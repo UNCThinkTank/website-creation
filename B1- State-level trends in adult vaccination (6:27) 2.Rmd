@@ -1,0 +1,402 @@
+---
+title: "B1: State-level trends in adult vaccination (6/27)"
+author: "B. Jayaraman"
+date: "2025-06-27"
+output: html_document
+---
+#Set up, installing packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+cdc_vaccs <- read.csv("~/Downloads/Vaccination_Coverage_among_Adults__18__Years_.csv")
+
+library(tidyverse)
+library(ggplot2)
+library(GGally)
+library(skimr)
+library(viridis)
+library(ggthemes)
+library(dplyr)
+library(janitor)
+
+```
+
+##Cleaning Data
+```{r cars}
+
+#Cleaning names in dataset, renaming some columns
+cdc_vaccs <- clean_names(cdc_vaccs)
+cdc_vaccs <- cdc_vaccs %>% 
+  rename(
+age = dimension_type, 
+race_eth = dimension, 
+percent_vaccinated = estimate, 
+conf_int = x95_ci,
+year = survey_year
+)
+
+#Investigating and removing rows with NR/NA + changing percent_vaccinated to numeric 
+cdc_vaccs <- cdc_vaccs %>%
+  filter(percent_vaccinated != "NR") %>%
+  mutate(percent_vaccinated = as.numeric(percent_vaccinated))
+
+#Removing places where sample size was 0
+cdc_vaccs <- cdc_vaccs %>%
+  filter(sample_size != 0)
+
+#Removing places where percent vaccinated was NA
+cdc_vaccs%>%
+  filter(is.na (percent_vaccinated))
+```
+
+
+#Cleaned data set
+```{r}
+
+#Clean data set, should have no NA's
+cdc_vaccs_clean <- cdc_vaccs %>%
+  filter(!is.na(percent_vaccinated))
+
+#Checking to see if anymore NA's -- there's not (removed 52 obs -> from 16916 to 16864)
+cdc_vaccs_clean %>%
+  filter(is.na (percent_vaccinated))
+
+#Dropping the dose column
+cdc_vaccs_clean <- cdc_vaccs_clean %>%
+  select(-dose)
+
+#Keeping 2018 to 2023
+unique(cdc_vaccs_clean$survey_year)
+
+cdc_vaccs_clean <- cdc_vaccs_clean %>%
+  filter(year >= 2018 & year <= 2023)
+
+
+cdc_vaccs_clean %>%
+  group_by(vaccine)
+
+
+# Filter to age 18+ and race_eth = "Overall"
+cdc_vaccs_clean_filtered <- cdc_vaccs_clean %>%
+  filter(age == ">=18 Years", race_eth == "Overall", geography_type == "States/Local Areas")
+
+# Group and summarize
+cdc_vaccs_summary <- cdc_vaccs_clean_filtered %>%
+  group_by(geography, vaccine) %>%
+  summarize(avg_coverage = mean(percent_vaccinated, na.rm = TRUE)) %>%
+  ungroup()
+
+# Create the grouped bar chart
+ggplot(cdc_vaccs_summary, aes(x = reorder(geography, -avg_coverage), y = avg_coverage, fill = vaccine)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Vaccination Coverage by Vaccine Type and State (Adults 18+, Overall Race)",
+    x = "State",
+    y = "Percent Vaccinated",
+    fill = "Vaccine Type"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#Realizing that pneumococcal and zoster vaccines are for older adults (aged 65+) or those at increased risk.
+
+zoster_df <- cdc_vaccs_clean %>%
+  filter(
+    vaccine == "Zoster (Shingles)",
+    age %in% c(">=65 Years", "60-64 Years"),
+    geography_type == "States/Local Areas"
+  ) %>%
+  group_by(geography) %>%
+  summarize(avg_zoster_coverage = mean(percent_vaccinated, na.rm = TRUE)) %>%
+  ungroup()
+  
+  
+#Filtering by states
+states <- state.name
+zoster_states <- zoster_df %>%
+  filter(geography %in% states)
+
+#Getting yearly data for zoster/shingles -- realizing I have 2020 and 2023 for all states but 2018, 2019, 2021 and 2022 for certain states
+zoster_yearly <- cdc_vaccs_clean %>%
+  filter(
+    vaccine == "Zoster (Shingles)",
+    age %in% c(">=65 Years", "60-64 Years"),
+    geography_type == "States/Local Areas",
+    geography %in% state.name
+  ) %>%
+  group_by(geography, year) %>%
+  summarize(avg_zoster_coverage = mean(percent_vaccinated, na.rm = TRUE)) %>%
+  ungroup()
+
+#Cleaning data to just use 2020 and 2023 for all states (but PA and KY are missing 2023)
+zoster_2020_2023 <- zoster_yearly %>%
+  filter(year %in% c(2020, 2023)) %>%
+  group_by(year) %>%
+  mutate(rank = rank(-avg_zoster_coverage)) %>%
+  ungroup() %>%
+  select(geography, year, avg_zoster_coverage, rank)
+
+#Pivoting to wide
+zoster_wide <- zoster_2020_2023 %>%
+  pivot_wider(
+    names_from = year,
+    values_from = c(avg_zoster_coverage, rank),
+    names_sep = "_"
+  ) %>%
+  mutate(include_2023 = !is.na(avg_zoster_coverage_2023))
+
+
+
+```
+
+
+## Including Plots
+
+
+```{r}
+
+library(ggplot2)
+#install.packages("ggalt")
+library(ggalt)  # For geom_dumbbell
+
+# Optional: reorder states by 2020 coverage or change
+zoster_plot_df <- zoster_wide %>%
+  arrange(desc(avg_zoster_coverage_2020)) %>%
+  mutate(geography = factor(geography, levels = unique(geography)))
+
+# Plot
+ggplot(zoster_plot_df) +
+  # Dumbbell for states with 2023 data
+  geom_dumbbell(
+    data = subset(zoster_plot_df, include_2023),
+    aes(x = avg_zoster_coverage_2020, xend = avg_zoster_coverage_2023, y = geography),
+    colour = "gray80",
+    size = 2,
+    colour_x = "steelblue",
+    colour_xend = "darkgreen"
+  ) +
+  # Dots for 2020 only (missing 2023)
+  geom_point(
+    data = subset(zoster_plot_df, !include_2023),
+    aes(x = avg_zoster_coverage_2020, y = geography),
+    color = "steelblue",
+    size = 3
+  ) +
+  labs(
+    title = "Change in Zoster (Shingles) Vaccination Coverage by State",
+    subtitle = "Adults 60+, 2020 (Blue) vs 2023 (Green)\n(Blue Dot = no 2023 data available)",
+    x = "Percent Vaccinated",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 9)
+  )
+
+########################################################
+#VERSION 2 OF VISUAL
+
+#Ordered by 2020 year starting rate
+zoster_plot_df <- zoster_plot_df %>%
+  mutate(change = avg_zoster_coverage_2023 - avg_zoster_coverage_2020)
+
+#Ordered by amount of change
+zoster_plot_df <- zoster_plot_df %>%
+  mutate(geography = fct_reorder(geography, change))
+
+
+ggplot(zoster_plot_df) +
+  geom_segment(
+    data = subset(zoster_plot_df, include_2023),
+    aes(
+      x = avg_zoster_coverage_2020,
+      xend = avg_zoster_coverage_2023,
+      y = geography,
+      color = change
+    ),
+    size = 2
+  ) +
+  scale_color_gradient2(
+    low = "#d73027", mid = "#ffffbf", high = "#1a9850",
+    midpoint = 0,
+    name = "Change (%)"
+  ) +
+  geom_point(
+    data = subset(zoster_plot_df, include_2023),
+    aes(x = avg_zoster_coverage_2020, y = geography),
+    color = "steelblue", size = 3
+  ) +
+  geom_point(
+    data = subset(zoster_plot_df, include_2023),
+    aes(x = avg_zoster_coverage_2023, y = geography),
+    color = "darkgreen", size = 3
+  ) +
+  geom_point(
+    data = subset(zoster_plot_df, !include_2023),
+    aes(x = avg_zoster_coverage_2020, y = geography),
+    color = "steelblue", size = 3
+  ) +
+  labs(
+    title = "Change in Zoster (Shingles) Vaccination Coverage by State",
+    subtitle = "Adults 60+, 2020 to 2023\n(Color shows increase or decrease)",
+    x = "Percent Vaccinated",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 9)
+  )
+
+```
+
+
+
+
+```{r}
+library(maps)
+library(ggplot2)
+
+# Base map
+us_states <- map_data("state")
+
+# Prepare plot data
+zoster_map_df <- zoster_plot_df %>%
+  mutate(region = tolower(geography))  # match 'region' in map_data
+
+# Join to map
+map_data_merged <- left_join(us_states, zoster_map_df, by = "region")
+
+ggplot(map_data_merged, aes(long, lat, group = group, fill = change)) +
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) +
+  scale_fill_gradient2(
+    low = "#d73027", mid = "#ffffbf", high = "#1a9850", midpoint = 0,
+    name = "Change (%)"
+  ) +
+  labs(
+    title = "Change in Shingles Vaccination Coverage by State",
+    subtitle = "Adults 60+, 2020 to 2023",
+    caption = "Green = Increase, Red = Decrease\nData missing for 2023: PA, KY"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12)
+  )
+
+
+```
+
+```{r}
+
+# Sort by change and take top/bottom 10
+top_gainers <- zoster_plot_df %>%
+  filter(include_2023) %>%
+  arrange(desc(change)) %>%
+  slice_head(n = 10) %>%
+  mutate(category = "Largest Increases in Coverage")
+
+bottom_laggards <- zoster_plot_df %>%
+  filter(include_2023) %>%
+  arrange(change) %>%
+  slice_head(n = 10) %>%
+  mutate(category = "Smallest Increases in Coverage")
+
+library(ggplot2)
+library(forcats)
+
+ggplot(top_bottom, aes(x = geography, y = change, fill = change)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ category, scales = "free_y") +
+  scale_fill_gradient(
+    low = "#e0f3db", high = "#43a2ca",
+    name = "Change (%)"
+  ) +
+  labs(
+    title = "Uneven Gains in Shingles Vaccination Coverage (2020–2023)",
+    subtitle = "Top and bottom 10 states by % point increase in adult Zoster vaccination",
+    x = NULL,
+    y = "Percent Point Increase",
+    caption = "Source: CDC BRFSS | Adults 60+ | PA and KY excluded (missing 2023 data)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "right",
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank()
+  )
+
+
+```
+```{r}
+
+library(ggplot2)
+library(forcats)
+library(dplyr)
+
+# Top 10 largest increases data
+topgainers1 <- zoster_plot_df %>%
+  filter(include_2023) %>%
+  arrange(desc(change)) %>%
+  slice_head(n = 10) %>%
+  # reorder factor from smallest to largest so largest bar ends up on top after coord_flip()
+  mutate(geography = fct_reorder(geography, change, .desc = FALSE))
+
+# Plot for top 10 largest increases
+ggplot(topgainers1, aes(x = geography, y = change, fill = change)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_gradient(low = "#e0f3db", high = "#43a2ca", name = "Change (%)") +
+  labs(
+    title = "States with Largest Increases in Shingles Vaccination Coverage (2020–2023)",
+    x = NULL,
+    y = "Percent Point Increase",
+    caption = "Source: CDC BRFSS | Adults 60+ | PA and KY excluded (missing 2023 data)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "right", panel.grid.major.y = element_blank(),
+          axis.text.y = element_text(size = 14)
+        )
+
+```
+
+```{r}
+# Bottom 10 smallest increases data
+# Get the min and max change values from the topgainers1 data
+y_min <- 0
+y_max <- 20
+
+
+bottomlaggards1 <- zoster_plot_df %>%
+  filter(include_2023) %>%
+  arrange(change) %>%
+  slice_head(n = 10) %>%
+  # reorder factor from largest to smallest so smallest bar ends up on top after coord_flip()
+  mutate(geography = fct_reorder(geography, change, .desc = TRUE))
+
+# Plot for bottom 10 smallest increases
+ggplot(bottomlaggards1, aes(x = geography, y = change, fill = change)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(limits = c(y_min, y_max)) +  # Same limits as largest increases plot
+  scale_fill_gradient(low = "#e0f3db", high = "#43a2ca", name = "Change (%)") +
+  labs(
+    title = "States with Smallest Increases in Shingles Vaccination Coverage (2020–2023)",
+    x = NULL,
+    y = "Percent Point Increase",
+    caption = "Source: CDC BRFSS | Adults 60+ | PA and KY excluded (missing 2023 data)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "right", panel.grid.major.y = element_blank(),
+          axis.text.y = element_text(size = 14)
+        )
+
+
+```
+
+
+
