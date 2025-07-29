@@ -400,3 +400,15 @@ article[role="pge-title-content"].contact-header p a:hover{color:#fb5353; text-d
 
 .commentys-form input[type="button"]:hover{ background-color:#ff5c5c}
 
+header[role="header"] h1 img {
+  width: 122px;
+  height: 100px;
+  display: block;
+}
+
+footer[role="footer"] h1 img {
+  width: 122px;
+  height: 100px;
+  display: block;
+  margin: 0 auto;
+}
