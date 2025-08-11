@@ -412,3 +412,15 @@ footer[role="footer"] h1 img {
   display: block;
   margin: 0 auto;
 }
+
+/* This is just for title on Homepage */
+
+.line-1 {
+  display: block;
+}
+
+.line-2 {
+  display: block;
+  margin-top: 10px;   /* space between first and second line */
+  text-align: center; /* centers Labs horizontally */
+}
