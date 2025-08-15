@@ -158,7 +158,7 @@ a:focus, img:focus, button:focus, .btn:focus {outline: none;}
 
 ::-moz-selection {background-color:#F98400FF;color:#fff;text-shadow:none;}
 
-::selection {background-color: #F98400FF;color: #fff;text-shadow: none;}
+::selection {background-color: #FECC98;color: #fff;text-shadow: none;}
 
 @font-face {font-family: 'Open Sans', sans-serif;}
 
@@ -330,11 +330,11 @@ article[role="pge-title-content"].contact-header p a:hover{color:#fb5353; text-d
 
 /*== Work Details ==*/
 
-.work-details,.blog-details{ padding:0 69px; margin-top:73px}
+.work-details,.blog-details{ padding:0 69px; margin-top:40px}
 
 .work-details header h2{ color:#343434; font-size:36px; font-weight:800}
 
-.work-details header a{ display:inline-block; color:#fb5353; font-size:18px;font-weight:800;padding-top:3px}
+.work-details header a{ display:inline-block; color:#F98400FF; font-size:24px;font-weight:800;padding-top:3px}
 
 .work-details header a i{ color:#0d0d0d; padding-left:10px}
 
@@ -342,13 +342,25 @@ article[role="pge-title-content"].contact-header p a:hover{color:#fb5353; text-d
 
 .work-details header a:hover i{ color:#fb5353}
 
-.work-details p{ font-size:16px; color:#666666; line-height:30px; margin-bottom:20px; font-weight:300}
+.work-details p{ font-size:16px; color:#001f4d; line-height:30px; margin-bottom:20px; font-weight:500; text-align: justify;}
 
 .work-details p strong{ font-weight:800}
+
+.work-details p a {color: #F98400FF;} /*orange link color*/
+
+.work-details .footnote-text {text-align: justify; color: #001f4d; font-weight: 300;font-size:12px;line-height: 20px}
 
 .work-images{ margin-top:46px}
 
 .work-images li{ margin-bottom:50px}
+
+.work-images img.large-img {
+    width: 90%;               /* makes the image almost full width of container */
+    max-width: 100%;          /* ensures it never exceeds container */
+    height: auto;             /* maintains aspect ratio */
+    display: block;           /* needed for centering */
+    margin: 20px auto;        /* top/bottom spacing + horizontal centering */
+}
 
 /*== Blog Details ==*/
 
