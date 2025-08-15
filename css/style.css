@@ -436,3 +436,39 @@ footer[role="footer"] h1 img {
   margin-top: 10px;   /* space between first and second line */
   text-align: center; /* centers Labs horizontally */
 }
+
+/* This is just for the tagline under Poli Plots */
+
+.tagline {
+    font-size: 1.3rem;   /* bigger than before */
+    font-weight: 300;
+    color: #555;         /* slightly darker for contrast */
+    margin-top: -3px;
+    letter-spacing: 0.4px;
+}
+
+/* This is just for the post background for Poli Plots */
+
+.placeholder-orange {
+    background-color: #F47F28; /* from your logo */
+    width: 100%;
+    height: 300px; /* adjust to match image height */
+}
+
+
+/* This is navy blue text color for Poli Plots title */
+
+header h2 .line-1,
+header h2 .line-2 {
+    color: #0B3B4D !important;
+}
+
+
+figcaption h2 {
+    color: #0B3B4D !important;
+}
+
+/* Site-wide cream background from logo */
+body {
+    background-color: #F8F5E9;
+}
