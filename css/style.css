@@ -154,6 +154,19 @@ a {
 
 }
 
+
+/*========= Logo ===========*/
+
+h1 a img {
+    width: 180px;       /* controls horizontal size */
+    max-width: 100%;    /* prevents overflow */
+    height: auto;       /* preserves aspect ratio */
+    display: block;
+}}
+
+/*===========*/
+
+
 a:focus, img:focus, button:focus, .btn:focus {outline: none;}
 
 ::-moz-selection {background-color:#F98400FF;color:#fff;text-shadow:none;}
@@ -168,7 +181,7 @@ header[role="header"]{ padding-top:80px; padding-bottom:39px}
 
 header[role="header"] h1{ padding:0; margin:0}
 
-header[role="header"] h1 > a{ max-width:66px; display:block; float:left}
+header[role="header"] h1 > a{ max-width:110px; display:block; float:left}
 
 header[role="header"] nav{ padding-top:10px;transition-delay: 0s;
 
