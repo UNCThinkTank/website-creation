@@ -42,6 +42,9 @@ html {
 
 }
 
+body {
+    background-color: #FFFFFF; 
+
 *, *:before, *:after {
 
 	-webkit-box-sizing: border-box;
@@ -155,6 +158,14 @@ a {
 }
 
 
+/* Ensure header and main wrappers are white */
+header[role="header"],
+main[role="main-home-wrapper"],
+main[role="main-inner-wrapper"] {
+    background-color: #FFFFFF !important;
+}
+
+
 /*========= Logo ===========*/
 
 h1 a img {
@@ -176,6 +187,10 @@ a:focus, img:focus, button:focus, .btn:focus {outline: none;}
 @font-face {font-family: 'Open Sans', sans-serif;}
 
 /*===== Header ===*/
+
+header[role="header"] {
+    background-color: #FFFFFF; /* makes the header itself white */
+}
 
 header[role="header"]{ padding-top:80px; padding-bottom:39px}
 
@@ -226,6 +241,10 @@ header[role="header"] nav #menu-button.open span:nth-child(3) {top: 10px;
 -webkit-transform: rotate(-135deg);-moz-transform: rotate(-135deg);-o-transform: rotate(-135deg);transform: rotate(-135deg);}
 
 /*===== main ===*/
+main[role="main-home-wrapper"],
+main[role="main-inner-wrapper"] {
+    background-color: #FFFFFF !important;  /* white */
+}
 
 main[role="main-home-wrapper"],main[role="main-inner-wrapper"] { padding-bottom:90px}
 
@@ -241,7 +260,7 @@ main[role="main-home-wrapper"] article[role="pge-title-content"] p,main[role="ma
 
 /*===== footer ===*/
 
-footer[role="footer"]{ background-color:#FFF; padding-top:100px; padding-bottom:77px}
+footer[role="footer"]{ background-color:rgb(208, 208, 208); padding-top:100px; padding-bottom:77px}
 
 footer[role="footer"] > h1 a{ margin:0 auto; display:block; max-width:66px;}
 
@@ -485,3 +504,5 @@ figcaption h2 {
 body {
     background-color: #F8F5E9;
 }
+
+/* ===== Index Grid Boxes ===== */
