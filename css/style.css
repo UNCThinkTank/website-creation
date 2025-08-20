@@ -502,7 +502,20 @@ figcaption h2 {
 
 /* Site-wide cream background from logo */
 body {
-    background-color: #F8F5E9;
+    background-color: #FFFFFF;
 }
 
 /* ===== Index Grid Boxes ===== */
+/* Target your ul directly */
+.grid-lod {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+
+
