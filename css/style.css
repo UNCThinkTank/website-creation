@@ -281,13 +281,17 @@ main[role="main-home-wrapper"] article[role="pge-title-content"] p,main[role="ma
 
 /*===== footer ===*/
 
+<<<<<<< HEAD
 footer[role="footer"]{
   background-color:var(--navy-bg);
   padding-top:100px;
   padding-bottom:77px;
 }
+=======
+footer[role="footer"]{ background-color:#d7d7d7; padding-top:100px;padding-bottom:77px}
+>>>>>>> b610440cce7667eaf88a129009f2a102f3c13958
 
-footer[role="footer"] > h1 a{ margin:0 auto; display:block; max-width:66px;}
+footer[role="footer"] > h1 a{ margin:0 auto; display:block;}
 
 footer[role="footer"] nav{ padding-top:37px; padding-bottom:43px}
 
@@ -303,6 +307,7 @@ footer[role="footer"] ul[role="social-icons"]{ padding:0; margin:0; text-align:c
 
 footer[role="footer"] ul[role="social-icons"] > li{ display: inline-block; margin:0 6.5px}
 
+<<<<<<< HEAD
 footer[role="footer"] ul[role="social-icons"] > li > a{
   display:block; width:42px; height:42px; background:#0B3B4D; color:#FFF;
   line-height:42px; font-size:20px; border-radius:100%; text-align:center;
@@ -311,6 +316,11 @@ footer[role="footer"] ul[role="social-icons"] > li > a{
 footer[role="footer"] ul[role="social-icons"] > li:hover a{
   background:#F98400FF;
 }
+=======
+footer[role="footer"] ul[role="social-icons"] > li > a{ display:block; width:42px; height:42px; background-color:#bbbbbb; color:#FFF; line-height:42px; font-size:20px; border-radius:100%; text-align:center}
+
+footer[role="footer"] ul[role="social-icons"] > li:hover a{ background-color:#F98400FF}
+>>>>>>> b610440cce7667eaf88a129009f2a102f3c13958
 
 footer[role="footer"] .copy-right{ text-align:center; display:block; font-size:12px; line-height:13px; color:#9c9c9c}
 
