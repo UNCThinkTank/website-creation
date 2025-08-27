@@ -25,7 +25,9 @@
 *::before,
 *::after{ box-sizing:border-box; }
 
-html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:#fff; }
+
+html.about-page{ font-size:18px; }
 
 body{
   margin:0;
@@ -34,6 +36,9 @@ body{
   background:#fff;
 }
 
+/* About page base adjustments */
+body.about-page{ background:#fff; }
+
 img{ max-width:100%; height:auto; display:block; }
 a{ color:#010101; text-decoration:none; transition:all .3s ease; }
 a:focus, img:focus, button:focus, .btn:focus{ outline:none; }
@@ -41,6 +46,13 @@ a:focus, img:focus, button:focus, .btn:focus{ outline:none; }
 
 main[role="main-home-wrapper"],
 main[role="main-inner-wrapper"]{ background:#fff; padding-bottom:90px; }
+
+/* Centered, narrower layout for About page */
+body.about-page main[role="main-inner-wrapper"]{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+}
 
 /* Smooth transitions for common elements */
 body, img,
