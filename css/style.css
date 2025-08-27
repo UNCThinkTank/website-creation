@@ -352,7 +352,9 @@ main[role="main-inner-wrapper"] .thumbnails-pan section figure:hover figcaption{
 /* ========================================================================
    BLOG / WORK DETAILS / CONTACT (kept concise)
    ======================================================================== */
-section.blog-content{ margin-bottom:29px; }
+body.blog1-page{ background:#fff; }
+
+   section.blog-content{ margin-bottom:29px; }
 section.blog-content figure{ overflow:hidden; position:relative; background:#fff; cursor:pointer; }
 section.blog-content figure .post-date{
   text-align:center; color:#fff; font-weight:800; font-size:14px; line-height:18px; text-transform:uppercase;
