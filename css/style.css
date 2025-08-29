@@ -25,7 +25,7 @@
 *::before,
 *::after{ box-sizing:border-box; }
 
-html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:#fff; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:#fff !important; }
 
 html.about-page{ font-size:18px; }
 
@@ -33,7 +33,7 @@ body{
   margin:0;
   font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color:#111;
-  background:#fff;
+  background:#fff !important;
 }
 
 /* About page base adjustments */
@@ -274,6 +274,10 @@ header h2 .line-1, header h2 .line-2, figcaption h2{ color:var(--navy) !importan
 
 /* Grid helper for legacy lists */
 .grid-lod{ display:flex; flex-wrap:wrap; list-style:none; padding:0; margin:0; }
+.grid-lod > li{ width:50%; padding:10px; }
+/* Center a single post card and cap width */
+.grid-lod.single{ justify-content:center; }
+.grid-lod.single > li{ width:min(720px,100%); }
 
 /* ========================================================================
    ABOUT (scoped so index styles remain)
@@ -476,26 +480,28 @@ section.blog-content article{
 .work-images li{ margin-bottom:50px; }
 .work-images img.large-img{ width:90%; max-width:100%; height:auto; margin:20px auto; display:block; }
 .interactive-orange-line {
-  position: relative; /* This is important for positioning the pseudo-element */
-  margin-bottom: 20px; /* Adjust spacing as needed */
-  height: 10px; /* This needs to have a height so the pseudo-element is visible */
+  position: relative;
+  margin: 10px 0 22px;
+  height: 12px; /* slightly taller for a stronger visual */
 }
 
 .interactive-orange-line::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0; /* Positions the line at the bottom of the div */
-  width: 50px; /* Initial width of the line */
-  height: 10px; /* Height of the line */
-  border-radius: 8px; /* For the curved ends */
-  background: linear-gradient(90deg, var(--orange), rgba(249, 132, 0, 0));
-  transition: width 0.28s ease; /* Adds the smooth hover effect */
+  bottom: 0;
+  width: 56%; /* start as a partial underline */
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), rgba(249,132,0,0.15));
+  transition: width 0.28s ease;
+  /* beveled right edge */
+  -webkit-clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+  box-shadow: 0 2px 8px rgba(249,132,0,.15);
+  border-radius: 6px; /* softens left edge */
 }
 
-.interactive-orange-line:hover::after {
-  width: 100%; /* Line expands to full width on hover */
-}
+.interactive-orange-line:hover::after { width: 100%; }
 
 article[role="pge-title-content"].blog-header,
 article[role="pge-title-content"].contact-header{ padding-bottom:218px; }
@@ -613,4 +619,101 @@ main[role="main-inner-wrapper"] {
   margin: 0 auto;      /* centers it */
   padding-left: 15px;
   padding-right: 15px;
+}
+/* Blog tweaks: larger intro and less whitespace before first post */
+article[role="pge-title-content"].blog-header{ padding-bottom:42px !important; }
+.blog-intro{ font-size:clamp(1.2rem, 2.6vw, 1.65rem); line-height:1.65; color:#233; margin-top:10px; }
+/* Blog hero: place byline below, aligned to right edge of title */
+main[role="main-inner-wrapper"] article.blog-header #site-hero-title{ display:inline-flex; flex-direction:column; align-items:flex-start; position:relative; }
+main[role="main-inner-wrapper"] article.blog-header #site-hero-title .line-2{ display:inline-flex; align-items:center; gap:10px; margin-top:10px; }
+
+/* ========================================================================
+   BLOG: Card-style posts (image-less) with zig-zag headers
+   ======================================================================== */
+/* Smaller subline for blog hero */
+main[role="main-inner-wrapper"] #site-hero-title .line-2{
+  font-size:clamp(14px, 2.2vw, 20px);
+  color:var(--navy-light);
+  font-weight:700;
+}
+main[role="main-inner-wrapper"] #site-hero-title{ margin-bottom:8px; }
+
+/* Card container */
+section.blog-content{
+  background:#fff;
+  border:1px solid #e6e8ec;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 8px 18px rgba(2,8,23,.06);
+  transition:transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+  position:relative;
+}
+section.blog-content:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(2,8,23,.10);
+  border-color:#dfe3e8;
+}
+
+/* Header band replaces images */
+section.blog-content figure{
+  position:relative;
+  display:block;
+  min-height:160px; /* ensures presence without images */
+  background:
+    radial-gradient( circle at 18% 24%, rgba(255,255,255,.25), rgba(255,255,255,0) 40%),
+    radial-gradient( circle at 82% 70%, rgba(255,255,255,.18), rgba(255,255,255,0) 44%),
+    linear-gradient(135deg, var(--navy-bg), #ffffff);
+}
+
+/* Alternate headers to keep a staggered zig-zag feel */
+.grid-lod > li:nth-child(odd) section.blog-content figure{
+  min-height:180px;
+  background:
+    radial-gradient( circle at 20% 25%, rgba(255,255,255,.25), rgba(255,255,255,0) 42%),
+    radial-gradient( circle at 80% 65%, rgba(255,255,255,.18), rgba(255,255,255,0) 46%),
+    linear-gradient(135deg, var(--navy-bg), #ffffff);
+}
+.grid-lod > li:nth-child(even) section.blog-content figure{
+    min-height:180px;
+    background:
+      radial-gradient( circle at 20% 25%, rgba(255,255,255,.25), rgba(255,255,255,0) 42%),
+      radial-gradient( circle at 80% 65%, rgba(255,255,255,.18), rgba(255,255,255,0) 46%),
+      linear-gradient(135deg, var(--navy-bg), #ffffff);
+  }
+
+/* Date stays pinned to the upper-left */
+section.blog-content figure .post-date{
+  background:var(--orange);
+  border-bottom-right-radius:12px;
+}
+
+/* Post body */
+section.blog-content article{
+    background:#fff;
+    color:var(--navy);
+    font-weight:700;
+    padding:20px 22px 24px 22px;
+    border-top:6px solid var(--orange-bg);
+  }
+
+/* Clickable overlay for full-card link */
+section.blog-content > a.stretched-link{ display:none !important; }
+
+/* Post content elements */
+.post-title, .post-meta, .post-excerpt, .post-cta{ display:none !important; }
+
+/* Featured card emphasis */
+section.blog-content.featured figure{ min-height:inherit !important; background:inherit !important; }
+
+/* Tweak mobile heights a bit lower */
+@media (max-width: 767px){
+  section.blog-content figure{ min-height:150px; }
+  .grid-lod > li:nth-child(odd) section.blog-content figure,
+  .grid-lod > li:nth-child(even) section.blog-content figure{ min-height:150px; }
+}
+
+/* Small logo at top-right of each card */
+.blog-card-logo{
+  position:absolute; top:8px; right:8px; width:38px; height:auto; z-index:55;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.15));
 }
