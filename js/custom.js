@@ -192,3 +192,31 @@ $('#subscribeform').submit(function(){
 function closePopup() {
     document.getElementById('image-popup').style.display = 'none';
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all topic chips
+  const topicChips = document.querySelectorAll('.topic-chips a');
+  // Get all the blog posts
+  const blogPosts = document.querySelectorAll('.blog-content figure');
+
+  topicChips.forEach(chip => {
+    chip.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the link from jumping
+
+      const filterValue = this.getAttribute('data-filter');
+
+      // Loop through each blog post
+      blogPosts.forEach(post => {
+        // Get the topics for the current blog post
+        const postTopics = post.getAttribute('data-topic');
+
+        // Check if the blog post has the selected topic
+        if (filterValue === 'all' || postTopics.includes(filterValue)) {
+          post.style.display = 'block'; // Show the blog post
+        } else {
+          post.style.display = 'none'; // Hide the blog post
+        }
+      });
+    });
+  });
+});

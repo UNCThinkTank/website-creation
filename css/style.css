@@ -433,6 +433,7 @@ main[role="main-inner-wrapper"] .thumbnails-pan section figure:hover figcaption{
 /* ========================================================================
    BLOG / WORK DETAILS / CONTACT (kept concise)
    ======================================================================== */
+body.blogmain-page{ background:#fff; }
 body.blog1-page{ background:#fff; }
 
    section.blog-content{ margin-bottom:29px; }
@@ -534,13 +535,13 @@ article[role="pge-title-content"].contact-header p a:hover{ color:var(--orange);
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    cursor: pointer;
+    cursor: default;
 }
 .image-popup-content {
     position: relative;
     max-width: 90%;
     max-height: 90%;
-    cursor: grab;
+    cursor: default;
 }
 .image-popup-content.is-dragging {
     cursor: grabbing;
@@ -561,11 +562,68 @@ article[role="pge-title-content"].contact-header p a:hover{ color:var(--orange);
 }
 .image-popup-close:hover,
 .image-popup-close:focus {
-    color: #bbb;
+    color: #161616;
     text-decoration: none;
+    cursor: default;
+}
+
+img.clickable-image {
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Interactive Post Title Styling
+   ========================================================================== */
+
+/* The main title */
+.work-details header h2 {
+    position: relative;
+    display: inline;
+    text-align: center;
+    color: var(--navy);
+    font-size: 3.5rem; /* Larger font size for impact */
+    line-height: 1.1;
+    margin-bottom: 20px; /* Space below the title */
     cursor: pointer;
 }
 
+/* Styling for the date and author */
+.post-meta-details {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between elements */
+    margin-bottom: 30px; /* Space below this block */
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.post-meta-details h3, .post-meta-details h6 {
+    margin: 0; /* Remove default margins */
+    color: var(--navy-light); /* Use a lighter color for the metadata */
+    font-weight: 600;
+}
+
+.post-meta-details h3 {
+    font-size: 1.1rem;
+}
+
+.post-meta-details h6 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Style for the Dataset link */
+.post-meta-details a {
+    color: var(--orange);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.post-meta-details a:hover {
+    color: var(--navy);
+    text-decoration: underline;
+}
 
 /* ========================================================================
    FOOTER
