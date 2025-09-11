@@ -1,8 +1,6 @@
 <!DOCTYPE HTML>
 
  <html class="blog1-page">
-    <figure data-topic="public-health">
-  </figure>
 
     <head>
 
@@ -53,6 +51,32 @@
         <link href="css/effects/component.css"  rel="stylesheet" type="text/css" >
 
 	</head>
+
+    <style>
+      /* Work details hero + meta (scoped) */
+      .work-details header[role="work-title"]{ display:none; }
+      .work-hero{ margin:8px 0 14px; }
+      .work-title{
+        margin:0; color:var(--navy); font-weight:900; letter-spacing:.01em;
+        font-size:clamp(28px,4.5vw,44px); line-height:1.1; position:relative; display:inline-block;
+      }
+      .work-title::after{
+        content:""; position:absolute; left:0; bottom:-10px; width:56%; height:10px; border-radius:8px;
+        background:linear-gradient(90deg,var(--orange),rgba(249,132,0,0));
+        transition: width .28s ease;
+      }
+      .work-title:hover::after{ width:100%; }
+      .work-meta.top{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+      .work-meta.top .work-dataset{ margin-left:auto; }
+      .work-meta{ margin:10px 0 8px; color:var(--navy-light); font-weight:700; }
+      .work-meta .work-date{ color:var(--navy); font-weight:800; }
+      .work-meta.tail{ margin-top:8px; }
+      .work-meta .sep{ margin:0 8px; color:#a0a8ae; }
+      .work-author{ color:var(--navy); font-weight:800; }
+      .work-author:hover{ color:var(--orange); text-decoration:underline; }
+      .work-dataset{ color:var(--navy); }
+      .work-dataset:hover{ color:var(--orange); }
+    </style>
 
 
 
@@ -111,27 +135,30 @@
 
                 	<div class="work-details">
 
+                        <!-- Full-width hero title -->
+                        <div class="work-hero">
+                            <h1 class="work-title">Tracking the Shingles Shot Surge</h1>
+                        </div>
+
                         <div class="row">
 
-                        	<div class="col-xs-12 col-sm-12 col-md-4">
-
-                            	<header role="work-title">
-
-                                	<h2>Tracking the Shingles Shot Surge</h2>
-                                    <h3>August 14, 2025</h3>
-                                    <h6>Bhairavi Jayaraman</h6>
-                                    <a href="https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD">Dataset <i class="fa fa-external-link" aria-hidden="true"></i></a>
-
-                                </header>
-
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-8">
+                            <div class="col-xs-12">
 
                             	<section>
 
+                                    <!-- primary meta under title -->
+                                    <div class="work-meta top">
+                                        <span class="work-date">August 14, 2025</span>
+                                        <a class="work-dataset" href="https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD">Dataset <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    </div>
 
+                                    <!-- brief description -->
                                     <p>What were the state-level trends in adult vaccination coverage leading up to recent CDC/ACIP leadership changes, and which states may be most vulnerable to future declines?</p>
+
+                                    <!-- tail meta: author + dataset -->
+                                    <div class="work-meta tail">
+                                        <a class="work-author" href="about.html#bhairavi">by Bhairavi Jayaraman</a>
+                                    </div>
 
                                     
 
@@ -139,7 +166,8 @@
                         <div class="keyword-chips">                              
                                         <p>
                                         <strong>Keywords</strong><br/>
-                                         <a href="blog.html?tag=public-health">Public Health</a>
+                                         <a href="#">Public Health</a>
+                                         <a href="#">Vaccines</a>
                                         </p>
                                 </div>  
                                 </section>
@@ -152,8 +180,7 @@
 
                         <div class="clearfix"></div>
 
-                          <div class="interactive-orange-line">
-                          </div> 
+                          
 
                           <div class="work-images grid">
                              </div>
@@ -166,6 +193,7 @@
     receive two doses of the Shingrix vaccine, administered two to six months apart. Uptake of this vaccine can also serve as an indicator of how well preventive care is reaching older populations.
 </p>
 
+<!-- Subscribe CTA moved to end of article -->
 
 <p>
     This issue has growing relevance in 2025, as the U.S. population ages and cost pressures increase within the healthcare system. Adults aged 65 and older are projected to <a href="https://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/data-warehouse/what-future-holds/us-population-aging#:~:text=The%20number%20of%20Americans%20ages,down%20from%203.7%20in%201970" 
@@ -182,7 +210,8 @@ Between 2020 and 2023, shingles vaccination coverage increased in every state. T
 <!-- <img src="images/Blog 1_ShinglesVax/Navy.orangeviz1.png" alt="" class="img-responsive"
 class="large-img"> -->
 
-<img src="images/Blog 1_ShinglesVax/Navy.orangeviz1.png" alt="Shingles Vaccination Rates by State" class="img-responsive large-img clickable-image" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz1.png', 'Shingles vaccination rates by state')">
+<img src="images/Blog 1_ShinglesVax/Navy.orangeviz1.png" alt="Shingles Vaccination Rates by State" class="img-responsive large-img" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz1.png', 'Shingles vaccination rates by state')">
+
                                
 <p>
 These shifts are not evenly distributed. States in the Northeastern, Upper Midwest, and Mountain West experienced the largest absolute increases. States in the South and rural West saw more limited gains. These regional patterns reflect long-standing disparities in provider access, insurance coverage, and the strength of local public health systems.
@@ -191,7 +220,7 @@ These shifts are not evenly distributed. States in the Northeastern, Upper Midwe
 <!--<img src="images/Blog 1_ShinglesVax/Navy.orangeviz2.png" alt="" class="img-responsive"
 class="large-img"> -->
 
-<img src="images/Blog 1_ShinglesVax/Navy.orangeviz2.png" alt="States with Largest and Smallest Improvements" class="img-responsive large-img clickable-image" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz2.png', 'States with the largest and smallest improvements in shingles vaccination rates')">
+<img src="images/Blog 1_ShinglesVax/Navy.orangeviz2.png" alt="States with Largest and Smallest Improvements" class="img-responsive large-img" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz2.png', 'States with the largest and smallest improvements in shingles vaccination rates')">
 
                                
 <p>
@@ -201,12 +230,12 @@ Looking at the states with the largest and smallest improvements reinforces this
 <!--<img src="images/Blog 1_ShinglesVax/Navy.orangeviz3.png" alt="" class="img-responsive"
 class="large-img"> -->
 
-<img src="images/Blog 1_ShinglesVax/Navy.orangeviz3.png" alt="Shingles Vaccination Trends Over Time" class="img-responsive large-img clickable-image" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz3.png', 'Shingles vaccination trends over time')">
+<img src="images/Blog 1_ShinglesVax/Navy.orangeviz3.png" alt="Shingles Vaccination Trends Over Time" class="img-responsive large-img" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz3.png', 'Shingles vaccination trends over time')">
 
 <!--<img src="images/Blog 1_ShinglesVax/Navy.orangeviz4.png" alt="" class="img-responsive"
 class="large-img"> -->
 
-<img src="images/Blog 1_ShinglesVax/Navy.orangeviz4.png" alt="Demographic Breakdown of Vaccination Rates" class="img-responsive large-img clickable-image" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz4.png', 'Demographic breakdown of shingles vaccination rates')">
+<img src="images/Blog 1_ShinglesVax/Navy.orangeviz4.png" alt="Demographic Breakdown of Vaccination Rates" class="img-responsive large-img" onclick="openPopup('images/Blog 1_ShinglesVax/Navy.orangeviz4.png', 'Demographic breakdown of shingles vaccination rates')">
 
 <p>
 While national debates around vaccine mandates and agency authority persist, the more immediate threat to shingles coverage may come from market dynamics. If insurers reduce coverage for adult vaccines—especially those perceived as low-profile—the burden will likely fall hardest on states already facing gaps in access. <a href="https://www.ssph-journal.org/journals/public-health-reviews/articles/10.3389/phrs.2024.1606679/full" target="_blank">Shingles vaccination patterns</a> thus serve as a useful measure of where preventive care is working and where it may be vulnerable to retrenchment.
@@ -221,10 +250,22 @@ Understanding these patterns is essential. Progress from 2020 to 2023 shows what
 <p>
 <strong>Methodology</strong><br/>
 </p>
+<!-- CTA moved below the full methodology paragraph -->
 
 <p class = "footnote-text">
 This analysis draws on publicly available data from the CDC’s Behavioral Risk Factor Surveillance System (BRFSS), focusing on state-level adult vaccination coverage for the Zoster (Shingles) vaccine between 2020 and 2023. The dataset includes annual estimates of percent vaccinated, disaggregated by geography, age group, and race/ethnicity. The analysis was restricted to individuals aged 60 and older (including the 60–64 and 65+ age bands) and filtered to include only responses tagged as "Overall" for race/ethnicity and "States/Local Areas" for geography. Coverage estimates were averaged across respondents within each state-year. To visualize change over time, the analysis compared percent coverage in 2020 and 2023 States missing 2023 values (e.g., Pennsylvania and Kentucky) were retained for 2020 but excluded from year-over-year comparison visuals, with footnotes denoting their omission. The analysis is descriptive in nature and does not make causal claims, but it establishes a baseline to assess future changes in vaccine uptake as national policy and leadership evolve.
 </p>
+
+<div class="cta-card" role="complementary" aria-label="Subscribe" style="max-width:560px; margin:28px 0 24px;">
+  <h3 class="cta-title">Get our updated plots</h3>
+  <p class="mb-2">One email when a new plot drops. No spam.</p>
+  <form action="#" method="post" class="cta-form" aria-label="Email signup">
+    <label class="sr-only" for="email-subscribe-works">Email</label>
+    <input id="email-subscribe-works" type="email" name="email" placeholder="you@domain.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+  <small class="cta-note">By subscribing, you agree to our <a href="#">privacy policy</a>.</small>
+</div>
 
                         </div>
 
