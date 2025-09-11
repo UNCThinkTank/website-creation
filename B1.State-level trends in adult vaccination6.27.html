@@ -76,6 +76,19 @@
       .work-author:hover{ color:var(--orange); text-decoration:underline; }
       .work-dataset{ color:var(--navy); }
       .work-dataset:hover{ color:var(--orange); }
+      /* Beveled container for title + meta */
+      .bevel-card{
+        background: linear-gradient(#fff,#fff) padding-box,
+                    linear-gradient(180deg,#f1f4f7,#dfe6ee) border-box;
+        border:1px solid transparent;
+        border-radius:18px;
+        box-shadow: 0 12px 30px rgba(2,8,23,.10), 0 4px 12px rgba(2,8,23,.06),
+                    inset 0 1px 0 rgba(255,255,255,.65);
+        padding:18px 20px;
+        margin:12px 0 18px;
+      }
+      .bevel-card .row{ margin-left:0; margin-right:0; }
+      .bevel-card [class^="col-"], .bevel-card [class*=" col-"]{ padding-left:0; padding-right:0; }
     </style>
 
 
@@ -135,12 +148,13 @@
 
                 	<div class="work-details">
 
-                        <!-- Full-width hero title -->
-                        <div class="work-hero">
-                            <h1 class="work-title">Tracking the Shingles Shot Surge</h1>
-                        </div>
+                        <div class="bevel-card">
+                          <!-- Full-width hero title -->
+                          <div class="work-hero">
+                              <h1 class="work-title">Tracking the Shingles Shot Surge</h1>
+                          </div>
 
-                        <div class="row">
+                          <div class="row">
 
                             <div class="col-xs-12">
 
@@ -176,6 +190,7 @@
 
                             </div>
 
+                          </div>
                         </div>
 
                         <div class="clearfix"></div>
