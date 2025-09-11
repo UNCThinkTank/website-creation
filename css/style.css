@@ -343,6 +343,18 @@ main[role="main-inner-wrapper"] .section-h.sm{
 }
 .border-orange{ border-color:var(--orange) !important; }
 
+/* Contributors grid and small-card variant */
+.contributors-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap:16px;
+}
+.team-card.team-sm{ font-size:.85rem; padding:18px !important; }
+.team-card.team-sm .team-avatar{ width:72px; height:72px; }
+.team-card.team-sm .team-name{ font-size:1.05rem; }
+.team-card.team-sm .team-role{ font-size:.8rem; }
+.team-card.team-sm .team-bio{ font-size:.82rem; margin-top:4px; }
+
 /* Timeline */
 .timeline{
   position:relative; max-width:none; margin:0; padding:2rem 0; /* align with section columns */
