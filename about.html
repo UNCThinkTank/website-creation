@@ -1,459 +1,1046 @@
-﻿<!DOCTYPE HTML>
-
- <html class="about-page">
-
-    <head>
-
-    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-        <meta charset="utf-8">
-
-        <!-- Description, Keywords and Author -->
-
-        <meta name="description" content="">
-
-        <meta name="author" content="">
-
-        
-
-       <title> Poli Plot Labs: About </title>
-
-		<link rel="shortcut icon" href="images/Updated Logo Transparent.png" type="image/x-icon">
-
-
-
-        <!-- style -->
-
-        <link href="css/style.css" rel="stylesheet" type="text/css">
-
-        <!-- style -->
-
-        <!-- bootstrap -->
-
-        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-
-        <!-- responsive -->
-
-        <link href="css/responsive.css" rel="stylesheet" type="text/css">
-
-        <!-- font-awesome -->
-
-        <link href="css/fonts.css" rel="stylesheet" type="text/css">
-
-        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-        <!-- font-awesome -->
-
-        
-
-	</head>
-
-
-
-    <body class="about-page">
-
-    
-
-    	<!-- header -->
-
-        	<header role="header">
-
-            	<div class="container">
-
-                	<!-- logo -->
-
-                        <h1>
-                            <a href="index.html" title="Poli Plot Labs">
-                                <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs"
-                                    style="width:200px;height:auto;display:block;" />
-                            </a>
-                        </h1>
-
-                    <!-- logo -->
-
-                    <!-- nav -->
-
-                    <nav role="header-nav" class="navy">
-
-                        <ul>
-
-                            <li><a href="index.html" title="Home">Home</a></li>
-
-                            <li class="nav-active"><a href="about.html" title="About">About</a></li>
-
-                            <li><a href="blog.html" title="Blog">Blog</a></li>
-
-                            <li><a href="contact_v2.html" title="Contact">Contact</a></li>
-
-                        </ul>
-
-                    </nav>
-
-                    <!-- nav -->
-
-                </div>
-
-            </header>
-
-        <!-- header -->
-
-        <!-- main -->
-<main role="main-inner-wrapper" class="container">
-
-  <!-- About Hero -->
-  <section class="row mt-5 about-wrap">
-    <div class="col-xs-12 col-md-8">
-      <h2 class="section-h left">About Poli Plot Labs</h2>
-      <p class="about-lead">
-        We turn complex policy data into clear, visual stories—
-        so leaders and communities can move from <em>data to decision</em>.
-      </p>
-      <p>
-        Research shows that most policy reports are rarely read beyond their executive summaries. Dense methods and
-        technical language mean important findings often fail to reach the people who could use them. At the same time,
-        students producing outstanding analysis in classrooms rarely get the chance to publish it for a wider audience.
-      </p>
-      <p><strong>Poli Plot Labs exists to bridge that disconnect.</strong></p>
-      <p>
-        For students, it’s a platform to practice data storytelling and showcase work to employers. For readers, it’s a
-        way to understand pressing issues — from food security to energy resilience — in a visual, approachable way.
-      </p>
+<!DOCTYPE html>
+<html class="about-page" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Poli Plot Labs turns policy research into interactive stories by blending data analysis, design, and community insight.">
+  <title>Poli Plot Labs | About</title>
+  <link rel="shortcut icon" href="images/Updated Logo Transparent.png" type="image/x-icon">
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/responsive.css" rel="stylesheet" type="text/css">
+  <link href="css/fonts.css" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <style>
+    body.about-page {
+      background:#fff;
+    }
+    main.about-main {
+      padding:clamp(.35rem,3vw,.9rem) 0 clamp(3rem,6vw,5rem);
+    }
+    main.about-main .container {
+      display:flex;
+      flex-direction:column;
+      gap:clamp(2.2rem,5vw,3.6rem);
+    }
+    .section-title {
+      font-size:clamp(2rem,4vw,2.85rem);
+      line-height:1.05;
+      letter-spacing:-0.015em;
+      color:var(--navy);
+      margin:0 0 1.5rem;
+    }
+    .lead {
+      font-size:1.02rem;
+      line-height:1.6;
+      color:#2b2b2b;
+      margin-bottom:1.5rem;
+    }
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:.6rem;
+      padding:.25rem .75rem;
+      background:rgba(249,132,0,0.12);
+      border-radius:999px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      font-size:.72rem;
+      font-weight:700;
+      color:var(--orange);
+      margin-bottom:1rem;
+    }
+    .eyebrow::after {
+      content:'';
+      width:42px;
+      height:2px;
+      background:var(--orange);
+      border-radius:999px;
+      opacity:.65;
+    }
+     .about-hero {
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,rgba(11,59,77,0.08),rgba(255,243,224,0.55));
+      border-radius:32px;
+      padding:clamp(2.3rem,5vw,3.75rem);
+      margin-top:0;
+      box-shadow:0 40px 120px -70px rgba(11,59,77,0.65);
+    }
+    .about-hero::before,
+    .about-hero::after {
+      content:'';
+      position:absolute;
+      border-radius:999px;
+      filter:blur(0);
+      opacity:.4;
+      z-index:0;
+      transition:transform .6s ease;
+    }
+    .about-hero::before {
+      width:440px;
+      height:440px;
+      top:-180px;
+      right:-120px;
+      background:radial-gradient(circle at 30% 30%,rgba(249,132,0,0.45),rgba(11,59,77,0.05));
+    }
+    .about-hero::after {
+      width:520px;
+      height:520px;
+      bottom:-220px;
+      left:-140px;
+      background:radial-gradient(circle at 70% 70%,rgba(77,107,122,0.35),rgba(11,59,77,0.08));
+    }
+    .about-hero:hover::before {
+      transform:translate(-8px,6px);
+    }
+    .about-hero:hover::after {
+      transform:translate(10px,-12px);
+    }
+    .hero-grid {
+      position:relative;
+      z-index:1;
+      display:grid;
+      gap:clamp(1.5rem,4vw,2.5rem);
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      align-items:start;
+    }
+    .hero-text {
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+    }
+    .hero-panel {
+      background:#fff;
+      border:1px solid rgba(11,59,77,0.08);
+      border-radius:28px;
+      padding:clamp(2rem,4vw,3rem);
+      box-shadow:0 32px 90px -60px rgba(11,59,77,0.55);
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+    }
+    .hero-panel__badge {
+      align-self:flex-start;
+      font-size:.75rem;
+      font-weight:700;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:var(--navy);
+      background:rgba(11,59,77,0.08);
+      padding:.45rem .9rem;
+      border-radius:999px;
+    }
+    .hero-panel__title {
+      margin:0;
+      font-size:1.4rem;
+      line-height:1.3;
+      color:var(--navy);
+    }
+    .hero-panel__copy {
+      margin:0;
+      font-size:.97rem;
+      line-height:1.6;
+      color:#3c3c3c;
+    }
+    .hero-panel__list {
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+    }
+    .hero-panel__list li {
+      display:flex;
+      flex-direction:column;
+      gap:.45rem;
+      padding-bottom:.45rem;
+      border-bottom:1px dashed rgba(11,59,77,0.12);
+    }
+    .hero-panel__list li:last-child {
+      border-bottom:none;
+      padding-bottom:0;
+    }
+    .hero-panel__list span {
+      font-weight:600;
+      color:var(--navy);
+      font-size:1.02rem;
+    }
+    .hero-panel__list small {
+      font-size:.92rem;
+      color:#4a4a4a;
+      line-height:1.45;
+    }
+    .hero-metrics {
+      list-style:none;
+      margin:clamp(1.75rem,3vw,2.5rem) 0 0;
+      padding:0;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:1rem;
+    }
+    .hero-metrics li {
+      background:rgba(11,59,77,0.08);
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.18);
+      padding:1.5rem;
+      display:flex;
+      flex-direction:column;
+      gap:.55rem;
+      min-height:150px;
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .hero-metrics li:hover {
+      transform:translateY(-6px);
+      box-shadow:0 24px 48px -38px rgba(11,59,77,0.7);
+    }
+    .metric-number {
+      font-size:clamp(2.25rem,5vw,3.05rem);
+      font-weight:800;
+      color:var(--navy);
+      line-height:1;
+    }
+    .metric-label {
+      font-size:.95rem;
+      color:#2e2e2e;
+      line-height:1.45;
+    }
+    .hero-highlights {
+      position:relative;
+      z-index:1;
+      margin-top:clamp(2rem,4vw,3rem);
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      gap:1.25rem;
+    }
+    .hero-highlights article {
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(11,59,77,0.1);
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.18);
+      padding:1.5rem;
+      backdrop-filter:blur(8px);
+      box-shadow:0 30px 65px -55px rgba(11,59,77,0.75);
+      transition:transform .35s ease, box-shadow .35s ease;
+    }
+    .hero-highlights article:hover {
+      transform:translateY(-10px);
+      box-shadow:0 32px 72px -50px rgba(249,132,0,0.55);
+    }
+    .hero-highlights h3 {
+      margin:0 0 .65rem;
+      font-size:1.1rem;
+      color:var(--navy);
+    }
+    .hero-highlights p {
+      margin:0;
+      font-size:.96rem;
+      line-height:1.5;
+      color:#3b3b3b;
+    }
+    .communication-section {
+      display:flex;
+      flex-direction:column;
+      gap:clamp(2rem,4vw,3rem);
+    }
+    .section-intro {
+      max-width:780px;
+    }
+    .communication-section {
+      display:flex;
+      flex-direction:column;
+      gap:clamp(2rem,4.5vw,3.2rem);
+    }
+    .section-intro {
+      max-width:780px;
+    }
+    .communication-layout {
+      display:grid;
+      gap:clamp(1.75rem,4vw,2.75rem);
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      align-items:stretch;
+    }
+    .comm-rail {
+      display:flex;
+      flex-direction:column;
+      gap:1.2rem;
+    }
+    .comm-stage {
+      position:relative;
+      border:1px solid rgba(11,59,77,0.1);
+      border-radius:24px;
+      padding:1.6rem 1.8rem 1.7rem 1.9rem;
+      background:#fff;
+      text-align:left;
+      display:flex;
+      flex-direction:column;
+      gap:.65rem;
+      cursor:pointer;
+      transition:transform .3s ease, box-shadow .3s ease, border .3s ease;
+      box-shadow:0 22px 60px -48px rgba(11,59,77,0.7);
+    }
+    .comm-stage::before {
+      content:'';
+      position:absolute;
+      left:18px;
+      top:18px;
+      bottom:18px;
+      width:4px;
+      border-radius:999px;
+      background:rgba(11,59,77,0.08);
+      transition:background .3s ease;
+    }
+    .comm-stage__number {
+      font-size:.78rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      font-weight:700;
+      color:var(--navy-light);
+      padding-left:14px;
+    }
+    .comm-stage h3 {
+      margin:0;
+      font-size:1.25rem;
+      color:var(--navy);
+    }
+    .comm-stage p {
+      margin:0;
+      font-size:.98rem;
+      line-height:1.55;
+      color:#373737;
+    }
+    .comm-stage:hover {
+      transform:translateY(-4px);
+      box-shadow:0 32px 80px -52px rgba(11,59,77,0.75);
+    }
+    .comm-stage[aria-current="true"] {
+      border-color:rgba(249,132,0,0.6);
+      box-shadow:0 36px 95px -50px rgba(249,132,0,0.5);
+    }
+    .comm-stage[aria-current="true"]::before {
+      background:var(--orange);
+    }
+    .communication-detail {
+      background:#fff;
+      border:1px solid rgba(11,59,77,0.08);
+      border-radius:28px;
+      padding:clamp(2.1rem,4vw,3rem);
+      box-shadow:0 35px 85px -70px rgba(11,59,77,0.78);
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+    }
+    .detail-label {
+      font-size:.72rem;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:var(--navy-light);
+      font-weight:700;
+    }
+    .communication-detail p {
+      margin:0;
+      color:#3c3c3c;
+      line-height:1.65;
+    }
+    .detail-highlights {
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+    }
+    .detail-highlights li {
+      position:relative;
+      padding-left:1.5rem;
+      font-size:.95rem;
+      line-height:1.45;
+      color:#303030;
+    }
+    .detail-highlights li::before {
+      content:'';
+      position:absolute;
+      left:0;
+      top:.5rem;
+      width:.65rem;
+      height:.65rem;
+      border-radius:50%;
+      background:var(--orange);
+      box-shadow:0 0 0 4px rgba(249,132,0,0.18);
+    }
+    .detail-footnote {
+      font-size:.86rem;
+      color:#4a4a4a;
+      padding-top:.75rem;
+      border-top:1px solid rgba(11,59,77,0.08);
+    }
+    .detail-footnote span {
+      font-weight:600;
+      color:var(--navy);
+    }
+    .team-section {
+      display:flex;
+      flex-direction:column;
+      gap:clamp(2rem,4vw,3rem);
+    }
+    .team-leads {
+      display:grid;
+      gap:clamp(1.75rem,4vw,2.5rem);
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    }
+    .team-card {
+      position:relative;
+      background:#fff;
+      border:1px solid rgba(11,59,77,0.08);
+      border-radius:26px;
+      padding:clamp(2rem,4vw,2.75rem);
+      box-shadow:0 32px 80px -62px rgba(11,59,77,0.68);
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .team-card[aria-expanded="true"] {
+      box-shadow:0 38px 90px -55px rgba(249,132,0,0.55);
+    }
+    .team-card:hover {
+      transform:translateY(-6px);
+    }
+    .team-header {
+      display:flex;
+      align-items:center;
+      gap:1.35rem;
+    }
+    .team-avatar {
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid rgba(249,132,0,0.5);
+      box-shadow:0 18px 35px -24px rgba(11,59,77,0.7);
+    }
+    .team-name {
+      margin:0;
+      font-size:1.2rem;
+      color:var(--navy);
+    }
+    .team-role {
+      margin:.35rem 0 0;
+      font-size:.92rem;
+      font-weight:600;
+      color:var(--navy-light);
+    }
+    .team-bio {
+      margin:0;
+      font-size:.95rem;
+      line-height:1.55;
+      color:#353535;
+    }
+    .team-links {
+      display:flex;
+      align-items:center;
+      gap:.95rem;
+      margin-top:.35rem;
+    }
+    .team-links a {
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(11,59,77,0.08);
+      color:var(--navy);
+      transition:background .3s ease, transform .3s ease;
+    }
+    .team-links a:hover {
+      background:var(--orange);
+      color:#fff;
+      transform:translateY(-3px);
+    }
+    .team-toggle {
+      align-self:flex-start;
+      border:none;
+      background:rgba(11,59,77,0.08);
+      color:var(--navy);
+      font-weight:600;
+      font-size:.9rem;
+      letter-spacing:.02em;
+      padding:.65rem 1.1rem;
+      border-radius:999px;
+      cursor:pointer;
+      transition:background .3s ease, color .3s ease, transform .3s ease;
+    }
+    .team-toggle span {
+      margin-left:.5rem;
+      font-size:1rem;
+      font-weight:700;
+    }
+    .team-toggle:hover {
+      background:var(--navy);
+      color:#fff;
+      transform:translateY(-2px);
+    }
+    .team-bio-long {
+      font-size:.92rem;
+      line-height:1.6;
+      color:#3d3d3d;
+    }
+    .contributors-block {
+      background:#fff;
+      border:1px solid rgba(11,59,77,0.06);
+      border-radius:26px;
+      padding:clamp(2rem,4vw,3rem);
+      box-shadow:0 24px 70px -58px rgba(11,59,77,0.6);
+      display:flex;
+      flex-direction:column;
+      gap:1.5rem;
+    }
+    .contributors-title {
+      margin:0;
+      font-size:1.45rem;
+      color:var(--navy);
+    }
+    .contributors-subtitle {
+      margin:0;
+      font-size:1rem;
+      color:#3d3d3d;
+      max-width:680px;
+      line-height:1.55;
+    }
+    .contributors-grid {
+      display:grid;
+      gap:1.35rem;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .team-card--mini {
+      padding:1.35rem;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:0 26px 60px -55px rgba(11,59,77,0.55);
+    }
+    .team-card--mini .team-header {
+      gap:1rem;
+    }
+    .team-card--mini .team-avatar {
+      width:70px;
+      height:70px;
+      border-width:3px;
+    }
+    .team-card--mini .team-name {
+      font-size:1.05rem;
+    }
+    .team-card--mini .team-role {
+      font-weight:600;
+      font-size:.86rem;
+      margin:.25rem 0 0;
+    }
+    .team-card--mini .team-bio {
+      font-size:.86rem;
+      margin-top:.45rem;
+      color:#444;
+    }
+    .journey-section {
+      display:flex;
+      flex-direction:column;
+      gap:clamp(2rem,4vw,3rem);
+    }
+    .journey-timeline {
+      position:relative;
+      padding-left:1.95rem;
+      display:flex;
+      flex-direction:column;
+      gap:2.25rem;
+    }
+    .journey-timeline::before {
+      content:'';
+      position:absolute;
+      top:.65rem;
+      bottom:.65rem;
+      left:.55rem;
+      width:2px;
+      background:linear-gradient(180deg,var(--navy),rgba(11,59,77,0));
+      opacity:.5;
+    }
+    .timeline-item {
+      position:relative;
+      padding-left:1.5rem;
+      display:flex;
+      flex-direction:column;
+      gap:.6rem;
+    }
+    .timeline-dot {
+      position:absolute;
+      left:-1.25rem;
+      top:.25rem;
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      border:3px solid var(--orange);
+      background:#fff;
+      box-shadow:0 0 0 6px rgba(249,132,0,0.15);
+    }
+    .timeline-item h3 {
+      margin:0;
+      font-size:1.22rem;
+      color:var(--navy);
+    }
+    .timeline-item p {
+      margin:0;
+      font-size:.97rem;
+      line-height:1.6;
+      color:#373737;
+      max-width:720px;
+    }
+    .journey-cta {
+      background:linear-gradient(135deg,rgba(11,59,77,0.92),rgba(77,107,122,0.85));
+      border-radius:28px;
+      padding:clamp(2.2rem,4vw,3.1rem);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      box-shadow:0 38px 100px -70px rgba(11,59,77,0.8);
+    }
+    .journey-cta h3 {
+      margin:0;
+      font-size:1.6rem;
+      letter-spacing:.01em;
+    }
+    .journey-cta p {
+      margin:0;
+      font-size:1rem;
+      line-height:1.55;
+      max-width:540px;
+    }
+    .cta-link {
+      align-self:flex-start;
+      background:#fff;
+      color:var(--navy);
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      padding:.85rem 1.8rem;
+      border-radius:999px;
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .cta-link:hover {
+      transform:translateY(-4px);
+      box-shadow:0 18px 40px -25px rgba(255,255,255,0.65);
+    }
+        @media (max-width:960px) {
+      .communication-layout {
+        grid-template-columns:1fr;
+      }
+    }
+    @media (max-width:768px) {
+      .hero-panel__badge {
+        font-size:.68rem;
+      }
+      .hero-metrics {
+        grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      }
+      .journey-timeline {
+        padding-left:1.35rem;
+      }
+      .journey-timeline::before {
+        left:.35rem;
+      }
+      .timeline-item {
+        padding-left:1rem;
+      }
+      .timeline-dot {
+        left:-1.6rem;
+      }
+      .communication-detail {
+        order:-1;
+      }
+    }
+    @media (max-width:600px) {
+      .about-hero {
+        padding:2.1rem 1.6rem;
+      }
+      .hero-highlights {
+        grid-template-columns:1fr;
+      }
+      .hero-grid {
+        grid-template-columns:1fr;
+      }
+      .comm-stage {
+        padding:1.45rem 1.5rem;
+      }
+      .comm-stage::before {
+        left:14px;
+      }
+      .comm-stage h3 {
+        font-size:1.15rem;
+      }
+    }
+</style>
+</head>
+<body class="about-page">
+  <header role="header">
+    <div class="container">
+      <h1>
+        <a href="index.html" title="Poli Plot Labs">
+          <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs" style="width:200px;height:auto;display:block;">
+        </a>
+      </h1>
+      <nav role="header-nav" class="navy">
+        <ul>
+          <li><a href="index.html" title="Home">Home</a></li>
+          <li class="nav-active"><a href="about.html" title="About">About</a></li>
+          <li><a href="blog.html" title="Blog">Blog</a></li>
+          <li><a href="contact_v2.html" title="Contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </section>
-
-  <!-- Why It Matters -->
-  <section class="row mt-4 about-wrap" style="display:none">
-    <div class="col-xs-12 col-md-8">
-      <h3 class="section-h left">Why It Matters</h3>
-      <div class="about-card p-5 rounded-4 shadow-sm hover-lift accent-left">
-        <p class="mb-2">
-          Research shows that most policy reports are rarely read beyond their executive summaries. Dense methods and
-          technical language mean important findings often fail to reach the people who could use them. At the same time,
-          students producing outstanding analysis in classrooms rarely get the chance to publish it for a wider audience.
-        </p>
-        <p class="mb-2"><strong>Poli Plot Labs exists to bridge that disconnect.</strong></p>
-        <p class="mb-2">
-          For students, it’s a platform to practice data storytelling and showcase work to employers.
-        </p>
-        <p class="mb-0">
-          For readers, it’s a way to understand pressing issues — from food security to energy resilience — in a visual,
-          approachable way.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- About (single) -->
-  <section class="row mt-4 about-wrap">
-    <div class="col-xs-12 col-md-8">
-      <h3 class="section-h left sm">About</h3>
-      <p>
-        We apply <span class="hero-accent">economic analysis</span> and
-        <span class="hero-accent">data visualization</span> to urgent topics in
-        energy, food security, trade, and development. Each plot is concise, chart-forward, and built for impact.
-      </p>
-      <p>
-        In a noisy world, clarity is power. We cut through clutter with evidence-based storytelling—so decisions are
-        faster, fairer, and easier to explain.
-      </p>
-    </div>
-  </section>  <!-- Team (Tristen & Bhairavi Bio's) -->
-  
-  <!-- Why It Matters: Interactive Bridge/Funnel -->
-  <section class="row mt-4 about-wrap ppl-bridge" aria-labelledby="ppl-bridge-title">
-  <div class="col-xs-12 col-md-8">
-    <h2 id="ppl-bridge-title">Communication Funnel: Bridging the Gap</h2>
-    <p class="ppl-lede">From dense research to public decisions: this pyramid centers Poli Plot Labs, translating methods into clear stories that move insights into action.</p>
-
-    <div class="ppl-pyramid" role="list">
-      <div class="ppl-tier ppl-top" role="listitem">
-        <div class="ppl-tier-head">
-          <h3>Scholarly Research</h3>
-        </div>
-        <p class="ppl-tier-body">Dense papers, regression tables, and technical datasets — essential, but often inaccessible beyond experts.</p>
-      </div>
-
-      <div class="ppl-tier ppl-mid" role="listitem">
-        <div class="ppl-tier-head">
-          <span class="ppl-badge" aria-hidden="true">Bridge</span>
-          <h3>Poli Plot Labs</h3>
-          <p class="ppl-tier-sub">Policy students translating evidence into action</p>
-        </div>
-        <p class="ppl-tier-body">We convene researchers and decision-makers with <strong>plots</strong>, <strong>visuals</strong>, and <strong>plain language</strong> so rigor and real-world clarity meet in one place.</p>
-      </div>
-
-      <div class="ppl-tier ppl-bot" role="listitem">
-        <div class="ppl-tier-head">
-          <h3>Public &amp; Practitioners</h3>
-        </div>
-        <p class="ppl-tier-body">Clear, visual explainers help policymakers, practitioners, and communities make better decisions, faster.</p>
-      </div>
-
-      <p class="ppl-footnote">Poli Plot Labs anchors the center of this pyramid, translating research downward and community insight upward so every layer stays connected.</p>
-    </div>
-  </div>
-</section>
-  <section class="row mt-5 about-wrap">
-    <div class="col-xs-12">
-      <h3 class="section-h left">Meet the Team</h3>
-    </div>
-
-    <!-- Tristen -->
-    <div class="col-xs-12 col-md-6 mb-4">
-      <div class="team-card rounded-4 shadow-sm hover-lift h-100">
-        <div class="team-row">
-          <img src="images/about-images/about-tristen.jpg"
-               class="img-responsive rounded-circle border border-3 border-orange team-avatar"
-               alt="Portrait of Tristen Best">
-          <div>
-            <h4 class="team-name">Tristen Best, MPP</h4>
-            <p class="text-muted team-role">Co-Founder/Policy Analyst</p>
-            <p class="team-bio">Participatory Energy Resilience Analyst; turning research into clear visuals.</p>
-            <div class="team-links">
-              <a href="https://www.linkedin.com/in/tristenbest" target="_blank" rel="noopener" aria-label="Tristen on LinkedIn"><i class="fa fa-linkedin"></i></a>
-              <a href="mailto:tristenbest6@gmail.com" aria-label="Email Tristen"><i class="fa fa-envelope"></i></a>
-            </div>
-            <button class="team-toggle" data-target="#bio-tristen" aria-controls="bio-tristen" aria-expanded="false">Read more</div>
-            <div id="bio-tristen" class="team-bio-long" hidden>
-              MPP graduate from UNC Chapel Hill with a background in economics and public policy. Tristen focuses on participatory approaches to energy resilience and is passionate about turning complex research into clear, visual stories that connect policy to the people it affects.
-            </div>
+  </header>
+  <main role="main-inner-wrapper" class="about-main">
+    <div class="container">
+      <section class="about-hero section" id="about-poli-plot-labs">
+        <div class="hero-grid">
+          <div class="hero-text">
+            <span class="eyebrow">About Poli Plot Labs</span>
+            <h1 class="section-title">Turning policy data into decisions people feel.</h1>
+            <p class="lead">Policy research shouldn&rsquo;t live in PDFs alone. We co-design visual stories with students, practitioners, and communities so insights travel faster and land with the people who can act.</p>
+            <p class="lead">The lab blends rapid data analysis with editorial design and context building. Every story we publish is grounded in method confidence, human language, and pathways for action.</p>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bhairavi -->
-    <div class="col-xs-12 col-md-6 mb-4">
-      <div class="team-card rounded-4 shadow-sm hover-lift h-100">
-        <div class="team-row">
-          <img src="images/about-images/about-bhairavi.JPG"
-               class="img-responsive rounded-circle border border-3 border-orange team-avatar"
-               alt="Portrait of Bhairavi Jayaraman">
-          <div>
-            <h4 class="team-name">Bhairavi Jayaraman, MPP</h4>
-            <p class="text-muted team-role">Co-founder/Policy Analyst</p>
-            <p class="team-bio">Applied Policy Data Analyst; leveraging quantitative methods to connect policy and practice.</p>
-            <div class="team-links">
-              <a href="https://www.linkedin.com/in/bhairavi-jayaraman" target="_blank" rel="noopener" aria-label="Bhairavi on LinkedIn"><i class="fa fa-linkedin"></i></a>
-              <a href="mailto:bjayaraman0627@gmail.com" aria-label="Email Bhairavi"><i class="fa fa-envelope"></i></a>
-            </div>
-            <button class="team-toggle" data-target="#bio-bj" aria-controls="bio-bj" aria-expanded="false">Read more</div>
-            <div id="bio-bj" class="team-bio-long" hidden>
-              MPP graduate from UNC Chapel Hill with a background in economics and public policy. Bhairavi uses data science to make complex research clear, with a particular interest in health and nutrition policy.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contributors -->
-  <section class="row mt-4 about-wrap">
-    <div class="col-xs-12">
-      <h3 class="section-h left sm">Contributors</h3>
-    </div>
-
-    <div class="col-xs-12">
-      <div class="contributors-grid">
-        <!-- Example contributor 1 -->
-        <div class="team-card team-sm rounded-4 shadow-sm hover-lift">
-          <div class="team-row">
-            <img src="images/about-images/about-image-1.jpg"
-                 class="img-responsive rounded-circle border border-2 border-orange team-avatar"
-                 alt="Contributor headshot">
-            <div>
-              <h4 class="team-name">Alex Kim</h4>
-              <p class="text-muted team-role">Data Visualization</p>
-              <p class="team-bio">UNC Public Policy � Tableau, D3.js</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Example contributor 2 -->
-        <div class="team-card team-sm rounded-4 shadow-sm hover-lift">
-          <div class="team-row">
-            <img src="images/about-images/about-image-3.jpg"
-                 class="img-responsive rounded-circle border border-2 border-orange team-avatar"
-                 alt="Contributor headshot">
-            <div>
-              <h4 class="team-name">Jordan Lee</h4>
-              <p class="text-muted team-role">Research + QA</p>
-              <p class="team-bio">UNC Economics � Reproducible pipelines</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Example contributor 3 -->
-        <div class="team-card team-sm rounded-4 shadow-sm hover-lift">
-          <div class="team-row">
-            <img src="images/about-images/about-image-2.jpg"
-                 class="img-responsive rounded-circle border border-2 border-orange team-avatar"
-                 alt="Contributor headshot">
-            <div>
-              <h4 class="team-name">Sam Patel</h4>
-              <p class="text-muted team-role">Policy Writing</p>
-              <p class="team-bio">Duke Sanford � Plain-language editing</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Timeline -->
-  <section class="row mt-5 about-wrap">
-    <div class="col-xs-12 col-md-8">
-      <h3 class="section-h left">Our Journey</h3>
-      <div class="timeline mt-3">
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h4>2025 — Founded</h4>
-          <p>Launched to make policy analysis faster and more visual.</p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h4>2025 — First Publication</h4>
-          <p>Inaugural plot on shingles vaccination trends in the U.S.</p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h4>Future — Scaling Impact</h4>
-          <p>More domains, interactive tools, and deeper local insights.</p>
-        </div>
-      </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-        <!-- footer -->
-
-        <footer role="footer">
-
-            <!-- logo -->
-
-                <h1>
-                    <a href="index.html" title="Poli Plot Labs">
-                        <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs"
-                            style="width:200px;height:auto;display:block;" />
-                    </a>
-                </h1>
-
-            <!-- logo -->
-
-            <!-- nav -->
-
-            <nav role="footer-nav">
-
-            	<ul>
-
-                	<li><a href="index.html" title="Home">Home</a></li>
-
-                    <li><a href="about.html" title="About">About</a></li>
-
-                    <li><a href="blog.html" title="Blog">Blog</a></li>
-
-                    <li><a href="contact_v2.html" title="Contact">Contact</a></li>
-
-                </ul>
-
-            </nav>
-
-            <!-- nav -->
-
-            <ul role="social-icons">
-
-
-
-                <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-
-                <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i></a></li>
-
+          <div class="hero-panel">
+            <div class="hero-panel__badge">Lab Snapshot</div>
+            <h3 class="hero-panel__title">Where policy, design, and data storytellers meet.</h3>
+            <p class="hero-panel__copy">We mentor student analysts through six-week studio cycles that pair them with policy partners. Each cohort produces visuals, narrative arcs, and activation kits ready to ship.</p>
+            <ul class="hero-panel__list">
+              <li>
+                <span>Insight studios</span>
+                <small>Intake labs, framing workshops, and shared briefs to keep everyone aligned.</small>
+              </li>
+              <li>
+                <span>Evidence engine</span>
+                <small>Reproducible notebooks, QA scripts, and reviewer checklists baked into every project.</small>
+              </li>
+              <li>
+                <span>Activation kits</span>
+                <small>Storyboards, annotated visuals, and copy blocks tailored for newsletters, decks, and social.</small>
+              </li>
             </ul>
+          </div>
+        </div>
+        <ul class="hero-metrics">
+          <li>
+            <span class="metric-number">6</span>
+            <span class="metric-label">student storytellers in our pilot studio cohort.</span>
+          </li>
+          <li>
+            <span class="metric-number">3</span>
+            <span class="metric-label">partner agencies testing our decision-ready prototypes.</span>
+          </li>
+          <li>
+            <span class="metric-number">4</span>
+            <span class="metric-label">policy domains in active build &mdash; from energy resilience to nutrition equity.</span>
+          </li>
+        </ul>
+        <div class="hero-highlights">
+          <article>
+            <h3>For learners</h3>
+            <p>Studio mentorship that sharpens data analysis, storytelling craft, and portfolio-ready deliverables.</p>
+          </article>
+          <article>
+            <h3>For partners</h3>
+            <p>Co-created insights that translate research into accessible language for stakeholders and decision makers.</p>
+          </article>
+          <article>
+            <h3>For readers</h3>
+            <p>Interactive explainers that deliver context, visuals, and actionable next steps in under five minutes.</p>
+          </article>
+        </div>
+      </section>
+      <section class="communication-section section" id="communication-funnel">
+        <div class="section-intro">
+          <span class="eyebrow">Communication Funnel</span>
+          <h2 class="section-title">From signal to story, our studio playbook keeps insight moving.</h2>
+          <p class="lead">The Poli Plot Labs communication playbook captures how an idea evolves from intake to activation. Each stage names the goal, the collaborators, and the tools that keep momentum on track.</p>
+        </div>
+                <div class="communication-layout">
+          <div class="comm-rail" role="list">
+            <button class="comm-stage" type="button" role="listitem" aria-current="true" data-title="Listen &amp; Frame" data-description="Intake labs align the policy question with lived context, policy windows, and the decisions partners need to move." data-highlights="Map the landscape with policy partners|Surface the people, constraints, and opportunities shaping the brief|Define success measures and storytelling guardrails together" data-output="Framing brief, stakeholder snapshot, shared success metrics">
+              <span class="comm-stage__number">01</span>
+              <div>
+                <h3>Listen &amp; Frame</h3>
+                <p>Discovery sessions that anchor the work in people, timing, and intent.</p>
+              </div>
+            </button>
+            <button class="comm-stage" type="button" role="listitem" aria-current="false" data-title="Co-Analyze" data-description="Analysts, mentors, and subject-matter partners co-build transparent notebooks so every insight is defensible and reproducible." data-highlights="Audit and prep data with versioned workflows|Pair analysts with design reviewers for bias and clarity checks|Capture methods in plain language alongside technical notes" data-output="Clean datasets, annotated notebooks, analyst explainer notes">
+              <span class="comm-stage__number">02</span>
+              <div>
+                <h3>Co-Analyze</h3>
+                <p>Evidence sprints that transform messy data into trustworthy signals.</p>
+              </div>
+            </button>
+            <button class="comm-stage" type="button" role="listitem" aria-current="false" data-title="Design &amp; Iterate" data-description="We storyboard, prototype, and test visuals with end users so the story resonates before it ships." data-highlights="Sketch journeys that connect stats to lived experience|Prototype visuals and copy in fast critique loops|Run clarity checks with partners and intended audiences" data-output="Narrative storyboard, prototype gallery, voice &amp; tone guide">
+              <span class="comm-stage__number">03</span>
+              <div>
+                <h3>Design &amp; Iterate</h3>
+                <p>Rapid prototyping that makes the insight visual, memorable, and shareable.</p>
+              </div>
+            </button>
+            <button class="comm-stage" type="button" role="listitem" aria-current="false" data-title="Activate &amp; Upskill" data-description="We package assets, facilitation notes, and training so partners can move the story through their channels with confidence." data-highlights="Bundle decks, social assets, and briefing notes for each audience|Host hand-off sessions that equip partners to deliver the story|Document lessons learned to fuel the next studio cycle" data-output="Activation kit, briefing deck, learning loop retrospective">
+              <span class="comm-stage__number">04</span>
+              <div>
+                <h3>Activate &amp; Upskill</h3>
+                <p>Launch plans that keep momentum alive long after the post goes live.</p>
+              </div>
+            </button>
+          </div>
+          <div class="communication-detail" aria-live="polite">
+            <span class="detail-label">Current focus</span>
+            <h3 id="comm-title">Listen &amp; Frame</h3>
+            <p id="comm-body">Intake labs align the policy question with lived context, policy windows, and the decisions partners need to move.</p>
+            <ul class="detail-highlights" id="comm-highlights">
+              <li>Map the landscape with policy partners</li>
+              <li>Surface the people, constraints, and opportunities shaping the brief</li>
+              <li>Define success measures and storytelling guardrails together</li>
+            </ul>
+            <div class="detail-footnote">Outputs: <span id="comm-output">Framing brief, stakeholder snapshot, shared success metrics</span></div>
+          </div>
+        </div>
+      </section>
+      <section class="team-section section" id="meet-the-team">
+        <div class="section-intro">
+          <span class="eyebrow">Meet the Team</span>
+          <h2 class="section-title">Led by policy storytellers who believe data belongs to community.</h2>
+          <p class="lead">Poli Plot Labs is grounded in partnership. Co-founders Tristen and Bhairavi bring policy analysis, participatory design, and data storytelling expertise&mdash;and our studio alumni expand what&rsquo;s possible with each build.</p>
+        </div>
+        <div class="team-leads">
+          <article class="team-card team-card--lead" aria-expanded="false">
+            <div class="team-header">
+              <img src="images/about-images/about-tristen.jpg" alt="Portrait of Tristen Best" class="team-avatar">
+              <div>
+                <h3 class="team-name">Tristen Best, MPP</h3>
+                <p class="team-role">Co-Founder &middot; Policy &amp; Participation</p>
+                <div class="team-links">
+                  <a href="https://www.linkedin.com/in/tristenbest" target="_blank" rel="noopener" aria-label="Tristen Best on LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                  <a href="mailto:tristenbest6@gmail.com" aria-label="Email Tristen"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+            <p class="team-bio">Participatory energy resilience analyst who translates complex research into visual stories communities can use.</p>
+            <button class="team-toggle" type="button" data-target="#bio-tristen" aria-expanded="false">Read full bio <span aria-hidden="true">+</span></button>
+            <div class="team-bio-long" id="bio-tristen" hidden>
+              MPP graduate from UNC Chapel Hill with a background in economics and public policy. Tristen leads our participatory intake labs and ensures that every visual we publish is grounded in lived experience, plain language, and actionable framing for readers and decision makers alike.
+            </div>
+          </article>
+          <article class="team-card team-card--lead" aria-expanded="false">
+            <div class="team-header">
+              <img src="images/about-images/about-bhairavi.JPG" alt="Portrait of Bhairavi Jayaraman" class="team-avatar">
+              <div>
+                <h3 class="team-name">Bhairavi Jayaraman, MPP</h3>
+                <p class="team-role">Co-Founder &middot; Data &amp; Methods</p>
+                <div class="team-links">
+                  <a href="https://www.linkedin.com/in/bhairavi-jayaraman" target="_blank" rel="noopener" aria-label="Bhairavi Jayaraman on LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                  <a href="mailto:bjayaraman0627@gmail.com" aria-label="Email Bhairavi Jayaraman"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+            <p class="team-bio">Applied policy data analyst who pairs rigorous quantitative methods with storytelling that feels human.</p>
+            <button class="team-toggle" type="button" data-target="#bio-bhairavi" aria-expanded="false">Read full bio <span aria-hidden="true">+</span></button>
+            <div class="team-bio-long" id="bio-bhairavi" hidden>
+              MPP graduate from UNC Chapel Hill focused on health and nutrition policy. Bhairavi architects our evidence engine, oversees QA, and helps student analysts articulate methodology in accessible language without compromising rigor.
+            </div>
+          </article>
+        </div>
+        <div class="contributors-block">
+          <h3 class="contributors-title">Contributors &amp; Studio Alumni</h3>
+          <p class="contributors-subtitle">Our studio community powers research, visualization, QA, and editorial polish. Each contributor brings a distinct craft to the lab.</p>
+          <div class="contributors-grid">
+            <article class="team-card team-card--mini">
+              <div class="team-header">
+                <img src="images/about-images/about-image-1.jpg" alt="Portrait of Alex Kim" class="team-avatar">
+                <div>
+                  <h4 class="team-name">Alex Kim</h4>
+                  <p class="team-role">Data Visualization</p>
+                </div>
+              </div>
+              <p class="team-bio">UNC Public Policy &middot; Specializes in Tableau prototypes and D3.js narratives that move fast and stay accessible.</p>
+            </article>
+            <article class="team-card team-card--mini">
+              <div class="team-header">
+                <img src="images/about-images/about-image-3.jpg" alt="Portrait of Jordan Lee" class="team-avatar">
+                <div>
+                  <h4 class="team-name">Jordan Lee</h4>
+                  <p class="team-role">Research &amp; QA</p>
+                </div>
+              </div>
+              <p class="team-bio">UNC Economics &middot; Leads reproducible pipeline reviews and clarity checks before every publish.</p>
+            </article>
+            <article class="team-card team-card--mini">
+              <div class="team-header">
+                <img src="images/about-images/about-image-2.jpg" alt="Portrait of Sam Patel" class="team-avatar">
+                <div>
+                  <h4 class="team-name">Sam Patel</h4>
+                  <p class="team-role">Policy Writing</p>
+                </div>
+              </div>
+              <p class="team-bio">Duke Sanford &middot; Crafts plain-language explainers and narrative bridges between data, policy, and people.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section class="journey-section section" id="our-journey">
+        <span class="eyebrow">Our Journey</span>
+        <h2 class="section-title">A young lab with momentum.</h2>
+        <p class="lead">We launched Poli Plot Labs to prove that policy storytelling can be fast, rigorous, and community-centered. Here&rsquo;s how the momentum is building.</p>
+        <div class="journey-timeline">
+          <article class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <h3>Spring 2025 &middot; The Spark</h3>
+            <p>Tristen and Bhairavi prototyped the first Poli Plot Labs sprint after repeatedly watching important research stall inside dense PDFs.</p>
+          </article>
+          <article class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <h3>Summer 2025 &middot; Pilot Studio</h3>
+            <p>Six student analysts joined a studio to deliver decision-ready shingles vaccination insights with rapid feedback from public health partners.</p>
+          </article>
+          <article class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <h3>Fall 2025 &middot; Partner Momentum</h3>
+            <p>Energy resilience teams, nutrition advocates, and local governments tapped the lab to co-design visuals that travel across community conversations.</p>
+          </article>
+          <article class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <h3>Looking Ahead &middot; Amplify Impact</h3>
+            <p>We&rsquo;re expanding the studio model, deepening training for partners, and building an open library of policy story templates anyone can remix.</p>
+          </article>
+        </div>
+        <div class="journey-cta">
+          <h3>Build with us</h3>
+          <p>Want to co-create a policy story, mentor a studio, or spin up an activation kit for your team? Let&rsquo;s design the next narrative together.</p>
+          <a class="cta-link" href="contact_v2.html">Start a conversation</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer role="footer">
+    <h1>
+      <a href="index.html" title="Poli Plot Labs">
+        <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs" style="width:200px;height:auto;display:block;">
+      </a>
+    </h1>
+    <nav role="footer-nav">
+      <ul>
+        <li><a href="index.html" title="Home">Home</a></li>
+        <li><a href="about.html" title="About">About</a></li>
+        <li><a href="blog.html" title="Blog">Blog</a></li>
+        <li><a href="contact_v2.html" title="Contact">Contact</a></li>
+      </ul>
+    </nav>
+    <ul role="social-icons">
+      <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+      <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i></a></li>
+    </ul>
+    <p class="copy-right">&copy; 2025 Poli Plot Labs. All rights reserved.</p>
+  </footer>
+  <script src="js/jquery.min.js" type="text/javascript"></script>
+  <script src="js/nav.js" type="text/javascript"></script>
+  <script src="js/custom.js" type="text/javascript"></script>
+  <script src="js/bootstrap.min.js" type="text/javascript"></script>
+  <script>
+    (function(){
+      var stages = document.querySelectorAll(".comm-stage");
+      if(!stages.length) return;
+      var detailTitle = document.getElementById("comm-title");
+      var detailBody = document.getElementById("comm-body");
+      var detailHighlights = document.getElementById("comm-highlights");
+      var detailOutput = document.getElementById("comm-output");
 
-            <p class="copy-right">&copy; 2015  avana LLC.. All rights Resved</p>
+      function updateDetail(stage){
+        stages.forEach(function(btn){
+          btn.setAttribute("aria-current","false");
+        });
+        stage.setAttribute("aria-current","true");
+        if(detailTitle){
+          detailTitle.textContent = stage.getAttribute("data-title") || "";
+        }
+        if(detailBody){
+          detailBody.textContent = stage.getAttribute("data-description") || "";
+        }
+        if(detailHighlights){
+          detailHighlights.innerHTML = "";
+          var highlightString = stage.getAttribute("data-highlights") || "";
+          highlightString.split("|").filter(Boolean).forEach(function(item){
+            var li = document.createElement("li");
+            li.textContent = item.trim();
+            detailHighlights.appendChild(li);
+          });
+        }
+        if(detailOutput){
+          detailOutput.textContent = stage.getAttribute("data-output") || "";
+        }
+      }
 
-        </footer>
+      stages.forEach(function(stage){
+        stage.addEventListener("click", function(){ updateDetail(stage); });
+        stage.addEventListener("mouseenter", function(){ updateDetail(stage); });
+        stage.addEventListener("focus", function(){ updateDetail(stage); });
+      });
 
-        <!-- footer -->
+      updateDetail(stages[0]);
+    })();
 
-    
-
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-
-        <script src="js/jquery.min.js" type="text/javascript"></script>
-
-        <!-- custom -->
-
-		<script src="js/nav.js" type="text/javascript"></script>
-
-        <script src="js/custom.js" type="text/javascript"></script>
-
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-
-        <script src="js/bootstrap.min.js" type="text/javascript"></script>
-
-        <!-- jquery.countdown -->
-
-        <script src="js/html5shiv.js" type="text/javascript"></script>
-
-        <script>
-          // Interactive Bridge/Funnel toggles
-          (function(){
-            function onClick(e){
-              var card = e.target.closest && e.target.closest('.ppl-card');
-              if(!card) return;
-              var expanded = card.getAttribute('aria-expanded') === 'true';
-              document.querySelectorAll('.ppl-card[aria-expanded="true"]').forEach(function(el){
-                if(el!==card) el.setAttribute('aria-expanded','false');
-              });
-              card.setAttribute('aria-expanded', String(!expanded));
-            }
-            document.addEventListener('click', onClick);
-            // Space to toggle
-            document.querySelectorAll('.ppl-card').forEach(function(card){
-              card.addEventListener('keydown', function(e){
-                if(e.code === 'Space'){
-                  e.preventDefault();
-                  card.click();
-                }
-              });
-            });
-          })();
-        </script>
-
-    </body>
-
+    (function(){
+      var toggles = document.querySelectorAll('.team-toggle');
+      toggles.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var targetSelector = btn.getAttribute('data-target');
+          var panel = document.querySelector(targetSelector);
+          if(!panel) return;
+          var expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!expanded));
+          panel.hidden = expanded;
+          var card = btn.closest('.team-card');
+          if(card){
+            card.setAttribute('aria-expanded', String(!expanded));
+          }
+          btn.innerHTML = !expanded ? 'Hide full bio <span aria-hidden="true">&minus;</span>' : 'Read full bio <span aria-hidden="true">+</span>';
+        });
+      });
+    })();
+  </script>
+</body>
 </html>
 
 
-<script>
-  // Team bio toggles
-  (function(){
-    function toggleLong(btn){
-      var targetSel = btn.getAttribute('data-target');
-      var panel = document.querySelector(targetSel);
-      if(!panel) return;
-      var expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!expanded));
-      panel.hidden = expanded;
-      // toggle card aria-expanded for CSS hook
-      var card = btn.closest('.team-card');
-      if(card){ card.setAttribute('aria-expanded', String(!expanded)); }
-      // swap label
-      btn.textContent = expanded ? 'Read more' : 'Show less';
-    }
-    document.addEventListener('click', function(e){
-      var btn = e.target.closest && e.target.closest('.team-toggle');
-      if(!btn) return;
-      toggleLong(btn);
-    });
-  })();
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
