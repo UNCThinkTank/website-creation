@@ -9,287 +9,27 @@
   <link href="css/style.css" rel="stylesheet" type="text/css">
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/responsive.css" rel="stylesheet" type="text/css">
-  <link href="css/fonts.css" rel="stylesheet" type="text/css">
-  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <style>
-    :root {
-      --navy:#0B3B4D;
-      --navy-light:#4D6B7A;
-      --navy-bg:#E6EEF1;
-      --orange:#F98400;
-      --orange-bg:#FFF3E0;
-    }
-    body.contact-page {
-      margin:0;
-      font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      color:#111;
-      background:#fff;
-    }
-    main.contact-main {
-      padding:clamp(1.4rem,5vw,3.2rem) 0 clamp(3.5rem,8vw,5.5rem);
-    }
-    main.contact-main .container {
-      display:flex;
-      flex-direction:column;
-      gap:clamp(2.5rem,6vw,4.5rem);
-    }
-    .eyebrow {
-      display:inline-flex;
-      align-items:center;
-      gap:.6rem;
-      padding:.25rem .75rem;
-      background:rgba(249,132,0,0.12);
-      border-radius:999px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      font-size:.72rem;
-      font-weight:700;
-      color:var(--orange);
-      margin-bottom:1rem;
-    }
-    .eyebrow::after {
-      content:'';
-      width:42px;
-      height:2px;
-      background:var(--orange);
-      border-radius:999px;
-      opacity:.55;
-    }
-    .contact-hero {
-      position:relative;
-      overflow:hidden;
-      background:linear-gradient(135deg,rgba(11,59,77,0.08),rgba(249,132,0,0.2));
-      border-radius:30px;
-      padding:clamp(2.4rem,6vw,4.5rem);
-      box-shadow:0 36px 110px -70px rgba(11,59,77,0.58);
-      display:flex;
-      flex-direction:column;
-      gap:1.4rem;
-    }
-    .contact-hero::before,
-    .contact-hero::after {
-      content:'';
-      position:absolute;
-      border-radius:999px;
-      opacity:.4;
-      transition:transform .6s ease;
-    }
-    .contact-hero::before {
-      width:420px;
-      height:420px;
-      top:-190px;
-      right:-120px;
-      background:radial-gradient(circle at 40% 40%,rgba(249,132,0,0.38),rgba(11,59,77,0.04));
-    }
-    .contact-hero::after {
-      width:520px;
-      height:520px;
-      bottom:-240px;
-      left:-150px;
-      background:radial-gradient(circle at 60% 60%,rgba(11,59,77,0.18),rgba(77,107,122,0.08));
-    }
-    .contact-hero:hover::before {
-      transform:translate(-8px,8px);
-    }
-    .contact-hero:hover::after {
-      transform:translate(10px,-10px);
-    }
-    .contact-title {
-      margin:0;
-      font-size:clamp(2.35rem,5.2vw,3.25rem);
-      line-height:1.05;
-      letter-spacing:-0.015em;
-      color:var(--navy);
-    }
-    .contact-lead {
-      margin:0;
-      font-size:1.12rem;
-      line-height:1.65;
-      max-width:640px;
-      color:#2e2e2e;
-    }
-    .response-note {
-      display:inline-flex;
-      align-items:center;
-      gap:.65rem;
-      padding:.65rem 1.1rem;
-      border-radius:999px;
-      background:rgba(11,59,77,0.1);
-      color:var(--navy);
-      font-size:.88rem;
-      font-weight:600;
-      width:max-content;
-    }
-    .contact-grid {
-      display:grid;
-      gap:clamp(1.8rem,4vw,2.8rem);
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      align-items:start;
-    }
-    .contact-card {
-      position:relative;
-      background:#fff;
-      border-radius:26px;
-      border:1px solid rgba(11,59,77,0.08);
-      padding:clamp(2.1rem,4vw,2.8rem);
-      box-shadow:0 28px 80px -60px rgba(11,59,77,0.6);
-      display:flex;
-      flex-direction:column;
-      gap:1.4rem;
-    }
-    .contact-card::before {
-      content:'';
-      position:absolute;
-      inset:0;
-      border-radius:26px;
-      opacity:0;
-      background:linear-gradient(135deg,rgba(249,132,0,0.16),rgba(11,59,77,0.12));
-      transition:opacity .3s ease;
-      pointer-events:none;
-    }
-    .contact-card:hover::before {
-      opacity:1;
-    }
-    .contact-card h2,
-    .contact-card h3 {
-      margin:0;
-      color:var(--navy);
-    }
-    .contact-card h2 {
-      font-size:1.55rem;
-    }
-    .contact-card h3 {
-      font-size:1.15rem;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .contact-card p {
-      margin:0;
-      font-size:.98rem;
-      line-height:1.6;
-      color:#2f2f2f;
-    }
-    .detail-pill {
-      display:flex;
-      align-items:center;
-      gap:.6rem;
-      padding:.65rem 1.1rem;
-      border-radius:16px;
-      background:rgba(11,59,77,0.08);
-      font-weight:600;
-      color:var(--navy);
-      width:max-content;
-    }
-    .detail-pill i {
-      color:var(--orange);
-    }
-    .contact-links {
-      display:flex;
-      flex-direction:column;
-      gap:.75rem;
-    }
-    .contact-links a {
-      display:inline-flex;
-      align-items:center;
-      gap:.6rem;
-      font-weight:600;
-      color:var(--navy);
-      text-decoration:none;
-      transition:color .25s ease, transform .25s ease;
-    }
-    .contact-links a:hover {
-      color:var(--orange);
-      transform:translateY(-2px);
-    }
-    form.contact-form {
-      display:flex;
-      flex-direction:column;
-      gap:1.1rem;
-    }
-    .form-row {
-      display:grid;
-      gap:1rem;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    }
-    .contact-form label {
-      font-size:.85rem;
-      font-weight:600;
-      color:var(--navy-light);
-    }
-    .contact-form input,
-    .contact-form textarea {
-      width:100%;
-      border-radius:14px;
-      border:1px solid rgba(11,59,77,0.18);
-      padding:.85rem 1rem;
-      font-size:.98rem;
-      font-family:inherit;
-      transition:border .25s ease, box-shadow .25s ease;
-      background:#fff;
-    }
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      border-color:var(--orange);
-      box-shadow:0 0 0 4px rgba(249,132,0,0.15);
-      outline:none;
-    }
-    .contact-form textarea {
-      min-height:180px;
-      resize:vertical;
-    }
-    .contact-form button {
-      align-self:flex-start;
-      border:none;
-      background:var(--navy);
-      color:#fff;
-      font-weight:700;
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      padding:.9rem 1.8rem;
-      border-radius:999px;
-      cursor:pointer;
-      transition:transform .25s ease, box-shadow .25s ease;
-    }
-    .contact-form button:hover {
-      transform:translateY(-3px);
-      box-shadow:0 22px 48px -24px rgba(11,59,77,0.65);
-    }
-    .form-footnote {
-      font-size:.85rem;
-      color:#4a4a4a;
-    }
-    @media (max-width:640px) {
-      .contact-hero {
-        padding:2.1rem 1.65rem;
-      }
-      .contact-card {
-        padding:1.9rem 1.6rem;
-      }
-      .response-note {
-        font-size:.82rem;
-      }
-    }
-  </style>
-</head>
-<body class="contact-page">
-  <header role="header">
-    <div class="container">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  </head>
+<body class="contact-page contact-modern">
+    <header class="site-header" role="banner">
+    <div class="header-inner">
       <h1>
-        <a href="index.html" title="Poli Plot Labs">
-          <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs" style="width:200px;height:auto;display:block;">
+        <a href="index_professional.html" title="Poli Plot Labs">
+          <img src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
         </a>
       </h1>
-      <nav role="header-nav" class="navy">
+      <nav class="site-nav" role="navigation" aria-label="Main menu">
         <ul>
-          <li><a href="index.html" title="Home">Home</a></li>
+          <li><a href="index_professional.html" title="Overview">Overview</a></li>
           <li><a href="about.html" title="About">About</a></li>
-          <li><a href="blog.html" title="Blog">Blog</a></li>
+          <li><a href="blog_modern.html" title="Blog">Blog</a></li>
           <li class="nav-active"><a href="contact_modern.html" title="Contact">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
-  <main role="main-inner-wrapper" class="contact-main">
+  <main role="main-inner-wrapper" class="page-shell contact-main">
     <div class="container">
       <section class="contact-hero">
         <span class="eyebrow">Contact</span>
@@ -336,25 +76,25 @@
       </section>
     </div>
   </main>
-  <footer role="footer">
-    <h1>
-      <a href="index.html" title="Poli Plot Labs">
-        <img src="images/Updated Logo Transparent.png" title="Poli Plot Labs" alt="Poli Plot Labs" style="width:200px;height:auto;display:block;">
+    <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <a href="index_professional.html" title="Poli Plot Labs">
+        <img src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
       </a>
-    </h1>
-    <nav role="footer-nav">
-      <ul>
-        <li><a href="index.html" title="Home">Home</a></li>
-        <li><a href="about.html" title="About">About</a></li>
-        <li><a href="blog.html" title="Blog">Blog</a></li>
-        <li class="nav-active"><a href="contact_modern.html" title="Contact">Contact</a></li>
+      <nav role="navigation" aria-label="Footer menu">
+        <ul>
+          <li><a href="index_professional.html" title="Overview">Overview</a></li>
+          <li><a href="about.html" title="About">About</a></li>
+          <li><a href="blog_modern.html" title="Blog">Blog</a></li>
+          <li><a href="contact_modern.html" title="Contact">Contact</a></li>
+        </ul>
+      </nav>
+      <ul role="social-icons">
+        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a></li>
+        <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i><span class="sr-only">Flickr</span></a></li>
       </ul>
-    </nav>
-    <ul role="social-icons">
-      <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i></a></li>
-    </ul>
-    <p class="copy-right">&copy; 2025 Poli Plot Labs. All rights reserved.</p>
+      <p class="copy-right">&copy; 2025 Poli Plot Labs. All rights reserved.</p>
+    </div>
   </footer>
   <script src="js/jquery.min.js" type="text/javascript"></script>
   <script src="js/nav.js" type="text/javascript"></script>
@@ -362,4 +102,13 @@
   <script src="js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
