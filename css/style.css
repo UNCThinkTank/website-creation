@@ -1,5 +1,5 @@
 /* ==========================================================================   Poli Plot Labs ??? Lean Stylesheet   --------------------------------------------------------------------------   Notes:   - Uses CSS variables for brand colors   - Keeps components you???re using across pages   - About page headings are scoped so Index stays the same   ========================================================================== *//* ----- Brand tokens ------------------------------------------------------ */:root{  --navy:#0B3B4D;  --navy-light:#4D6B7A;  --navy-bg:#E6EEF1;  --orange:#F98400;  --orange-light:#FFB84D;  --orange-bg:#FFF3E0;}/* Font */@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800);
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap);/* ----- Base / Reset (light) --------------------------------------------- */*,*::before,*::after{ box-sizing:border-box; }html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:#fff !important; }html.about-page{ font-size:clamp(17px,1.2vw,18px); }body{  margin:0;  font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;  color:#111;  background:#fff !important;}/* About page base adjustments */body.about-page{ background:#fff; }img{ max-width:100%; height:auto; display:block; }a{ color:#010101; text-decoration:none; transition:all .3s ease; }a:focus, img:focus, button:focus, .btn:focus{ outline:none; }::selection{ background:#FECC98; color:#fff; }main[role="main-home-wrapper"],main[role="main-inner-wrapper"]{ background:#fff; padding:0; }/* Layout: slightly narrower content area like many modern sites */@media (min-width:1200px){  /* Wider container to further reduce side whitespace */  .container{ width:1200px !important; }}/* Centered, narrower layout for About page *//* About page: use full container width (not centered/narrow) */body.about-page main[role="main-inner-wrapper"]{  /* Match home page container centering/offset */  width:auto;  margin:0 auto;}/* Smooth transitions for common elements */body, img,.commentys-form input[type="text"],.commentys-form input[type="email"],.commentys-form input[type="url"],.commentys-form textarea{ transition:all .2s linear; }/* ----- Logo sizes -------------------------------------------------------- */
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap);/* ----- Base / Reset (light) --------------------------------------------- */*,*::before,*::after{ box-sizing:border-box; }html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; background:#fff !important; }body{  margin:0;  font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;  color:#111;  background:#fff !important;}/* About page base adjustments */body.about-page{ background:#fff; }img{ max-width:100%; height:auto; display:block; }a{ color:#010101; text-decoration:none; transition:all .3s ease; }a:focus, img:focus, button:focus, .btn:focus{ outline:none; }::selection{ background:#FECC98; color:#fff; }main[role="main-home-wrapper"],main[role="main-inner-wrapper"]{ background:#fff; padding:0; }/* Layout: slightly narrower content area like many modern sites */@media (min-width:1200px){  /* Wider container to further reduce side whitespace */  .container{ width:1200px !important; }}/* Centered, narrower layout for About page *//* About page: use full container width (not centered/narrow) */body.about-page main[role="main-inner-wrapper"]{  /* Match home page container centering/offset */  width:auto;  margin:0 auto;}/* Smooth transitions for common elements */body, img,.commentys-form input[type="text"],.commentys-form input[type="email"],.commentys-form input[type="url"],.commentys-form textarea{ transition:all .2s linear; }/* ----- Logo sizes -------------------------------------------------------- */
 .brand-logo{ display:block; width:auto; height:auto; }
 .site-header h1 img{
   max-height:clamp(72px,12vw,96px);
@@ -501,23 +501,6 @@ footer.site-footer img {
 
 
 /* ========================================================================
-   About Page Type Fix
-   ======================================================================== */
-/* Ensure About matches modern page scale and readability */
-html.about-page { font-size:clamp(18.5px,1.35vw,19.5px); }
-body.about-page { font-size:18.5px; line-height:1.65; }
-body.about-page .about-main p,
-body.about-page .about-main li { font-size:1.06rem; }
-/* Nudge smaller About components up to match modern scale */
-body.about-page .hero-panel__copy { font-size:1.08rem; }
-body.about-page .hero-panel__list small { font-size:1rem; }
-body.about-page .metric-label { font-size:1.05rem; }
-body.about-page .hero-highlights p { font-size:1.05rem; }
-body.about-page .hero-panel__title { font-size:1.5rem; }
-
-
-
-/* ========================================================================
    Shared Modern Components
    ======================================================================== */
 body.home-alt,
@@ -766,20 +749,16 @@ body.home-alt .hero-title .spark-dot {
   border-radius:50%;
   background:var(--orange);
   box-shadow:0 0 0 0 rgba(249,132,0,0.45);
-  animation:heroDotPulse 1.8s infinite;
-  animation-play-state:paused;
+  animation:heroDotPulse 1.8s ease-out infinite;
+  animation-play-state:running;
 }
 body.home-alt .hero-title:hover .spark-line::after {
   transform:translateX(6px);
 }
-body.home-alt .hero-title:hover .spark-dot {
-  animation-play-state:running;
-}
+/* dot always animates; keep hover rule as no-op for safety */
+body.home-alt .hero-title:hover .spark-dot { animation-play-state:running; }
 @keyframes heroDotPulse {
   0% { box-shadow:0 0 0 0 rgba(249,132,0,0.5); transform:scale(1); }
-  60% { box-shadow:0 0 0 12px rgba(249,132,0,0); transform:scale(1.08); }
-  100% { box-shadow:0 0 0 0 rgba(249,132,0,0); transform:scale(1); }
-}
   60% { box-shadow:0 0 0 12px rgba(249,132,0,0); transform:scale(1.08); }
   100% { box-shadow:0 0 0 0 rgba(249,132,0,0); transform:scale(1); }
 }
@@ -788,6 +767,18 @@ body.home-alt .hero-lead {
   line-height:1.4;
   margin:0;
   color:#1a2c38;
+}
+/* Catchphrase below the spark */
+body.home-alt .hero-catchphrase {
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(1.1rem,2.4vw,1.6rem);
+  color:#1c3140;
+  letter-spacing:.01em;
+  opacity:.9;
+}
+@media (prefers-reduced-motion:reduce){
+  body.home-alt .hero-title .spark-dot { animation:none; }
 }
 body.home-alt .hero-text {
   display:flex;
