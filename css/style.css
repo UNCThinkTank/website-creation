@@ -3,8 +3,8 @@
 /* ----- Design Tokens (layout + type) ----------------------------------- */
 :root{
   /* Layout */
-  --container-max: 1120px;
-  --container-wide: 92vw; /* equal side padding as index */
+  --container-max: 1100px;
+  --container-wide: min(96vw,var(--container-max));
   --space-0: 0;
   --space-1: .5rem;
   --space-2: .75rem;
@@ -12,8 +12,8 @@
   --space-4: 1.25rem;
   --space-5: 1.5rem;
   --space-6: 2rem;
-  --space-stack: clamp(2rem,4.5vw,3.2rem);
-  --container-gutter: clamp(1.5rem,4vw,2.8rem);
+  --space-stack: clamp(1.8rem,4vw,2.8rem);
+  --container-gutter: clamp(1rem,3.6vw,2rem);
   /* Typography */
   --font-family-base: "Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   --font-family-heading: "Montserrat","Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
@@ -418,13 +418,14 @@ main[role="main-inner-wrapper"] {
   border-bottom:1px solid rgba(11,59,77,0.08);
 }
 .site-header .header-inner {
+  width:100%;
   max-width:min(var(--container-max),var(--container-wide));
   margin:0 auto;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:1.5rem;
-  padding:clamp(1.1rem,3vw,1.6rem) 0;
+  padding:clamp(1.1rem,3vw,1.6rem) var(--container-gutter);
 }
 .site-header h1 {
   margin:0;
@@ -484,7 +485,7 @@ body.contact-page .site-nav ul {
 }
 /* Shared container and stacking to match index across pages */
 .container {
-  width:auto !important;
+  width:100% !important;
   max-width:min(var(--container-max), var(--container-wide));
   margin:0 auto;
   padding-left:0;
@@ -498,20 +499,19 @@ body.contact-page .site-nav ul {
 main.page-shell,
 main[role="main-inner-wrapper"],
 main[role="main-home-wrapper"] {
+  width:100%;
+  max-width:min(var(--container-max),var(--container-wide));
+  margin:0 auto;
   padding-left:var(--container-gutter);
   padding-right:var(--container-gutter);
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-stack);
 }
 body.about-page .container,
 body.about-page--alt .container {
   padding-left:0;
   padding-right:0;
-}
-main.page-shell {
-  max-width:min(var(--container-max),var(--container-wide));
-  margin:0 auto;
-  display:flex;
-  flex-direction:column;
-  gap:var(--space-stack);
 }
 footer.site-footer {
   background:#fff;
@@ -520,8 +520,11 @@ footer.site-footer {
   display:flex;
   justify-content:center;
 }
+footer.site-footer .footer-inner {
+  width:100%;
   max-width:min(var(--container-max),var(--container-wide));
   margin:0 auto;
+  padding:0 var(--container-gutter);
   display:flex;
   flex-direction:column;
   align-items:center;
