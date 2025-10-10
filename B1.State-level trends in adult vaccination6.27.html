@@ -24,23 +24,32 @@
 
         <!-- style -->
 
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="css/responsive.css" rel="stylesheet" type="text/css">
         <link href="css/style.css" rel="stylesheet" type="text/css">
 
         <!-- style -->
 
         <!-- bootstrap -->
 
-        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <!-- moved bootstrap above site styles -->
 
         <!-- responsive -->
 
-        <link href="css/responsive.css" rel="stylesheet" type="text/css">
+        <!-- moved responsive above site styles -->
 
         <!-- font-awesome -->
 
         <link href="css/fonts.css" rel="stylesheet" type="text/css">
 
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <style>
+          .report-container { width:100%; max-width:min(96vw, 1120px); margin:0 auto; padding:0 clamp(16px,2.5vw,24px); }
+          img, video, iframe { max-width:100%; height:auto; }
+          table { width:100% !important; display:block; overflow-x:auto; }
+          pre, code { white-space:pre-wrap; word-break:break-word; }
+          @media (max-width:600px){ body { font-size:18px; } }
+        </style>
 
         <!-- font-awesome -->
 
@@ -56,7 +65,8 @@
 
 
 
-    <body>
+    <body class="report">
+      <div class="report-container">
 
     
 
@@ -310,6 +320,7 @@ This analysis draws on publicly available data from the CDC’s Behavioral Risk 
 
         <script src="js/html5shiv.js" type="text/javascript"></script>
 
+      </div>
     </body>
 
 </html>
