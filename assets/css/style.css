@@ -1,5 +1,6 @@
 /* ==========================================================================   Poli Plot Labs ??? Lean Stylesheet   --------------------------------------------------------------------------   Notes:   - Uses CSS variables for brand colors   - Keeps components you???re using across pages   - About page headings are scoped so Index stays the same   ========================================================================== *//* ----- Brand tokens ------------------------------------------------------ */:root{  --navy:#0B3B4D;  --navy-light:#4D6B7A;  --navy-bg:#E6EEF1;  --orange:#F98400;  --orange-light:#FFB84D;  --orange-bg:#FFF3E0;}/* Font */@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800);
 @import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap);
 /* ----- Design Tokens (layout + type) ----------------------------------- */
 :root{
   /* Layout */
@@ -15,8 +16,8 @@
   --space-stack: clamp(1.8rem,4vw,2.8rem);
   --container-gutter: clamp(16px,2.5vw,24px);
   /* Typography */
-  --font-family-base: "Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  --font-family-heading: "Montserrat","Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  --font-family-base: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  --font-family-heading: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   --font-size-root: 17px;
   --font-size-base: 18px;
   --line-height-base: 1.6;
@@ -49,10 +50,23 @@ body, img{ transition:all .2s linear; }
 /* ----- Logo sizes -------------------------------------------------------- */
 .brand-logo{ display:block; width:auto; height:auto; }
 .site-header h1 img{
-  max-height:clamp(72px,12vw,96px);
-  max-width:320px;
+  max-height:clamp(100px,12vw,140px);
+  max-width:360px;
   width:auto;
   height:auto;
+}
+/* Enlarge header logo visually without affecting layout */
+.site-header .brand-logo {
+  transform: translateX(-24px) scale(1.40);
+  transform-origin: left center;
+  transition: transform .25s ease, filter .25s ease;
+  will-change: transform;
+}
+
+/* Hover zoom on header logo without affecting layout */
+.site-header .brand-link:hover .brand-logo {
+  transform: translateX(-24px) scale(1.52);
+  filter: drop-shadow(0 10px 24px rgba(11,59,77,0.25)) drop-shadow(0 2px 8px rgba(249,132,0,0.18));
 }
 
 footer.site-footer img,
@@ -423,8 +437,13 @@ body.data-story-page .bevel-header{ padding-left:clamp(4px, 0.8vw, 10px); paddin
   position:sticky;
   top:0;
   z-index:50;
-  background:#fff;
-  border-bottom:1px solid rgba(11,59,77,0.08);
+  /* Clear, neutral glossy header treatment */
+  background: linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(255,255,255,0.97) 60%, rgba(255,255,255,0.94) 100%);
+  border-bottom: 0; /* remove faint divider line */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.85) inset,
+    0 -1px 0 rgba(0,0,0,0.06) inset,
+    0 14px 28px -22px rgba(0,0,0,0.12);
 }
 /* Keep header divider visible on home */
 .site-header .header-inner {
@@ -509,6 +528,9 @@ body.contact-page .site-nav ul {
 /* ensure consistent bottom spacing across pages */
 .page-shell > *:last-child,
 .page-shell > .container:last-child > *:last-child { margin-bottom:0; padding-bottom:0; }
+
+/* Utility: force top flush against header line */
+/* removed: flush-top utility (no longer needed) */
 #main-content > .page-shell,
 main.page-shell,
 main[role="main-inner-wrapper"],
@@ -898,8 +920,13 @@ body.data-story-page .report-container {
   padding:0 clamp(16px, 2.5vw, 24px);
 }
 footer.site-footer {
-  background:#fff;
-  border-top:1px solid rgba(11,59,77,0.08);
+  /* Clear glossy footer treatment (neutral tone) */
+  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.99) 100%);
+  border-top:1px solid rgba(0,0,0,0.12);
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,0.85) inset,
+    0 1px 0 rgba(0,0,0,0.06) inset,
+    0 -14px 28px -22px rgba(0,0,0,0.12);
   padding:clamp(2.4rem,4vw,3.4rem) 0;
   display:flex;
   justify-content:center;
@@ -932,6 +959,15 @@ footer.site-footer a {
 footer.site-footer a:hover,
 footer.site-footer a:focus {
   color:var(--orange);
+}
+/* Filter labels for clarity */
+.filter-label {
+  margin: .25rem 0 .4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .8rem;
+  color: var(--navy-light);
 }
 
 /* Index: small gap under header to match inner pages */
@@ -1099,6 +1135,22 @@ footer.site-footer .footer-inner {
 /* .site-header .header-inner { padding-bottom:0; } */
 .page-shell > *:first-child,
 .page-shell > .container:first-child > *:first-child { margin-top:0; padding-top:0; }
+
+/* removed: page-specific hero top padding overrides */
+
+/* Last-resort: nudge main content up across static pages without changing header size */
+body.home-page #main-content,
+body.about-page #main-content,
+body.contact-page #main-content,
+body.blog-page #main-content { margin-top: -46px; }
+
+/* Square-off aurora backgrounds (no rounded corners) */
+body.home-alt .hero,
+body.blog-page.blog-modern .blog-hero,
+body.contact-page.contact-modern .contact-hero,
+.about-hero { border-radius: 0 !important; }
+
+/* removed: debug outline helpers */
 
 /* Ensure first hero blocks align like Index */
 body.about-page .about-hero,
@@ -1344,7 +1396,7 @@ C:\Users\trist
    Home (Professional Overview)
    ======================================================================== */
 body.home-alt {
-  font-family:"Montserrat","Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  font-family: var(--font-family-base);
 }
 body.home-alt .hero {
   position:relative;
@@ -1396,13 +1448,28 @@ body.home-alt .hero-title {
   line-height:1;
   letter-spacing:-0.015em;
   font-weight:700;
-  font-family:"Montserrat","Open Sans",sans-serif;
+  font-family: var(--font-family-heading);
 }
 body.home-alt .hero-wordmark {
   display:inline-flex;
   align-items:baseline;
-  gap:.35rem;
+  gap:.45rem; /* slightly more space between Poli / Plot / Labs */
   white-space:nowrap;
+}
+/* PPL badge styling */
+.ppl-badge {
+  display:inline-flex;
+  align-items:center;
+  padding:.12rem .38rem;
+  margin-left:.35rem;
+  border-radius:6px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:.72rem;
+  color:#fff;
+  background:linear-gradient(90deg,var(--orange), var(--navy));
+  box-shadow:0 8px 20px -12px rgba(11,59,77,0.45);
 }
 body.home-alt .hero-title .accent {
   background:linear-gradient(90deg,var(--orange),#ffb347,var(--navy));
@@ -1421,24 +1488,31 @@ body.home-alt .hero-title .hero-spark {
   gap:.5rem;
   padding-left:.15rem;
   width:100%;
-  max-width:180px;
+  max-width:340px; /* extend line well past the S */
   pointer-events:none;
 }
 body.home-alt .hero-title .spark-line {
   position:relative;
   flex:1;
-  min-width:110px;
-  height:4px;
+  min-width:180px;
+  height:8px; /* stronger presence for zig-zag */
   border-radius:999px;
-  background:linear-gradient(90deg,rgba(249,132,0,0.2),rgba(11,59,77,0.2));
+  /* use warm base so any uncovered area doesn’t show gray */
+  background:linear-gradient(90deg,var(--orange) 0%, var(--orange-light) 100%);
   overflow:hidden;
 }
 body.home-alt .hero-title .spark-line::after {
   content:"";
   position:absolute;
   inset:-1px;
-  background:linear-gradient(120deg,var(--orange) 0%,var(--orange-light) 55%,rgba(255,255,255,0) 100%);
-  clip-path:polygon(0% 90%, 18% 50%, 36% 65%, 56% 30%, 75% 55%, 100% 15%, 100% 100%, 0% 100%);
+  background:linear-gradient(120deg,var(--orange) 0%,var(--orange-light) 75%);
+  /* crisp saw-tooth zig-zag along the top edge */
+  clip-path:polygon(
+    0% 100%, 4% 18%, 8% 100%, 12% 18%, 16% 100%, 20% 18%, 24% 100%, 28% 18%,
+    32% 100%, 36% 18%, 40% 100%, 44% 18%, 48% 100%, 52% 18%, 56% 100%, 60% 18%,
+    64% 100%, 68% 18%, 72% 100%, 76% 18%, 80% 100%, 84% 18%, 88% 100%, 92% 18%,
+    96% 100%, 100% 18%, 100% 100%, 0% 100%
+  );
   transition:transform .45s ease;
 }
 body.home-alt .hero-title .spark-dot {
@@ -1450,9 +1524,7 @@ body.home-alt .hero-title .spark-dot {
   animation:heroDotPulse 1.8s ease-out infinite;
   animation-play-state:running;
 }
-body.home-alt .hero-title:hover .spark-line::after {
-  transform:translateX(6px);
-}
+body.home-alt .hero-title:hover .spark-line::after { transform:translateX(14px); }
 /* dot always animates; keep hover rule as no-op for safety */
 body.home-alt .hero-title:hover .spark-dot { animation-play-state:running; }
 @keyframes heroDotPulse {
@@ -2825,6 +2897,8 @@ body.about-page {
       .comm-stage h3 {
         font-size:1.15rem;
       }}
+
+
 
 
 

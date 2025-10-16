@@ -222,36 +222,49 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Blog type filter (data_story, toolkit, studio_brief)
+  // Blog filters: by content type and by topic
   const filterBar = document.querySelector('.content-filter');
+  const topicBar = document.querySelector('.topic-filter');
   const cards = document.querySelectorAll('.blog-grid .blog-card');
-  if (filterBar && cards.length) {
-    const btns = filterBar.querySelectorAll('[data-filter-type]');
-    const setFilter = (type) => {
+  if (cards.length) {
+    let activeType = 'all';
+    let activeTopic = 'all';
+
+    const applyFilters = () => {
       cards.forEach(card => {
         const t = card.getAttribute('data-type') || '';
-        const show = (type === 'all') || (t === type);
-        card.style.display = show ? '' : 'none';
+        const topic = card.getAttribute('data-topic') || '';
+        const typeOk = (activeType === 'all') || (t === activeType);
+        const topicOk = (activeTopic === 'all') || (topic === activeTopic);
+        card.style.display = (typeOk && topicOk) ? '' : 'none';
       });
     };
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.setAttribute('aria-pressed','false'));
-        btn.setAttribute('aria-pressed','true');
-        setFilter(btn.getAttribute('data-filter-type'));
+
+    if (filterBar) {
+      const typeBtns = filterBar.querySelectorAll('[data-filter-type]');
+      typeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          typeBtns.forEach(b => b.setAttribute('aria-pressed','false'));
+          btn.setAttribute('aria-pressed','true');
+          activeType = btn.getAttribute('data-filter-type') || 'all';
+          applyFilters();
+        });
       });
-    });
-    // Allow hero chips to drive the same filter
-    document.addEventListener('click', (e) => {
-      const target = e.target && (e.target.closest ? e.target.closest('.topic-chips [data-filter-type]') : null);
-      if (!target) return;
-      e.preventDefault();
-      const type = target.getAttribute('data-filter-type') || 'all';
-      btns.forEach(b => b.setAttribute('aria-pressed','false'));
-      const match = filterBar.querySelector(`[data-filter-type="${type}"]`);
-      if (match) match.setAttribute('aria-pressed','true');
-      setFilter(type);
-    });
+    }
+
+    if (topicBar) {
+      const topicBtns = topicBar.querySelectorAll('[data-filter-topic]');
+      topicBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          topicBtns.forEach(b => b.setAttribute('aria-pressed','false'));
+          btn.setAttribute('aria-pressed','true');
+          activeTopic = btn.getAttribute('data-filter-topic') || 'all';
+          applyFilters();
+        });
+      });
+    }
+
+    applyFilters();
   }
 
   // Make active blog cards clickable as a whole (navigate to their CTA)
@@ -316,38 +329,29 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDetail(stages[0]);
   }
 
-  // Team bio toggles
-  const toggles = document.querySelectorAll('.team-toggle');
-  toggles.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      const targetSelector = btn.getAttribute('data-target');
-      const panel = document.querySelector(targetSelector);
-      if (!panel) return;
-
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      // If we are opening this bio, close all others first
-      if (!expanded) {
-        toggles.forEach(function(other){
-          if (other === btn) return;
-          const otherTarget = other.getAttribute('data-target');
-          const otherPanel = otherTarget ? document.querySelector(otherTarget) : null;
-          other.setAttribute('aria-expanded','false');
-          if (otherPanel) otherPanel.hidden = true;
-          const otherCard = other.closest('.team-card');
-          if (otherCard) otherCard.setAttribute('aria-expanded','false');
-          other.innerHTML = 'Read full bio <span aria-hidden="true">+</span>';
-        });
-      }
-
-      btn.setAttribute('aria-expanded', String(!expanded));
-      panel.hidden = expanded;
-
-      const card = btn.closest('.team-card');
-      if (card) {
-        card.setAttribute('aria-expanded', String(!expanded));
-      }
-
-      btn.innerHTML = !expanded
+  // Team bio toggles (only one open at a time)
+  const teamCards = document.querySelectorAll('.team-card');
+  teamCards.forEach(function(card){
+    const btn = card.querySelector('.team-toggle');
+    const panel = card.querySelector('.team-bio-long');
+    if (!btn || !panel) return;
+    btn.addEventListener('click', function(){
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      // Close all other bios
+      document.querySelectorAll('.team-card .team-toggle[aria-expanded="true"]').forEach(function(otherBtn){
+        if (otherBtn === btn) return;
+        otherBtn.setAttribute('aria-expanded','false');
+        const oc = otherBtn.closest('.team-card');
+        const op = oc && oc.querySelector('.team-bio-long');
+        if (op) op.hidden = true;
+        if (oc) oc.setAttribute('aria-expanded','false');
+        otherBtn.innerHTML = 'Read full bio <span aria-hidden="true">+</span>';
+      });
+      // Toggle current card
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+      card.setAttribute('aria-expanded', String(!isOpen));
+      btn.innerHTML = !isOpen
         ? 'Hide full bio <span aria-hidden="true">&minus;</span>'
         : 'Read full bio <span aria-hidden="true">+</span>';
     });

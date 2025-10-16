@@ -11,11 +11,7 @@ body_class: "blog-page"
         <h1 class="section-title">Stories that turn data into direction.</h1>
         <p class="lead">We publish visual explainers, policy playbooks, and studio retrospectives that keep decision-makers current on the issues we track. Explore the latest drops or scan what the next cohort is building.</p>
 
-        <div class="topic-chips" role="navigation" aria-label="Collections">
-          <a href="#" data-filter-type="data_story"><i class="fa fa-line-chart" aria-hidden="true"></i> Data Stories</a>
-          <a href="#" data-filter-type="toolkit"><i class="fa fa-wrench" aria-hidden="true"></i> Toolkits</a>
-          <a href="#" data-filter-type="studio_brief"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Studio Briefs</a>
-        </div>
+        
 
         <ul class="hero-metrics">
           <li>
@@ -38,16 +34,23 @@ body_class: "blog-page"
       <div>
         <h2 class="section-title">Latest from the lab</h2>
         <p class="lead sm blog-intro">Every Poli Plot piece packages rigorous analysis, editorial storytelling, and activation kits so your team can brief faster. Catch what’s out now and what’s shipping soon.</p>
+        <div class="filter-label" aria-hidden="true">Filter by content type</div>
         <div class="content-filter" role="navigation" aria-label="Filter by content type">
           <button class="btn btn-sm" data-filter-type="all" aria-pressed="true">All</button>
           <button class="btn btn-sm" data-filter-type="data_story">Data Stories</button>
           <button class="btn btn-sm" data-filter-type="toolkit">Toolkits</button>
           <button class="btn btn-sm" data-filter-type="studio_brief">Studio Briefs</button>
         </div>
+        <div class="topic-filter" role="navigation" aria-label="Filter by topic">
+          <div class="filter-label" aria-hidden="true">Filter by topic</div>
+          <button class="btn btn-sm" data-filter-topic="all" aria-pressed="true">All</button>
+          <button class="btn btn-sm" data-filter-topic="energy">Energy</button>
+          <button class="btn btn-sm" data-filter-topic="public_health">Public Health</button>
+        </div>
       </div>
 
       <div class="blog-grid">
-        <article class="blog-card" data-type="data_story">
+        <article class="blog-card" data-type="data_story" data-topic="public_health">
           <span class="blog-card__status">Published &middot; August 14, 2025</span>
           <h3>Tracking the Shingles Shot Surge</h3>
           <div class="blog-card__meta">
@@ -57,7 +60,7 @@ body_class: "blog-page"
           <p>State and county trends reveal where adults 50+ are falling behind on shingles vaccination coverage&mdash;and the rapid-response interventions that close the gap.</p>
           <a class="blog-card__cta" href="{{ '/data-stories/2025-10-14-state-level-trends.html' | relative_url }}">View story</a>
         </article>
-        <article class="blog-card" data-type="studio_brief">
+        <article class="blog-card" data-type="studio_brief" data-topic="energy">
           <span class="blog-card__status blog-card__status--upcoming">In build &middot; October 2025</span>
           <h3>Energy Resilience Projects in North Carolina</h3>
           <div class="blog-card__meta">
@@ -67,7 +70,7 @@ body_class: "blog-page"
           <p>We&rsquo;re mapping how NC is entering the new era of energy demand. Expect policy updates, funding pathways, and state initiatives.</p>
           <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Coming Soon</a>
         </article>
-        <article class="blog-card" data-type="toolkit">
+        <article class="blog-card" data-type="toolkit" data-topic="public_health">
           <span class="blog-card__status blog-card__status--upcoming">In build &middot; November 2025</span>
           <h3>Nutrition Equity Data Pack</h3>
           <div class="blog-card__meta">
@@ -77,7 +80,7 @@ body_class: "blog-page"
           <p>A remixable asset library to help local advocates brief lawmakers on SNAP expansion, summer EBT pilots, and grocery access investments.</p>
           <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Join the waitlist</a>
         </article>
-        <article class="blog-card" data-type="studio_brief">
+        <article class="blog-card" data-type="studio_brief" data-topic="other">
           <span class="blog-card__status blog-card__status--upcoming">Dispatch &middot; Monthly</span>
           <h3>Studio Dispatch</h3>
           <div class="blog-card__meta">
