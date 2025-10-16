@@ -1,39 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Poli Plot Labs transforms policy questions into visual narratives for decision makers.">
-  <title>Poli Plot Labs | Professional Overview</title>
-  <link rel="shortcut icon" href="images/Updated Logo Transparent.png" type="image/x-icon">
-  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="css/responsive.css" rel="stylesheet" type="text/css">
-  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  </head>
-<body class="home-alt">
-  <header class="site-header" role="banner">
-    <div class="header-inner">
-      <h1>
+---
+layout: default
+title: "Home"
+body_class: "home-page home-alt"
+---
 
-        <img class="brand-logo" src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
-
-      </h1>
-      <nav class="site-nav" role="navigation" aria-label="Main menu">
-        <ul>
-          <li class="nav-active"><a href="index.html" title="Home">Home</a></li>
-          <li><a href="about.html" title="About">About</a></li>
-          <li><a href="blog_modern.html" title="Blog">Blog</a></li>
-          <li><a href="contact_modern.html" title="Contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main class="page-shell">
-    <section class="section hero" aria-labelledby="hero-title">
+<div class="page-shell home-main" role="main">
+  <div class="container">
+    <section class="section hero full-bleed" aria-labelledby="hero-title">
       <div class="hero-grid">
         <div class="hero-text">
-          <span class="eyebrow">Data forward storytelling</span>
           <h1 id="hero-title" class="hero-title">
             <span class="hero-wordmark">Poli <span class="accent">Plot</span> Labs</span>
             <span class="hero-spark" aria-hidden="true">
@@ -53,49 +28,111 @@
             </ul>
           </div>
           <div class="hero-actions">
-            <a class="cta primary" href="blog_modern.html" aria-label="Browse the latest plots">Explore plots</a>
-            <a class="cta ghost" href="contact_modern.html" aria-label="Start a collaboration with Poli Plot Labs">Start a project</a>
+            <a class="cta primary" href="{{ '/blog_modern.html' | relative_url }}" aria-label="Browse the latest plots">Explore plots</a>
+            <a class="cta ghost" href="{{ '/contact.html' | relative_url }}" aria-label="Start a collaboration with Poli Plot Labs">Start a project</a>
           </div>
         </div>
-        
       </div>
     </section>
-    <section class="section" aria-labelledby="capability-title">
-      <h2 id="capability-title" class="section-title">How we turn questions into decisions</h2>
-      <p class="section-intro">Poli Plot Labs brings students, analysts, and designers together to pair economic modeling with narrative design. Every project moves through three connected tracks that keep your policy story rigorous, clear, and people-centered.</p>
-      <div id="grid" class="capability-grid">
-        <article class="capability-card">
-          <h3>Insight Architecture</h3>
-          <p>We frame the policy moment, define success, and build data frameworks that get to the real question.</p>
-          <ul>
-            <li>Reviewing existing research, data quality, and blind spots</li>
-            <li>Identifying who matters, what they need, and how they’ll use the findings</li>
-            <li>Drafting fact sheets and key takeaways that tie evidence to decision</li>
-          </ul>
-        </article>
-        <article class="capability-card">
-          <h3>Plot Engineering</h3>
-          <p>Analysts and designers iterate side by side to turn datasets into visual narratives shaped for your audience.</p>
-          <ul>
-            <li>Explore scenarios and run checks that reveal what changes matter most</li>
-            <li>Build draft charts, storyboards, and interactives with quick feedback</li>
-            <li>Pair every figure with plain-language notes so evidence is easy to follow</li>
-          </ul>
-        </article>
-        <article class="capability-card">
-          <h3>Story Delivery</h3>
-          <p>We make sure your policy story reaches the right audience in the right format.</p>
-          <ul>
-            <li>Briefing decks and speaker notes for committees, classrooms, or press briefings</li>
-            <li>Web-ready articles and visuals that can drop straight into a site or newsletter</li>
-            <li>Sharing guides to help track engagement and amplify reach on social platforms</li>
-          </ul>
-        </article>
+
+    <section class="section capabilities" aria-labelledby="capability-title">
+      <div class="capability-shell">
+        <div class="capability-heading">
+          <div>
+            <h2 id="capability-title" class="section-title">How we turn questions into decisions</h2>
+            <p class="section-intro">Poli Plot Labs brings students, analysts, and designers together so policy insights move from signal to storytelling without losing rigor.</p>
+          </div>
+          
+        </div>
+
+        <div class="capability-slider" data-capability-slider>
+          <article class="capability-slide is-active" data-slide="0">
+            <header class="capability-slide__header">
+              <span class="capability-eyebrow">Track 01</span>
+              <h3>Insight Architecture</h3>
+              <p>We frame the policy moment, define the success metric, and build data frameworks that surface the real signal.</p>
+            </header>
+            <ul class="capability-points">
+              <li>
+                <span class="point-title">Landscape sweep</span>
+                <span class="point-copy">Review existing research, data quality, and blind spots before we model a single scenario.</span>
+              </li>
+              <li>
+                <span class="point-title">Stakeholder mapping</span>
+                <span class="point-copy">Identify who matters, what they need, and how each audience will activate the findings.</span>
+              </li>
+              <li>
+                <span class="point-title">Decision briefs</span>
+                <span class="point-copy">Draft fact sheets and headline takeaways that tie evidence to an action the minute they publish.</span>
+              </li>
+            </ul>
+          </article>
+
+          <article class="capability-slide" data-slide="1">
+            <header class="capability-slide__header">
+              <span class="capability-eyebrow">Track 02</span>
+              <h3>Plot Engineering</h3>
+              <p>Analysts and designers iterate side by side so every chart, storyboard, and annotation lands with clarity.</p>
+            </header>
+            <ul class="capability-points">
+              <li>
+                <span class="point-title">Scenario labs</span>
+                <span class="point-copy">Explore simulations and run checks that reveal which changes matter most for your policy window.</span>
+              </li>
+              <li>
+                <span class="point-title">Visual prototypes</span>
+                <span class="point-copy">Build draft charts, interactives, and motion frames with fast critique loops and accessibility passes.</span>
+              </li>
+              <li>
+                <span class="point-title">Plain-language notes</span>
+                <span class="point-copy">Pair every figure with annotations and sourcing so evidence is easy to follow and reuse.</span>
+              </li>
+            </ul>
+          </article>
+
+          <article class="capability-slide" data-slide="2">
+            <header class="capability-slide__header">
+              <span class="capability-eyebrow">Track 03</span>
+              <h3>Story Delivery</h3>
+              <p>We package the story for every channel so it reaches the right room, inbox, and briefing at launch.</p>
+            </header>
+            <ul class="capability-points">
+              <li>
+                <span class="point-title">Activation kits</span>
+                <span class="point-copy">Build briefing decks, speaker notes, and scripts tailored to committees, classrooms, and press.</span>
+              </li>
+              <li>
+                <span class="point-title">Publish-ready assets</span>
+                <span class="point-copy">Ship web-ready articles, social explainers, and newsletter modules that drop straight into your stack.</span>
+              </li>
+              <li>
+                <span class="point-title">Impact tracking</span>
+                <span class="point-copy">Share guides and dashboards that capture engagement, follow-on questions, and next-step opportunities.</span>
+              </li>
+            </ul>
+          </article>
+          <div class="capability-controls" role="toolbar" aria-label="Capability carousel controls">
+          <button class="capability-nav capability-nav--prev" type="button" data-capability-prev aria-label="Show previous capability">
+            <span aria-hidden="true">&larr;</span>
+          </button>
+          <div class="capability-progress" data-capability-progress>01 / 03</div>
+          <button class="capability-nav capability-nav--next" type="button" data-capability-next aria-label="Show next capability">
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+          </div>
+        </div>
+
+        <div class="capability-dots" role="tablist" aria-label="Select capability track" data-capability-dots>
+          <button type="button" class="capability-dot is-active" data-capability-dot="0" aria-label="Insight Architecture" aria-pressed="true"></button>
+          <button type="button" class="capability-dot" data-capability-dot="1" aria-label="Plot Engineering" aria-pressed="false"></button>
+          <button type="button" class="capability-dot" data-capability-dot="2" aria-label="Story Delivery" aria-pressed="false"></button>
+        </div>
       </div>
     </section>
+
     <section class="section" aria-labelledby="feature-title">
       <div class="feature-band">
-        <a href="B1.State-level trends in adult vaccination6.27.html" aria-labelledby="feature-title">
+        <a href="{{ '/data-stories/2025-10-14-state-level-trends.html' | relative_url }}" aria-labelledby="feature-title">
           <span class="feature-tag">Featured insight</span>
           <h2 id="feature-title" class="feature-title">Tracking the shingles shot surge across the United States</h2>
           <p class="feature-dek">Our flagship project maps uptake trends, equity gaps, and the policy levers influencing adult vaccination. The resulting storyboard equips health agencies with ready-to-share visuals.</p>
@@ -106,12 +143,13 @@
         </a>
       </div>
     </section>
+
     <section class="section" aria-labelledby="workflow-title">
       <h2 id="workflow-title" class="section-title">Our workflow keeps teams aligned</h2>
       <div class="workflow-grid">
         <div class="workflow-detail">
           <h3>Clarity at every checkpoint</h3>
-          <p>Every stage uses shared workspaces, sourced data, and decision notes so there’s no gap between analysts, designers, and stakeholders.</p>
+          <p>Every stage uses shared workspaces, sourced data, and decision notes so there's no gap between analysts, designers, and stakeholders.</p>
           <ul>
             <li>Weekly briefs keep teams updated on insight shifts and design progress.</li>
             <li>Quality checks ensure methods and visuals reinforce one another.</li>
@@ -120,6 +158,7 @@
         </div>
       </div>
     </section>
+
     <section class="section subscribe-card" aria-labelledby="subscribe-title">
       <div>
         <h2 id="subscribe-title">Get the plot drop</h2>
@@ -131,37 +170,5 @@
         <button type="submit">Subscribe</button>
       </form>
     </section>
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-inner">
-      <img class="brand-logo" src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
-      <!-- Navigation removed -->
-      <ul role="social-icons">
-        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a></li>
-        <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i><span class="sr-only">Flickr</span></a></li>
-      </ul>
-      <p class="copy-right">&copy; 2025 Poli Plot Labs. All rights reserved.</p>
-    </div>
-  </footer>
-  <script src="js/jquery.min.js" type="text/javascript"></script>
-  <script src="js/nav.js" type="text/javascript"></script>
-  <script src="js/custom.js" type="text/javascript"></script>
-  <script src="js/bootstrap.min.js" type="text/javascript"></script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </div>
+</div>

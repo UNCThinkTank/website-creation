@@ -1,0 +1,38 @@
+---
+---
+<!-- Base layout for all Poli Plot Labs pages -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title | default: site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/font-awesome.min.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/effects/set2.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/effects/normalize.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/effects/component.css' | relative_url }}">
+  </head>
+  <body class="{{ page.body_class }}">
+    <header>
+      {% include header.html %}
+    </header>
+    <main id="main-content">
+      {{ content }}
+    </main>
+    <footer>
+      {% include footer.html %}
+    </footer>
+    <script src="{{ '/assets/js/jquery.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/nav.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/custom.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/bootstrap.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/effects/masonry.pkgd.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/effects/imagesloaded.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/effects/classie.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/effects/AnimOnScroll.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/effects/modernizr.custom.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/html5shiv.js' | relative_url }}"></script>
+  </body>
+</html>

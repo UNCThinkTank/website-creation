@@ -1,0 +1,49 @@
+---
+layout: default
+---
+<!-- Layout for instructional toolkits with sidebar navigation and applied tips -->
+<div class="toolkit-layout py-5">
+  <div class="container">
+    <div class="row">
+      <aside class="col-lg-3 mb-4 mb-lg-0">
+        <nav class="list-group">
+          {% if page.sidebar_links %}
+            {% for link in page.sidebar_links %}
+              <a class="list-group-item list-group-item-action" href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          {% else %}
+            <a class="list-group-item list-group-item-action" href="#steps">Steps</a>
+            <a class="list-group-item list-group-item-action" href="#data">Data</a>
+            <a class="list-group-item list-group-item-action" href="#example-outputs">Example Outputs</a>
+          {% endif %}
+        </nav>
+      </aside>
+
+      <div class="col-lg-9">
+        <header class="mb-5 pb-3 border-bottom">
+          <h1 class="h1 fw-bold mb-2">{{ page.title }}</h1>
+          {% if page.subtitle %}
+            <p class="lead text-muted mb-0">{{ page.subtitle }}</p>
+          {% endif %}
+        </header>
+
+        <section class="toolkit-content">
+          {{ content }}
+        </section>
+
+        {% if page.tips %}
+          <div class="toolkit-tips mt-5">
+            {% for tip in page.tips %}
+              <div class="tip border rounded-3 p-4 mb-4">
+                <h2 class="h5 fw-semibold mb-2">
+                  <i class="fa fa-lightbulb-o me-2" aria-hidden="true"></i>{{ tip.title }}
+                </h2>
+                <p class="mb-0">{{ tip.body }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,162 +1,94 @@
-<!DOCTYPE html>
-<html class="blog-page" lang="en">
+---
+layout: default
+title: "Stories"
+body_class: "blog-page"
+---
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description"
-    content="Poli Plot Labs newsroom showcases the latest policy visualizations, toolkits, and studio updates.">
-  <title>Poli Plot Labs | Blog v2</title>
-  <link rel="shortcut icon" href="images/Updated Logo Transparent.png" type="image/x-icon">
-  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="css/responsive.css" rel="stylesheet" type="text/css">
-  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  </head>
+<div class="page-shell blog-main" role="main">
+  <div class="container">
+    <section class="blog-hero">
+      <div class="hero-text">
+        <span class="eyebrow">Poli Plot Newsroom</span>
+        <h1 class="section-title">Stories that turn data into direction.</h1>
+        <p class="lead">We publish visual explainers, policy playbooks, and studio retrospectives that keep decision-makers current on the issues we track. Explore the latest drops or scan what the next cohort is building.</p>
 
-<body class="blog-page blog-modern">
-    <header class="site-header" role="banner">
-    <div class="header-inner">
-      <h1>
+        <div class="topic-chips" role="navigation" aria-label="Collections">
+          <a href="#" data-filter-type="data_story"><i class="fa fa-line-chart" aria-hidden="true"></i> Data Stories</a>
+          <a href="#" data-filter-type="toolkit"><i class="fa fa-wrench" aria-hidden="true"></i> Toolkits</a>
+          <a href="#" data-filter-type="studio_brief"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Studio Briefs</a>
+        </div>
 
-        <img class="brand-logo" src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
-
-      </h1>
-      <nav class="site-nav" role="navigation" aria-label="Main menu">
-        <ul>
-          <li><a href="index.html" title="Home">Home</a></li>
-          <li><a href="about.html" title="About">About</a></li>
-          <li class="nav-active"><a href="blog_modern.html" title="Blog">Blog</a></li>
-          <li><a href="contact_modern.html" title="Contact">Contact</a></li>
+        <ul class="hero-metrics">
+          <li>
+            <span>Traceable sources</span>
+            <span>Every figure links back to original datasets so evidence is always verifiable.</span>
+          </li>
+          <li>
+            <span>Annotated Codebooks</span>
+            <span>Each published analysis comes with transparent methods and sources, making it fully reproducible..</span>
+          </li>
+          <li>
+            <span>5-8 minute reads</span>
+            <span>Visual-first stories that respect your time and put decisions up front.</span>
+          </li>
         </ul>
-      </nav>
-    </div>
-  </header>
-  <main role="main-inner-wrapper" class="page-shell blog-main">
-    <div class="container">
-      <section class="blog-hero">
-        <div class="hero-text">
-          <span class="eyebrow">Poli Plot Newsroom</span>
-          <h1 class="section-title">Stories that turn data into direction.</h1>
-          <p class="lead">We publish visual explainers, policy playbooks, and studio retrospectives that keep
-            decision-makers current on the issues we track. Explore the latest drops or scan what the next cohort is
-            building.</p>
-          <div class="topic-chips" role="navigation" aria-label="Blog topics">
-            <a href="blog_modern.html">All Stories</a>
-            <a href="blog_modern.html?tag=energy">Energy Resilience</a>
-            <a href="blog_modern.html?tag=food-security">Food Security</a>
-            <a href="blog_modern.html?tag=equity">Equity</a>
-            <a href="blog_modern.html?tag=studio-updates">Studio Updates</a>
+      </div>
+    </section>
+
+    <section class="blog-list">
+      <div>
+        <h2 class="section-title">Latest from the lab</h2>
+        <p class="lead sm blog-intro">Every Poli Plot piece packages rigorous analysis, editorial storytelling, and activation kits so your team can brief faster. Catch what’s out now and what’s shipping soon.</p>
+        <div class="content-filter" role="navigation" aria-label="Filter by content type">
+          <button class="btn btn-sm" data-filter-type="all" aria-pressed="true">All</button>
+          <button class="btn btn-sm" data-filter-type="data_story">Data Stories</button>
+          <button class="btn btn-sm" data-filter-type="toolkit">Toolkits</button>
+          <button class="btn btn-sm" data-filter-type="studio_brief">Studio Briefs</button>
+        </div>
+      </div>
+
+      <div class="blog-grid">
+        <article class="blog-card" data-type="data_story">
+          <span class="blog-card__status">Published &middot; August 14, 2025</span>
+          <h3>Tracking the Shingles Shot Surge</h3>
+          <div class="blog-card__meta">
+            <span>Data story</span>
+            <span>By Poli Plot Studio</span>
           </div>
-          <ul class="hero-metrics">
-            <li>
-              <span>Traceable sources</span>
-              <span>Every figure links back to original datasets so evidence is always verifiable.</span>
-            </li>
-            <li>
-              <span>Annotated Codebooks</span>
-              <span>Each published analysis comes with transparent methods and sources, making it fully reproducible..</span>
-            </li>
-            <li>
-              <span>5-8 minute reads</span>
-              <span>Visual-first stories that respect your time and put decisions up front.</span>
-            </li>
-          </ul>
-        </div>
-        
-      </section>
-      <section class="blog-list">
-        <div>
-          <h2 class="section-title">Latest from the lab</h2>
-          <p class="lead sm blog-intro">Every Poli Plot piece packages rigorous analysis, editorial storytelling, and activation
-            kits so your team can brief faster. Catch what&rsquo;s out now and what&rsquo;s shipping soon.</p>
-        </div>
-        <div class="blog-grid">
-          <article class="blog-card">
-            <span class="blog-card__status">Published &middot; August 14, 2025</span>
-            <h3>Tracking the Shingles Shot Surge</h3>
-            <div class="blog-card__meta">
-              <span>Data story</span>
-              <span>By Poli Plot Studio</span>
-            </div>
-            
-            <p>State and county trends reveal where adults 50+ are falling behind on shingles vaccination
-              coverage&mdash;and the rapid-response interventions that close the gap.</p>
-            <a class="blog-card__cta" href="B1.State-level trends in adult vaccination6.27.html">View story</a>
-          </article>
-          <article class="blog-card">
-            <span class="blog-card__status blog-card__status--upcoming">In build &middot; October 2025</span>
-            <h3>Energy Resilience Projects in North Carolina</h3>
-            <div class="blog-card__meta">
-              <span>Studio brief</span>
-              <span>Led by Tristen Best</span>
-            </div>
-            
-            <p>We&rsquo;re mapping how NC is entering the new era of energy demand. Expect policy updates,
-              funding pathways, and state initiatives.</p>
-            <a class="blog-card__cta blog-card__cta--alt" href="contact_modern.html">Coming Soon</a>
-          </article>
-          <article class="blog-card">
-            <span class="blog-card__status blog-card__status--upcoming">In build &middot; November 2025</span>
-            <h3>Nutrition Equity Data Pack</h3>
-            <div class="blog-card__meta">
-              <span>Toolkit</span>
-              <span>Led by Bhairavi Jayaraman</span>
-            </div>
-            
-            <p>A remixable asset library to help local advocates brief lawmakers on SNAP expansion, summer EBT pilots,
-              and grocery access investments.</p>
-            <a class="blog-card__cta blog-card__cta--alt" href="contact_modern.html">Join the waitlist</a>
-          </article>
-          <article class="blog-card">
-            <span class="blog-card__status blog-card__status--upcoming">Dispatch &middot; Monthly</span>
-            <h3>Studio Dispatch</h3>
-            <div class="blog-card__meta">
-              <span>Newsletter</span>
-              <span>Poli Plot Labs</span>
-            </div>
-            
-            <p>Behind-the-scenes notes from our analysts, open calls for collaborators, and what&rsquo;s on deck for the
-              next sprint.</p>
-            <a class="blog-card__cta blog-card__cta--alt" href="contact_modern.html">Subscribe</a>
-          </article>
-        </div>
-      </section>
-      <section class="studio-note">
-        <div>
-          <h3>Want an advance brief?</h3>
-          <p>We send early releases, workshop invites, and collaboration calls to our partner list. Reply with a policy
-            question you&rsquo;re exploring and we&rsquo;ll co-design what comes next.</p>
-        </div>
-        <a class="cta-link" href="contact_modern.html">Start the conversation</a>
-      </section>
-    </div>
-  </main>
-    <footer class="site-footer" role="contentinfo">
-    <div class="footer-inner">
-      <img class="brand-logo" src="images/Updated Logo Transparent.png" alt="Poli Plot Labs">
-      <!-- Navigation removed -->
-      <ul role="social-icons">
-        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a></li>
-        <li><a href="#"><i class="fa fa-flickr" aria-hidden="true"></i><span class="sr-only">Flickr</span></a></li>
-      </ul>
-      <p class="copy-right">&copy; 2025 Poli Plot Labs. All rights reserved.</p>
-    </div>
-  </footer>
-  <script src="js/jquery.min.js" type="text/javascript"></script>
-  <script src="js/nav.js" type="text/javascript"></script>
-  <script src="js/custom.js" type="text/javascript"></script>
-  <script src="js/bootstrap.min.js" type="text/javascript"></script>
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
+          <p>State and county trends reveal where adults 50+ are falling behind on shingles vaccination coverage&mdash;and the rapid-response interventions that close the gap.</p>
+          <a class="blog-card__cta" href="{{ '/data-stories/2025-10-14-state-level-trends.html' | relative_url }}">View story</a>
+        </article>
+        <article class="blog-card" data-type="studio_brief">
+          <span class="blog-card__status blog-card__status--upcoming">In build &middot; October 2025</span>
+          <h3>Energy Resilience Projects in North Carolina</h3>
+          <div class="blog-card__meta">
+            <span>Studio brief</span>
+            <span>Led by Tristen Best</span>
+          </div>
+          <p>We&rsquo;re mapping how NC is entering the new era of energy demand. Expect policy updates, funding pathways, and state initiatives.</p>
+          <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Coming Soon</a>
+        </article>
+        <article class="blog-card" data-type="toolkit">
+          <span class="blog-card__status blog-card__status--upcoming">In build &middot; November 2025</span>
+          <h3>Nutrition Equity Data Pack</h3>
+          <div class="blog-card__meta">
+            <span>Toolkit</span>
+            <span>Led by Bhairavi Jayaraman</span>
+          </div>
+          <p>A remixable asset library to help local advocates brief lawmakers on SNAP expansion, summer EBT pilots, and grocery access investments.</p>
+          <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Join the waitlist</a>
+        </article>
+        <article class="blog-card" data-type="studio_brief">
+          <span class="blog-card__status blog-card__status--upcoming">Dispatch &middot; Monthly</span>
+          <h3>Studio Dispatch</h3>
+          <div class="blog-card__meta">
+            <span>Newsletter</span>
+            <span>Poli Plot Labs</span>
+          </div>
+          <p>Behind-the-scenes notes from our analysts, open calls for collaborators, and what&rsquo;s on deck for the next sprint.</p>
+          <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Subscribe</a>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

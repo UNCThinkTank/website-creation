@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<!-- Layout for concise studio briefs with a centered, text-focused presentation -->
+<div class="studio-brief py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-xl-6">
+        <header class="text-center mb-4">
+          <h1 class="fw-bold mb-2">{{ page.title }}</h1>
+          {% if page.subtitle %}
+            <p class="lead text-muted mb-3">{{ page.subtitle }}</p>
+          {% endif %}
+          <div class="text-muted small">
+            <span class="me-2">{{ page.author }}</span>
+            <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+          </div>
+        </header>
+        <section class="brief-content fs-5 lh-lg">
+          {{ content }}
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
