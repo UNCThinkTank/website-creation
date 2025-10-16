@@ -426,6 +426,7 @@ body.data-story-page .bevel-header{ padding-left:clamp(4px, 0.8vw, 10px); paddin
   background:#fff;
   border-bottom:1px solid rgba(11,59,77,0.08);
 }
+/* Keep header divider visible on home */
 .site-header .header-inner {
   width:100%;
   max-width:min(var(--container-max),var(--container-wide));
@@ -543,6 +544,15 @@ body.about-page--alt .container {
   background: radial-gradient(1200px 500px at 20% -120px, rgba(249,132,0,0.16), transparent 60%),
               radial-gradient(1200px 500px at 80% -140px, rgba(11,32,61,0.14), transparent 60%);
 }
+/* Revert home hero adjustments; use base .full-bleed only */
+/* Ensure inner hero content aligns to site container gutters */
+.full-bleed > .hero-grid {
+  width: 100%;
+  max-width: min(var(--container-max), var(--container-wide));
+  margin: 0 auto;
+  padding-left: var(--container-gutter);
+  padding-right: var(--container-gutter);
+}
 
 /* Home: mission line slightly smaller */
 body.home-page .hero-lead.mission {
@@ -550,19 +560,7 @@ body.home-page .hero-lead.mission {
 }
 
 /* Home: center subscribe section */
-.subscribe-card {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  gap:clamp(.8rem, 1.6vw, 1.2rem);
-}
-.subscribe-card form {
-  display:flex;
-  gap:.6rem;
-  align-items:center;
-  justify-content:center;
-}
+/* Removed home subscribe section styles */
 
 /* Data stories: widen reading width */
 /* Data stories: full-bleed canvas (no side gutters) */
@@ -584,7 +582,7 @@ body.data-story-page .report-container {
   background:transparent; /* remove background color */
   border:0;
   border-radius:28px;
-  padding:clamp(2.2rem, 4vw, 3.4rem);
+  padding:0; /* align shell to container edges; card handles inner padding */
   overflow:visible;
   box-shadow:none;
   display:flex;
@@ -597,6 +595,8 @@ body.data-story-page .report-container {
   align-items:flex-start;
   justify-content:space-between;
   gap:clamp(1.2rem, 3vw, 2.2rem);
+  padding-left: clamp(2rem, 4vw, 3rem);
+  padding-right: clamp(2rem, 4vw, 3rem);
 }
 .capability-heading .section-title {
   margin-bottom:clamp(.4rem, 1vw, .8rem);
@@ -647,7 +647,7 @@ body.data-story-page .report-container {
   background:#fff;
   border-radius:24px;
   border:1px solid rgba(11,32,61,0.08);
-  padding:clamp(1.8rem, 4vw, 2.6rem);
+  padding:clamp(2rem, 4vw, 3rem); /* match Featured Insight inner padding */
   box-shadow:0 32px 90px -55px rgba(11,32,61,0.4);
   opacity:0;
   transform:translateY(32px) scale(.975);
@@ -987,6 +987,8 @@ footer.site-footer .footer-inner {
 
 /* Blog: Poli Plot Newsroom hero - balanced scale */
 body.blog-page.blog-modern .blog-hero .section-title { font-size: clamp(2.3rem, 4.8vw, 3.0rem) !important; }
+/* Match hero title-to-lead spacing with list intro spacing */
+body.blog-page.blog-modern .blog-hero .section-title { margin-bottom: clamp(.55rem, 1.2vw, 1rem) !important; }
 body.blog-page.blog-modern .hero-text .lead { font-size: clamp(1.1rem, 2vw, 1.3rem) !important; line-height: 1.55; max-width: 68ch !important; }
 body.blog-page.blog-modern .hero-metrics li span:first-child { font-size: clamp(0.96rem, 1.9vw, 1.12rem) !important; font-weight: 700; }
 body.blog-page.blog-modern .hero-metrics li span:last-child { font-size: clamp(0.98rem, 1.9vw, 1.14rem) !important; }
@@ -998,6 +1000,8 @@ body.blog-page.blog-modern .hero-metrics li span:last-child { font-size: clamp(0
 body.blog-page.blog-modern .blog-intro,
 body.blog-page.blog-modern .blog-list .lead,
 body.blog-page.blog-modern .section .lead { font-size: clamp(1.08rem, 1.9vw, 1.28rem) !important; line-height: 1.6; }
+/* Ensure consistent spacing under section titles in blog list */
+body.blog-page.blog-modern .blog-list .section-title { margin-bottom: clamp(.55rem, 1.2vw, 1rem); }
 
 /* Blog grid and filters */
 body.blog-page .content-filter { display:flex; gap:.5rem; flex-wrap:wrap; margin: .6rem 0 1rem; }
@@ -1059,9 +1063,11 @@ body.contact-page.contact-modern .contact-card p { font-size: clamp(1.08rem, 2vw
 /* Blog: bump the intro paragraph under Latest from the lab */
 body.blog-page.blog-modern .blog-intro { font-size: clamp(1.18rem, 2.3vw, 1.45rem); }
 
-/* About: widen Team section intro */
+/* About: widen Team + Journey section intro */
 body.about-page .team-section .section-intro,
-body.about-page .team-section .section-intro .lead { max-width: 80ch; }
+body.about-page .team-section .section-intro .lead,
+body.about-page .journey-section .section-intro,
+body.about-page .journey-section .section-intro .lead { max-width: 80ch; }
 
 /* === Balanced Shell Overrides (1120px max, 94vw, larger type) === */
 :root {
@@ -1183,8 +1189,7 @@ p{ font-size:var(--text-base); }
   line-height:1.08;
   letter-spacing:-0.015em;
 }
-/* Add breathing room under About impact title */
-body.about-page #studio-impact .section-title { margin-bottom: clamp(.8rem, 1.6vw, 1.4rem); }
+/* Impact section removed; former spacing rule deleted */
 .lead {
   margin:0;
   font-size:var(--text-lg);
@@ -1656,125 +1661,8 @@ body.home-alt .feature-tag {
   font-size:.75rem;
   color:var(--orange);
 }
-body.home-alt .workflow-grid {
-  display:grid;
-  gap:clamp(1.8rem,4vw,2.8rem);
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  align-items:start;
-}
-body.home-alt .workflow-list {
-  margin:0;
-  padding:0;
-  list-style:none;
-  display:flex;
-  flex-direction:column;
-  gap:.8rem;
-}
-body.home-alt .workflow-step {
-  background:#fff;
-  border:1px solid rgba(11,59,77,0.1);
-  border-radius:999px;
-  padding:.85rem 1.3rem;
-  display:flex;
-  align-items:center;
-  gap:.9rem;
-  font-weight:600;
-  font-size:clamp(1.05rem,2.2vw,1.25rem);
-  color:#1a2c38;
-}
-body.home-alt .workflow-step span {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:rgba(249,132,0,0.16);
-  color:var(--orange);
-  font-weight:700;
-  font-size:1rem;
-}
-body.home-alt .workflow-detail {
-  background:#f6f8f9;
-  border-radius:24px;
-  padding:clamp(1.8rem,3.6vw,2.6rem);
-  display:flex;
-  flex-direction:column;
-  gap:1.1rem;
-}
-body.home-alt .workflow-detail h3 {
-  margin:0;
-  font-size:clamp(1.6rem,2.8vw,2.15rem);
-  line-height:1.2;
-}
-body.home-alt .workflow-detail p {
-  margin:0;
-  font-size:clamp(1.08rem,2.2vw,1.35rem);
-  color:#2e4251;
-}
-body.home-alt .workflow-detail ul {
-  margin:0;
-  padding-left:1.1rem;
-  display:flex;
-  flex-direction:column;
-  gap:.55rem;
-  font-size:clamp(1.02rem,2vw,1.2rem);
-}
-body.home-alt .subscribe-card {
-  background:linear-gradient(120deg,rgba(11,59,77,0.9),rgba(37,77,99,0.88));
-  border-radius:28px;
-  padding:clamp(2.4rem,4.6vw,3.2rem);
-  color:#fff;
-  display:grid;
-  gap:clamp(1.5rem,3vw,2.5rem);
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  align-items:center;
-}
-body.home-alt .subscribe-card h2 {
-  margin:0;
-  font-size:clamp(2rem,3.8vw,2.6rem);
-  line-height:1.1;
-}
-body.home-alt .subscribe-card p {
-  margin:0;
-  font-size:clamp(1.1rem,2.2vw,1.3rem);
-  line-height:1.6;
-  opacity:.88;
-}
-body.home-alt .subscribe-form {
-  display:flex;
-  flex-wrap:wrap;
-  gap:.8rem;
-}
-body.home-alt .subscribe-form input {
-  flex:1 1 220px;
-  min-width:0;
-  border:1px solid rgba(255,255,255,0.6);
-  background:rgba(255,255,255,0.12);
-  color:#fff;
-  border-radius:999px;
-  padding:.85rem 1.2rem;
-  font-size:clamp(1.05rem,2vw,1.2rem);
-}
-body.home-alt .subscribe-form input::placeholder {
-  color:rgba(255,255,255,0.65);
-}
-body.home-alt .subscribe-form button {
-  border:none;
-  background:#fff;
-  color:var(--navy);
-  border-radius:999px;
-  padding:.85rem 1.6rem;
-  font-weight:700;
-  font-size:clamp(1.05rem,2vw,1.2rem);
-  cursor:pointer;
-  transition:transform .2s ease,box-shadow .3s ease;
-}
-body.home-alt .subscribe-form button:hover,
-body.home-alt .subscribe-form button:focus {
-  transform:translateY(-2px);
-  box-shadow:0 18px 55px -20px rgba(16,39,54,0.75);
-}
+/* Removed home workflow block styles (workflow-grid/workflow-detail/etc.) */
+/* Removed home subscribe card + form styles */
 body.home-alt .feature-meta {
   flex-wrap:wrap;
 }
@@ -2937,6 +2825,9 @@ body.about-page {
       .comm-stage h3 {
         font-size:1.15rem;
       }}
+
+
+
 
 
 
