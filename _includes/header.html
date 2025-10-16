@@ -14,8 +14,8 @@
         <li class="{% if page.url == '/about.html' or page.url == '/about/' %}nav-active{% endif %}">
           <a href="{{ '/about.html' | relative_url }}" title="About">About</a>
         </li>
-        <li class="{% if page.url == '/blog_modern.html' or page.url contains '/blog' or page.collection == 'data_stories' or page.url contains '/data-stories/' %}nav-active{% endif %}">
-          <a href="{{ '/blog_modern.html' | relative_url }}" title="Stories">Stories</a>
+        <li class="{% if page.url == '/blog.html' or page.url contains '/blog' or page.collection == 'data_stories' or page.url contains '/data-stories/' %}nav-active{% endif %}">
+          <a href="{{ '/blog.html' | relative_url }}" title="Stories">Stories</a>
         </li>
         <li class="{% if page.url == '/contact.html' or page.url == '/contact/' or page.url contains '/contact' %}nav-active{% endif %}">
           <a href="{{ '/contact.html' | relative_url }}" title="Contact">Contact</a>
