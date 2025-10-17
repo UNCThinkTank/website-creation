@@ -1,1 +1,69 @@
-/* Placeholder for data-story.css */
+/* ============================================================================
+   Data Story Template Styles
+   --------------------------------------------------------------------------
+   Everything here is scoped to the data story layout so we can tweak
+   presentation without touching global styling.
+   ========================================================================== */
+
+/* Reduce horizontal padding on the beveled card so the story feels wider. */
+body.data-story-page .bevel-card {
+  padding-left: clamp(2px, 0.8vw, 12px);
+  padding-right: clamp(2px, 0.8vw, 12px);
+}
+
+/* Widen the header section inside the beveled card for visual balance. */
+body.data-story-page .bevel-header {
+  padding-left: clamp(4px, 0.8vw, 10px);
+  padding-right: clamp(4px, 0.8vw, 10px);
+}
+
+/* Stretch the story container full-bleed and paint a subtle blue canvas. */
+body.data-story-page .report-container {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: 0;
+  padding-right: 0;
+  background: rgba(224, 239, 248, 0.65);
+}
+
+/* Wrapper that holds the aurora glow behind the content card. */
+.story-aurora {
+  position: relative;
+}
+
+/* Glossy light-blue aurora that sits behind the beveled card. */
+.story-aurora::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  pointer-events: none;
+  background-color: rgba(212, 232, 243, 0.82);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.88),
+    inset 0 -6px 12px rgba(255, 255, 255, 0.35),
+    0 32px 74px -58px rgba(77, 107, 122, 0.4);
+  z-index: 0;
+}
+
+/* Lift the real content above the aurora overlay. */
+.story-aurora .work-details,
+.story-aurora .bevel-card {
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep the card itself white so the blue glow sits behind it. */
+.story-aurora .bevel-card {
+  background: #fff;
+}
+
+/* Nudge the main content upward to align with the global layouts. */
+body.data-story-page #main-content {
+  margin-top: -44px;
+}

@@ -47,6 +47,8 @@ defaults:
       type: "toolkits"
     values:
       layout: toolkit
+      body_class: "report toolkit-page"
+      permalink: "/toolkits/:name.html"
   - scope:
       path: ""
       type: "studio_briefs"

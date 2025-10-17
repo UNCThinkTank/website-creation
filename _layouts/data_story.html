@@ -67,7 +67,104 @@ body_class: "data-story-page"
       </div>
 
       <div class="work-body">
-        {{ content }}
+        {% assign has_story_intro = page.story_intro.paragraphs %}
+        {% if has_story_intro %}
+          {% assign has_story_intro = true %}
+        {% elsif page.story_intro.figures %}
+          {% assign has_story_intro = true %}
+        {% else %}
+          {% assign has_story_intro = false %}
+        {% endif %}
+
+        {% assign has_story_sections = page.story_sections %}
+        {% assign has_methodology = page.methodology.paragraphs %}
+
+        {% if has_story_intro or has_story_sections or has_methodology %}
+
+          {% if has_story_intro %}
+            <section class="story-intro">
+              {% if page.story_intro.paragraphs %}
+                {% for paragraph in page.story_intro.paragraphs %}
+                  {{ paragraph | markdownify }}
+                {% endfor %}
+              {% endif %}
+
+              {% if page.story_intro.figures %}
+                <div class="work-images grid">
+                  {% for figure in page.story_intro.figures %}
+                    <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
+                      <img
+                        src="{{ figure.src | relative_url }}"
+                        alt="{{ figure.alt | default: page.title }}"
+                        class="{{ figure.img_class | default: 'img-responsive large-img' }}"
+                        {% if figure.enable_popup != false %}
+                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                        {% endif %}
+                      >
+                      {% if figure.caption %}
+                        <figcaption>{{ figure.caption }}</figcaption>
+                      {% endif %}
+                    </figure>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </section>
+          {% endif %}
+
+          {% if has_story_sections %}
+            {% for section in page.story_sections %}
+              <section class="{{ section.wrapper_class | default: 'story-section' }}">
+                {% if section.heading %}
+                  <h2>{{ section.heading }}</h2>
+                {% endif %}
+
+                {% if section.paragraphs %}
+                  {% for paragraph in section.paragraphs %}
+                    {{ paragraph | markdownify }}
+                  {% endfor %}
+                {% endif %}
+
+                {% if section.figures %}
+                  {% for figure in section.figures %}
+                    <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
+                      <img
+                        src="{{ figure.src | relative_url }}"
+                        alt="{{ figure.alt | default: section.heading | default: page.title }}"
+                        class="{{ figure.img_class | default: 'img-responsive large-img' }}"
+                        {% if figure.enable_popup != false %}
+                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                        {% endif %}
+                      >
+                      {% if figure.caption %}
+                        <figcaption>{{ figure.caption }}</figcaption>
+                      {% endif %}
+                    </figure>
+                  {% endfor %}
+                {% endif %}
+              </section>
+            {% endfor %}
+          {% endif %}
+
+          {% if has_methodology %}
+            <hr class="story-divider">
+            <section class="{{ page.methodology.wrapper_class | default: 'methodology-block' }}">
+              {% if page.methodology.title %}
+                <p class="methodology-title"><strong>{{ page.methodology.title }}</strong></p>
+              {% endif %}
+
+              {% for paragraph in page.methodology.paragraphs %}
+                {{ paragraph | markdownify | replace: '<p>', '<p class="footnote-text">' }}
+              {% endfor %}
+
+              {% if page.methodology.dataset %}
+                {{ page.methodology.dataset | markdownify | replace: '<p>', '<p class="footnote-text">' }}
+              {% endif %}
+            </section>
+          {% endif %}
+
+        {% else %}
+          {{ content }}
+        {% endif %}
       </div>
 
       {% if page.dataset_link %}

@@ -1,31 +1,59 @@
 ---
 layout: default
+body_class: "report toolkit-page"
 ---
-<!-- Layout for instructional toolkits with sidebar navigation and applied tips -->
+{%- comment -%}
+  Toolkit layout
+  --------------
+  - Hero header with quick metadata.
+  - Table of contents card beneath the hero.
+  - Primary content card and optional "tips" callouts.
+{%- endcomment -%}
 <div class="toolkit-layout py-5">
-  <div class="container">
-    <div class="row">
-      <aside class="col-lg-3 mb-4 mb-lg-0">
-        <nav class="list-group">
-          {% if page.sidebar_links %}
-            {% for link in page.sidebar_links %}
-              <a class="list-group-item list-group-item-action" href="{{ link.url }}">{{ link.title }}</a>
-            {% endfor %}
-          {% else %}
-            <a class="list-group-item list-group-item-action" href="#steps">Steps</a>
-            <a class="list-group-item list-group-item-action" href="#data">Data</a>
-            <a class="list-group-item list-group-item-action" href="#example-outputs">Example Outputs</a>
-          {% endif %}
-        </nav>
-      </aside>
-
-      <div class="col-lg-9">
-        <header class="mb-5 pb-3 border-bottom">
-          <h1 class="h1 fw-bold mb-2">{{ page.title }}</h1>
-          {% if page.subtitle %}
-            <p class="lead text-muted mb-0">{{ page.subtitle }}</p>
-          {% endif %}
+  <div class="toolkit-aurora">
+    <div class="container">
+      <div class="toolkit-main">
+        <header class="toolkit-hero">
+          <div class="toolkit-hero__content">
+            <div class="toolkit-hero__label">Toolkit</div>
+            <h1 class="toolkit-hero__title">{{ page.title }}</h1>
+            {% if page.subtitle %}
+              <p class="toolkit-hero__subtitle">{{ page.subtitle }}</p>
+            {% endif %}
+            {% if page.author %}
+              <p class="toolkit-hero__meta">
+                {% if page.author_link %}
+                  <a class="toolkit-hero__author" href="{{ page.author_link }}">{{ page.author }}</a>
+                {% else %}
+                  <span class="toolkit-hero__author">{{ page.author }}</span>
+                {% endif %}
+                {% if page.date %}
+                  <span class="toolkit-hero__divider" aria-hidden="true">•</span>
+                  <span class="toolkit-hero__date">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+                  </span>
+                {% endif %}
+              </p>
+            {% endif %}
+          </div>
         </header>
+
+        <nav class="toolkit-toc" aria-label="Toolkit table of contents">
+          <h2 class="toolkit-toc__heading">Table of Contents</h2>
+          <div class="toolkit-toc__grid">
+            {% assign sidebar_links = page.sidebar_links %}
+            {% if sidebar_links %}
+              {% for link in sidebar_links %}
+                <a class="toolkit-toc__link" href="{{ link.url }}">{{ link.title }}</a>
+              {% endfor %}
+            {% else %}
+              <a class="toolkit-toc__link" href="#steps">Steps</a>
+              <a class="toolkit-toc__link" href="#data">Data</a>
+              <a class="toolkit-toc__link" href="#example-outputs">Example Outputs</a>
+            {% endif %}
+          </div>
+        </nav>
 
         <section class="toolkit-content">
           {{ content }}
@@ -34,11 +62,14 @@ layout: default
         {% if page.tips %}
           <div class="toolkit-tips mt-5">
             {% for tip in page.tips %}
-              <div class="tip border rounded-3 p-4 mb-4">
-                <h2 class="h5 fw-semibold mb-2">
-                  <i class="fa fa-lightbulb-o me-2" aria-hidden="true"></i>{{ tip.title }}
-                </h2>
-                <p class="mb-0">{{ tip.body }}</p>
+              <div class="toolkit-tip">
+                <div class="toolkit-tip__icon" aria-hidden="true">
+                  <i class="fa fa-lightbulb-o"></i>
+                </div>
+                <div>
+                  <h2 class="toolkit-tip__title">{{ tip.title }}</h2>
+                  <p class="toolkit-tip__body">{{ tip.body }}</p>
+                </div>
               </div>
             {% endfor %}
           </div>
@@ -47,3 +78,6 @@ layout: default
     </div>
   </div>
 </div>
+
+
+

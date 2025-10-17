@@ -26,6 +26,12 @@
       <link rel="stylesheet" href="{{ '/assets/css/pages/contact.css' | relative_url }}">
     {% elsif page.body_class contains 'blog-page' %}
       <link rel="stylesheet" href="{{ '/assets/css/pages/blog.css' | relative_url }}">
+    {% elsif page.body_class contains 'data-story-page' %}
+      <link rel="stylesheet" href="{{ '/assets/css/templates/data-story.css' | relative_url }}">
+    {% elsif page.body_class contains 'toolkit-page' %}
+      <link rel="stylesheet" href="{{ '/assets/css/templates/toolkit.css' | relative_url }}">
+    {% elsif page.body_class contains 'studio-brief-page' %}
+      <link rel="stylesheet" href="{{ '/assets/css/templates/studio-brief.css' | relative_url }}">
     {% endif %}
     <link rel="icon" href="{{ '/assets/images/icons/favicon.ico' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/assets/images/icons/apple-touch-icon.png' | relative_url }}">
@@ -52,3 +58,4 @@
     <script src="{{ '/assets/js/html5shiv.js' | relative_url }}" defer></script>
   </body>
 </html>
+
