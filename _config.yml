@@ -54,6 +54,8 @@ defaults:
       type: "studio_briefs"
     values:
       layout: studio_brief
+      body_class: "report studio-brief-page"
+      permalink: "/studio-briefs/:name.html"
 
 # ============================
 #   Plugins

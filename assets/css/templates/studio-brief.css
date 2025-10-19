@@ -1,1 +1,500 @@
-/* Placeholder for studio-brief.css */
+/* ============================================================================
+   Studio Brief Template Styles
+   --------------------------------------------------------------------------
+   Focused, editorial layout for rapid studio briefs. Structured to highlight
+   key signals, summary takeaways, and quick calls-to-action without needing
+   manual HTML tweaks in markdown content.
+   ========================================================================== */
+
+/* Page scaffold ------------------------------------------------------------ */
+body.studio-brief-page {
+  background: var(--orange-bg);
+  color: var(--navy);
+}
+
+.studio-brief-layout a {
+  color: var(--orange);
+  text-decoration: none;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.studio-brief-layout a:hover,
+.studio-brief-layout a:focus-visible {
+  color: var(--navy);
+}
+
+body.studio-brief-page #main-content {
+  margin-top: -44px;
+}
+
+/* Layout shell ------------------------------------------------------------- */
+.studio-brief-layout {
+  position: relative;
+}
+
+.studio-brief-aurora {
+  position: relative;
+  padding: clamp(2.8rem, 6vw, 4.2rem) 0;
+}
+
+.studio-brief-aurora::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 236, 213, 0.92);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -6px 14px rgba(255, 206, 170, 0.45),
+    0 36px 110px -70px rgba(11, 59, 77, 0.32);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.studio-brief-aurora > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.studio-brief-article {
+  max-width: min(1160px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+/* Hero block --------------------------------------------------------------- */
+.studio-brief-hero {
+  position: relative;
+  padding: clamp(2.6rem, 5vw, 3.4rem);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(249, 132, 0, 0.22);
+  box-shadow:
+    0 34px 80px -60px rgba(11, 59, 77, 0.32),
+    0 20px 50px -48px rgba(249, 132, 0, 0.25);
+  overflow: hidden;
+}
+
+.studio-brief-hero::before,
+.studio-brief-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.48;
+  pointer-events: none;
+  transition: transform 0.5s ease;
+}
+
+.studio-brief-hero::before {
+  width: clamp(240px, 38vw, 420px);
+  height: clamp(240px, 38vw, 420px);
+  top: clamp(-160px, -18vw, -120px);
+  right: clamp(-140px, -16vw, -90px);
+  background: radial-gradient(circle at 45% 40%, rgba(255, 176, 87, 0.42), rgba(11, 59, 77, 0.08));
+}
+
+.studio-brief-hero::after {
+  width: clamp(280px, 45vw, 520px);
+  height: clamp(280px, 45vw, 520px);
+  bottom: clamp(-220px, -20vw, -150px);
+  left: clamp(-180px, -20vw, -110px);
+  background: radial-gradient(circle at 65% 60%, rgba(11, 59, 77, 0.2), rgba(255, 196, 144, 0.12));
+}
+
+.studio-brief-hero:hover::before {
+  transform: translate(-10px, 8px);
+}
+
+.studio-brief-hero:hover::after {
+  transform: translate(12px, -10px);
+}
+
+.studio-brief-feature {
+  margin: clamp(1.8rem, 3.4vw, 2.6rem) 0;
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(249, 132, 0, 0.22);
+  box-shadow: 0 26px 64px -48px rgba(11, 59, 77, 0.28);
+}
+
+.studio-brief-feature__image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.studio-brief-feature__caption {
+  padding: 1rem 1.4rem;
+  font-size: 0.95rem;
+  color: rgba(11, 59, 77, 0.68);
+  background: rgba(255, 247, 235, 0.92);
+}
+
+.studio-brief-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(249, 132, 0, 0.9), rgba(255, 182, 81, 0.78));
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.studio-brief-hero__title {
+  margin: clamp(1rem, 2vw, 1.4rem) 0 clamp(0.7rem, 1.6vw, 1rem);
+  font-size: clamp(2.4rem, 5.2vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+  position: relative;
+  z-index: 1;
+}
+
+.studio-brief-hero__subtitle {
+  margin: 0;
+  font-size: clamp(1.18rem, 2.4vw, 1.6rem);
+  color: rgba(11, 59, 77, 0.72);
+  max-width: 62ch;
+  position: relative;
+  z-index: 1;
+}
+
+.studio-brief-hero__meta {
+  margin-top: clamp(0.8rem, 1.4vw, 1.1rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+  font-weight: 600;
+  color: rgba(11, 59, 77, 0.68);
+  position: relative;
+  z-index: 1;
+}
+
+.studio-brief-hero__author,
+.studio-brief-hero__date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.studio-brief-hero__author a {
+  color: inherit;
+}
+
+.studio-brief-hero__author a:hover,
+.studio-brief-hero__author a:focus-visible {
+  color: var(--orange);
+}
+
+.studio-brief-hero__date i,
+.studio-brief-hero__author i {
+  color: rgba(11, 59, 77, 0.5);
+  font-size: 0.95em;
+}
+
+.studio-brief-hero__divider {
+  color: rgba(11, 59, 77, 0.35);
+}
+
+/* Summary callout ---------------------------------------------------------- */
+.studio-brief-summary {
+  padding: clamp(2rem, 4.2vw, 3rem);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(249, 132, 0, 0.24);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -6px 16px rgba(255, 206, 170, 0.45),
+    0 24px 50px -38px rgba(11, 59, 77, 0.24);
+}
+
+.studio-brief-summary__heading {
+  margin: 0 0 clamp(0.9rem, 2vw, 1.2rem);
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.studio-brief-summary__body > *:first-child {
+  margin-top: 0;
+}
+
+.studio-brief-summary__body > * + * {
+  margin-top: 0.8rem;
+}
+
+/* Key points --------------------------------------------------------------- */
+.studio-brief-keypoints {
+  padding: clamp(1.8rem, 3.6vw, 2.6rem);
+  border-radius: 28px;
+  background: var(--navy);
+  color: #f4fbff;
+  box-shadow: 0 24px 60px -40px rgba(11, 59, 77, 0.5);
+}
+
+.studio-brief-keypoints__heading {
+  margin: 0 0 clamp(1rem, 2.4vw, 1.4rem);
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.studio-brief-keypoints__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+.studio-brief-keypoints__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.studio-brief-keypoints__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(249, 132, 0, 0.9), rgba(255, 184, 77, 0.85));
+  color: var(--navy);
+  font-size: 1.05rem;
+}
+
+.studio-brief-keypoints__text {
+  display: block;
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.65;
+  color: rgba(244, 251, 255, 0.92);
+}
+
+/* Markdown content --------------------------------------------------------- */
+.studio-brief-content {
+  padding: clamp(2.2rem, 4.4vw, 3.2rem);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(249, 132, 0, 0.22);
+  box-shadow: 0 28px 70px -50px rgba(11, 59, 77, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.studio-brief-content > *:first-child {
+  margin-top: 0;
+}
+
+.studio-brief-content > * + * {
+  margin-top: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+.studio-brief-content h2,
+.studio-brief-content h3 {
+  margin-top: clamp(2rem, 3.6vw, 2.8rem);
+  margin-bottom: clamp(0.9rem, 2vw, 1.3rem);
+  color: var(--navy);
+}
+
+.studio-brief-content h2 {
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  letter-spacing: -0.01em;
+}
+
+.studio-brief-content h3 {
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+}
+
+.studio-brief-content p,
+.studio-brief-content li {
+  font-size: clamp(1.05rem, 1.95vw, 1.2rem);
+  line-height: 1.7;
+  color: rgba(11, 59, 77, 0.84);
+}
+
+.studio-brief-content ul {
+  padding-left: 1.2rem;
+}
+
+.studio-brief-content figure {
+  margin: clamp(1.8rem, 3.2vw, 2.6rem) 0;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(249, 132, 0, 0.2);
+  box-shadow: 0 20px 52px -42px rgba(11, 59, 77, 0.28);
+}
+
+.studio-brief-content figure img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.studio-brief-content figure figcaption {
+  padding: 0.9rem 1.2rem;
+  font-size: 0.92rem;
+  color: rgba(11, 59, 77, 0.7);
+  background: rgba(255, 247, 235, 0.92);
+}
+
+.studio-brief-content blockquote {
+  margin: clamp(1.6rem, 3vw, 2.2rem) 0;
+  padding: 1.6rem 1.8rem;
+  border-radius: 22px;
+  background: rgba(249, 132, 0, 0.12);
+  border-left: 4px solid var(--orange);
+  color: rgba(11, 59, 77, 0.85);
+  font-style: italic;
+}
+
+.studio-brief-content code {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.45rem;
+  border-radius: 8px;
+  background: rgba(11, 59, 77, 0.12);
+  color: rgba(11, 59, 77, 0.92);
+  font-size: 0.92rem;
+}
+
+.studio-brief-content pre {
+  margin: clamp(1.6rem, 3vw, 2.3rem) 0;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: 20px;
+  background: rgba(11, 59, 77, 0.92);
+  color: #e4f5ff;
+  font-size: 0.95rem;
+  overflow-x: auto;
+}
+
+.studio-brief-content hr {
+  margin: clamp(2rem, 3.6vw, 3rem) 0;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(11, 59, 77, 0.25), transparent);
+}
+
+/* Call to action ----------------------------------------------------------- */
+.studio-brief-cta {
+  display: flex;
+  justify-content: center;
+}
+
+.studio-brief-cta__inner {
+  width: min(640px, 100%);
+  padding: clamp(1.8rem, 3.8vw, 2.6rem);
+  border-radius: 28px;
+  background: var(--navy);
+  color: #f4fbff;
+  text-align: center;
+  box-shadow: 0 26px 68px -48px rgba(11, 59, 77, 0.5);
+}
+
+.studio-brief-cta__heading {
+  margin: 0 0 clamp(0.8rem, 1.6vw, 1.1rem);
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.studio-brief-cta__body {
+  margin: 0 0 clamp(1rem, 2vw, 1.4rem);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.studio-brief-cta__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.studio-brief-cta__link:hover,
+.studio-brief-cta__link:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.studio-brief-cta__link i {
+  font-size: 0.95rem;
+}
+
+/* Responsive tweaks -------------------------------------------------------- */
+@media (max-width: 992px) {
+  .studio-brief-article {
+    gap: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .studio-brief-keypoints__item {
+    grid-template-columns: minmax(36px, auto) 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .studio-brief-hero,
+  .studio-brief-summary,
+  .studio-brief-keypoints,
+  .studio-brief-content,
+  .studio-brief-cta__inner {
+    border-radius: 24px;
+    padding: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  .studio-brief-keypoints__item {
+    grid-template-columns: minmax(32px, auto) 1fr;
+    gap: 0.7rem;
+  }
+
+  .studio-brief-keypoints__icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .studio-brief-hero__meta {
+    gap: 0.5rem;
+  }
+
+  .studio-brief-keypoints__list {
+    gap: 0.6rem;
+  }
+
+  .studio-brief-content {
+    padding: 1.6rem;
+  }
+}
+
+/* Motion preference -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .studio-brief-hero::before,
+  .studio-brief-hero::after,
+  .studio-brief-cta__link {
+    transition: none;
+  }
+}
