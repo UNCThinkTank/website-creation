@@ -1,0 +1,68 @@
+---
+layout: default
+title: "Stories"
+body_class: "blog-page blog-modern"
+---
+
+<div class="page-shell blog-main" role="main">
+  <div class="container">
+    <section class="blog-list">
+      <div class="blog-list__header">
+        <h1 class="section-title">Latest Releases</h1>
+        <p class="lead sm blog-intro">Your single destination for our Data Stories, Toolkits, and Briefs, with everything new from PPL in one place.</p>
+        <div class="blog-filters">
+          <div class="filter-group">
+            <div class="filter-label" aria-hidden="true">Filter by content type</div>
+            <div class="content-filter" role="navigation" aria-label="Filter by content type">
+              <button class="btn btn-sm" data-filter-type="all" aria-pressed="true">All</button>
+              <button class="btn btn-sm" data-filter-type="data_story">Data Stories</button>
+              <button class="btn btn-sm" data-filter-type="toolkit">Toolkits</button>
+              <button class="btn btn-sm" data-filter-type="studio_brief">Studio Briefs</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label" aria-hidden="true">Filter by topic</div>
+            <div class="topic-filter" role="navigation" aria-label="Filter by topic">
+              <button class="btn btn-sm" data-filter-topic="all" aria-pressed="true">All</button>
+              <button class="btn btn-sm" data-filter-topic="energy">Energy</button>
+              <button class="btn btn-sm" data-filter-topic="public_health">Public Health</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-grid">
+        <article class="blog-card" data-type="data_story" data-topic="public_health">
+          <span class="blog-card__status">Published &middot; August 14, 2025</span>
+          <h3>Tracking the Shingles Shot Surge</h3>
+          <div class="blog-card__meta">
+            <span>Data story</span>
+            <span>By Poli Plot Studio</span>
+          </div>
+          <p>State and county trends reveal where adults 50+ are falling behind on shingles vaccination coverage&mdash;and the rapid-response interventions that close the gap.</p>
+          <a class="blog-card__cta" href="{{ '/data-stories/2025-10-14-state-level-trends.html' | relative_url }}">View story</a>
+        </article>
+        <article class="blog-card" data-type="studio_brief" data-topic="energy">
+          <span class="blog-card__status blog-card__status--upcoming">In build &middot; October 2025</span>
+          <h3>Energy Resilience Projects in North Carolina</h3>
+          <div class="blog-card__meta">
+            <span>Studio brief</span>
+            <span>Led by Tristen Best</span>
+          </div>
+          <p>We&rsquo;re mapping how NC is entering the new era of energy demand. Expect policy updates, funding pathways, and state initiatives.</p>
+          <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Coming Soon</a>
+        </article>
+        <article class="blog-card" data-type="toolkit" data-topic="public_health">
+          <span class="blog-card__status blog-card__status--upcoming">In build &middot; November 2025</span>
+          <h3>Nutrition Equity Data Pack</h3>
+          <div class="blog-card__meta">
+            <span>Toolkit</span>
+            <span>Led by Bhairavi Jayaraman</span>
+          </div>
+          <p>A remixable asset library to help local advocates brief lawmakers on SNAP expansion, summer EBT pilots, and grocery access investments.</p>
+          <a class="blog-card__cta blog-card__cta--alt" href="{{ '/contact.html' | relative_url }}">Join the waitlist</a>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

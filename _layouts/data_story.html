@@ -1,0 +1,201 @@
+---
+layout: default
+body_class: "data-story-page"
+---
+<!-- Legacy-styled layout for long-form data stories -->
+<div class="report-container story-aurora">
+  <div class="work-details">
+    <div class="bevel-card">
+      <div class="bevel-header">
+        <div class="work-hero">
+          <h1 class="work-title">{{ page.title }}</h1>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <section>
+              <div class="work-meta top">
+                {% if page.date %}
+                  <span class="work-date">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    {{ page.date | date: "%B %d, %Y" }}
+                  </span>
+                {% endif %}
+              </div>
+
+              {% if page.summary %}
+                <p class="work-dek">{{ page.summary }}</p>
+              {% endif %}
+
+              <div class="work-meta tail">
+                {% if page.author_link %}
+                  <a class="work-author" href="{{ page.author_link }}">{{ page.author }}</a>
+                {% else %}
+                  <span class="work-author">{{ page.author }}</span>
+                {% endif %}
+              </div>
+
+              {% if page.keywords %}
+                <div class="keyword-chips">
+                  <p>
+                    <strong>Keywords</strong><br/>
+                    {% for keyword in page.keywords %}
+                      {% if keyword.url %}
+                        <a href="{{ keyword.url }}">{{ keyword.label | default: keyword.name | default: keyword }}</a>
+                      {% else %}
+                        <a href="#">{{ keyword.label | default: keyword }}</a>
+                      {% endif %}
+                    {% endfor %}
+                  </p>
+                </div>
+                <hr class="keyword-divider">
+              {% endif %}
+            </section>
+          </div>
+        </div>
+
+        {% if page.image %}
+          <div class="work-images grid">
+            <figure class="story-hero">
+              <img src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: page.title }}" class="img-responsive">
+              {% if page.image_caption %}
+                <figcaption class="image-caption">{{ page.image_caption }}</figcaption>
+              {% endif %}
+            </figure>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="work-body">
+        {% assign has_story_intro = page.story_intro.paragraphs %}
+        {% if has_story_intro %}
+          {% assign has_story_intro = true %}
+        {% elsif page.story_intro.figures %}
+          {% assign has_story_intro = true %}
+        {% else %}
+          {% assign has_story_intro = false %}
+        {% endif %}
+
+        {% assign has_story_sections = page.story_sections %}
+        {% assign has_methodology = page.methodology.paragraphs %}
+
+        {% if has_story_intro or has_story_sections or has_methodology %}
+
+          {% if has_story_intro %}
+            <section class="story-intro">
+              {% if page.story_intro.paragraphs %}
+                {% for paragraph in page.story_intro.paragraphs %}
+                  {{ paragraph | markdownify }}
+                {% endfor %}
+              {% endif %}
+
+              {% if page.story_intro.figures %}
+                <div class="work-images grid">
+                  {% for figure in page.story_intro.figures %}
+                    <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
+                      <img
+                        src="{{ figure.src | relative_url }}"
+                        alt="{{ figure.alt | default: page.title }}"
+                        class="{{ figure.img_class | default: 'img-responsive large-img' }}"
+                        {% if figure.enable_popup != false %}
+                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                        {% endif %}
+                      >
+                      {% if figure.caption %}
+                        <figcaption>{{ figure.caption }}</figcaption>
+                      {% endif %}
+                    </figure>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </section>
+          {% endif %}
+
+          {% if has_story_sections %}
+            {% for section in page.story_sections %}
+              <section class="{{ section.wrapper_class | default: 'story-section' }}">
+                {% if section.heading %}
+                  <h2>{{ section.heading }}</h2>
+                {% endif %}
+
+                {% if section.paragraphs %}
+                  {% for paragraph in section.paragraphs %}
+                    {{ paragraph | markdownify }}
+                  {% endfor %}
+                {% endif %}
+
+                {% if section.figures %}
+                  {% for figure in section.figures %}
+                    <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
+                      <img
+                        src="{{ figure.src | relative_url }}"
+                        alt="{{ figure.alt | default: section.heading | default: page.title }}"
+                        class="{{ figure.img_class | default: 'img-responsive large-img' }}"
+                        {% if figure.enable_popup != false %}
+                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                        {% endif %}
+                      >
+                      {% if figure.caption %}
+                        <figcaption>{{ figure.caption }}</figcaption>
+                      {% endif %}
+                    </figure>
+                  {% endfor %}
+                {% endif %}
+              </section>
+            {% endfor %}
+          {% endif %}
+
+          {% if has_methodology %}
+            <hr class="story-divider">
+            <section class="{{ page.methodology.wrapper_class | default: 'methodology-block' }}">
+              {% if page.methodology.title %}
+                <p class="methodology-title"><strong>{{ page.methodology.title }}</strong></p>
+              {% endif %}
+
+              {% for paragraph in page.methodology.paragraphs %}
+                {{ paragraph | markdownify | replace: '<p>', '<p class="footnote-text">' }}
+              {% endfor %}
+
+              {% if page.methodology.dataset %}
+                {{ page.methodology.dataset | markdownify | replace: '<p>', '<p class="footnote-text">' }}
+              {% endif %}
+            </section>
+          {% endif %}
+
+        {% else %}
+          {{ content }}
+        {% endif %}
+      </div>
+
+      {% if page.dataset_link %}
+        <div class="story-dataset text-center my-5">
+          <a href="{{ page.dataset_link }}" class="btn btn-outline-primary px-4 py-2" target="_blank" rel="noopener">
+            {{ page.dataset_label | default: 'Explore the dataset' }}
+          </a>
+        </div>
+      {% endif %}
+
+      {% unless page.hide_subscribe %}
+        <div class="cta-card" role="complementary" aria-label="Subscribe" style="max-width:560px; margin:28px 0 24px;">
+          <h3 class="cta-title">Get our updated plots</h3>
+          <p class="mb-2">One email when a new plot drops. No spam.</p>
+          <form action="#" method="post" class="cta-form" aria-label="Email signup">
+            <label class="sr-only" for="email-subscribe-works">Email</label>
+            <input id="email-subscribe-works" type="email" name="email" placeholder="you@domain.com" required>
+            <button type="submit">Subscribe</button>
+          </form>
+          <small class="cta-note">By subscribing, you agree to our <a href="#">privacy policy</a>.</small>
+        </div>
+      {% endunless %}
+    </div>
+  </div>
+</div>
+
+<div id="image-popup" class="image-popup-overlay" onclick="closePopup()">
+  <div class="image-popup-content" onclick="event.stopPropagation()">
+    <span class="image-popup-close" onclick="closePopup()" aria-label="Close image">&times;</span>
+    <img id="popup-image" src="" alt="Popup image preview">
+    <div class="image-popup-caption"></div>
+    <button class="image-popup-back" type="button" onclick="closePopup()">Back to story</button>
+  </div>
+</div>

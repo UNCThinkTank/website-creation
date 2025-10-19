@@ -1,0 +1,37 @@
+<!-- Legacy-inspired global footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <a href="{{ '/' | relative_url }}" class="footer-brand" aria-label="{{ site.title | default: 'Poli Plot Labs' }}">
+      <img class="brand-logo" src="{{ '/assets/images/Updated Logo Transparent.png' | relative_url }}" alt="{{ site.title | default: 'Poli Plot Labs' }}">
+    </a>
+    <nav role="navigation" aria-label="Footer menu">
+      <ul>
+        <li><a href="{{ '/' | relative_url }}" title="Home">Home</a></li>
+        <li><a href="{{ '/about.html' | relative_url }}" title="About">About</a></li>
+        <li><a href="{{ '/blog.html' | relative_url }}" title="Stories">Stories</a></li>
+        <li><a href="{{ '/contact.html' | relative_url }}" title="Contact">Contact</a></li>
+      </ul>
+    </nav>
+    <ul role="social-icons">
+      {% if site.social.linkedin %}
+        <li><a href="{{ site.social.linkedin }}" target="_blank" rel="noopener"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a></li>
+      {% endif %}
+      {% if site.social.flickr %}
+        <li><a href="{{ site.social.flickr }}" target="_blank" rel="noopener"><i class="fa fa-flickr" aria-hidden="true"></i><span class="sr-only">Flickr</span></a></li>
+      {% endif %}
+      {% if site.social.github %}
+        <li><a href="{{ site.social.github }}" target="_blank" rel="noopener"><i class="fa fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a></li>
+      {% endif %}
+      {% if site.social.twitter %}
+        <li><a href="{{ site.social.twitter }}" target="_blank" rel="noopener"><i class="fa fa-twitter" aria-hidden="true"></i><span class="sr-only">Twitter</span></a></li>
+      {% endif %}
+      {% if site.social.instagram %}
+        <li><a href="{{ site.social.instagram }}" target="_blank" rel="noopener"><i class="fa fa-instagram" aria-hidden="true"></i><span class="sr-only">Instagram</span></a></li>
+      {% endif %}
+      {% if site.social.email %}
+        <li><a href="mailto:{{ site.social.email }}"><i class="fa fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a></li>
+      {% endif %}
+    </ul>
+    <p class="copy-right">&copy; {{ site.time | date: '%Y' }} {{ site.title | default: 'Poli Plot Labs' }}. All rights reserved.</p>
+  </div>
+</footer>

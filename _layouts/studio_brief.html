@@ -1,0 +1,95 @@
+---
+layout: default
+body_class: "report studio-brief-page"
+---
+<!-- Studio brief layout: concise research spotlight with structured callouts -->
+<div class="studio-brief-layout py-5">
+  <div class="studio-brief-aurora">
+    <div class="container">
+      <article class="studio-brief-article">
+        <header class="studio-brief-hero">
+          <p class="studio-brief-hero__eyebrow">Studio Brief</p>
+          <h1 class="studio-brief-hero__title">{{ page.title }}</h1>
+          {% if page.subtitle %}
+            <p class="studio-brief-hero__subtitle">{{ page.subtitle }}</p>
+          {% endif %}
+          <div class="studio-brief-hero__meta">
+            {% if page.author %}
+              <span class="studio-brief-hero__author">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                {% if page.author_link %}
+                  <a href="{{ page.author_link }}">{{ page.author }}</a>
+                {% else %}
+                  {{ page.author }}
+                {% endif %}
+              </span>
+            {% endif %}
+            {% if page.date %}
+              <span class="studio-brief-hero__divider" aria-hidden="true">&middot;</span>
+              <span class="studio-brief-hero__date">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+              </span>
+            {% endif %}
+          </div>
+        </header>
+
+        {% if page.feature_image %}
+          <figure class="studio-brief-feature">
+            <img
+              src="{{ page.feature_image | relative_url }}"
+              alt="{{ page.feature_image_alt | default: page.title }}"
+              class="studio-brief-feature__image">
+            {% if page.feature_image_caption %}
+              <figcaption class="studio-brief-feature__caption">{{ page.feature_image_caption }}</figcaption>
+            {% endif %}
+          </figure>
+        {% endif %}
+
+        {% if page.summary %}
+          <section class="studio-brief-summary" aria-label="Brief summary">
+            <h2 class="studio-brief-summary__heading">In Brief</h2>
+            <div class="studio-brief-summary__body">
+              {{ page.summary | markdownify }}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if page.key_points %}
+          <section class="studio-brief-keypoints" aria-label="Key points">
+            <h2 class="studio-brief-keypoints__heading">Key Signals</h2>
+            <ul class="studio-brief-keypoints__list">
+              {% for point in page.key_points %}
+                <li class="studio-brief-keypoints__item">
+                  <span class="studio-brief-keypoints__icon" aria-hidden="true">
+                    <i class="fa fa-bolt"></i>
+                  </span>
+                  <span class="studio-brief-keypoints__text">{{ point | markdownify | replace: '<p>', '' | replace: '</p>', '' }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endif %}
+
+        <section class="studio-brief-content" aria-label="Brief content">
+          {{ content }}
+        </section>
+
+        {% if page.call_to_action %}
+          <section class="studio-brief-cta" aria-label="Call to action">
+            <div class="studio-brief-cta__inner">
+              <h2 class="studio-brief-cta__heading">{{ page.call_to_action.heading | default: "Next Steps" }}</h2>
+              <p class="studio-brief-cta__body">{{ page.call_to_action.body }}</p>
+              {% if page.call_to_action.link %}
+                <a class="studio-brief-cta__link" href="{{ page.call_to_action.link.url }}">
+                  {{ page.call_to_action.link.label | default: "Learn more" }}
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+            </div>
+          </section>
+        {% endif %}
+      </article>
+    </div>
+  </div>
+</div>

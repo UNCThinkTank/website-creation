@@ -1,0 +1,77 @@
+# ============================
+#   Poli Plot Labs — Config
+# This is basically like the "settings" for your Jekyll site.
+# You can change the title, description, URL, and other settings here.
+# For more info, see: https://jekyllrb.com/docs/configuration/
+# ============================
+
+title: "Poli Plot Labs"
+email: "poliplotlabs@gmail.com"
+description: >-
+  A student-powered studio turning policy data into visual stories that are clear, rigorous, and built to be shared.
+baseurl: ""   # leave empty unless your site lives in a subfolder
+url: "https://poliplotlabs.org"   # update to your actual domain when ready
+collections_dir: "collections"
+
+# Branding and Social Links
+social:
+  linkedin: "https://www.linkedin.com/company/poliplotlabs"
+  github: "https://github.com/UNCThinkTank"
+  email: "poliplotlabs@gmail.com"
+
+# Author defaults
+author: "Poli Plot Labs Team"
+
+# ============================
+#   Collections
+# ============================
+
+collections:
+  data_stories:
+    output: true
+  toolkits:
+    output: true
+  studio_briefs:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "data_stories"
+    values:
+      layout: data_story
+      body_class: "report data-story-page"
+      permalink: "/data-stories/:name.html"
+  - scope:
+      path: ""
+      type: "toolkits"
+    values:
+      layout: toolkit
+      body_class: "report toolkit-page"
+      permalink: "/toolkits/:name.html"
+  - scope:
+      path: ""
+      type: "studio_briefs"
+    values:
+      layout: studio_brief
+      body_class: "report studio-brief-page"
+      permalink: "/studio-briefs/:name.html"
+
+# ============================
+#   Plugins
+# ============================
+plugins:
+  - jekyll-feed
+
+# ============================
+#   Exclusions
+# ============================
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules/
+  - vendor/
+  - .jekyll-cache/
+  - .sass-cache/
+  - _site/

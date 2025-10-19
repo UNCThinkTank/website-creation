@@ -1,0 +1,83 @@
+---
+layout: default
+body_class: "report toolkit-page"
+---
+{%- comment -%}
+  Toolkit layout
+  --------------
+  - Hero header with quick metadata.
+  - Table of contents card beneath the hero.
+  - Primary content card and optional "tips" callouts.
+{%- endcomment -%}
+<div class="toolkit-layout py-5">
+  <div class="toolkit-aurora">
+    <div class="container">
+      <div class="toolkit-main">
+        <header class="toolkit-hero">
+          <div class="toolkit-hero__content">
+            <div class="toolkit-hero__label">Toolkit</div>
+            <h1 class="toolkit-hero__title">{{ page.title }}</h1>
+            {% if page.subtitle %}
+              <p class="toolkit-hero__subtitle">{{ page.subtitle }}</p>
+            {% endif %}
+            {% if page.author %}
+              <p class="toolkit-hero__meta">
+                {% if page.author_link %}
+                  <a class="toolkit-hero__author" href="{{ page.author_link }}">{{ page.author }}</a>
+                {% else %}
+                  <span class="toolkit-hero__author">{{ page.author }}</span>
+                {% endif %}
+                {% if page.date %}
+                  <span class="toolkit-hero__divider" aria-hidden="true">•</span>
+                  <span class="toolkit-hero__date">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+                  </span>
+                {% endif %}
+              </p>
+            {% endif %}
+          </div>
+        </header>
+
+        <nav class="toolkit-toc" aria-label="Toolkit table of contents">
+          <h2 class="toolkit-toc__heading">Table of Contents</h2>
+          <div class="toolkit-toc__grid">
+            {% assign sidebar_links = page.sidebar_links %}
+            {% if sidebar_links %}
+              {% for link in sidebar_links %}
+                <a class="toolkit-toc__link" href="{{ link.url }}">{{ link.title }}</a>
+              {% endfor %}
+            {% else %}
+              <a class="toolkit-toc__link" href="#steps">Steps</a>
+              <a class="toolkit-toc__link" href="#data">Data</a>
+              <a class="toolkit-toc__link" href="#example-outputs">Example Outputs</a>
+            {% endif %}
+          </div>
+        </nav>
+
+        <section class="toolkit-content">
+          {{ content }}
+        </section>
+
+        {% if page.tips %}
+          <div class="toolkit-tips mt-5">
+            {% for tip in page.tips %}
+              <div class="toolkit-tip">
+                <div class="toolkit-tip__icon" aria-hidden="true">
+                  <i class="fa fa-lightbulb-o"></i>
+                </div>
+                <div>
+                  <h2 class="toolkit-tip__title">{{ tip.title }}</h2>
+                  <p class="toolkit-tip__body">{{ tip.body }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
