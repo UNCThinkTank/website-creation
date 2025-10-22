@@ -233,9 +233,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const applyFilters = () => {
       cards.forEach(card => {
         const t = card.getAttribute('data-type') || '';
-        const topic = card.getAttribute('data-topic') || '';
+        const topicList = (card.getAttribute('data-topic') || '')
+          .split(/[\s,]+/)
+          .map(entry => entry.trim().toLowerCase())
+          .filter(Boolean);
         const typeOk = (activeType === 'all') || (t === activeType);
-        const topicOk = (activeTopic === 'all') || (topic === activeTopic);
+        const topicOk = (activeTopic === 'all') ||
+          topicList.includes('all') ||
+          topicList.includes(activeTopic);
         card.style.display = (typeOk && topicOk) ? '' : 'none';
       });
     };
@@ -278,6 +283,111 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = link.getAttribute('href');
     });
   });
+
+  // Toolkit references & inline citations
+  if (document.body.classList.contains('toolkit-page')) {
+    const content = document.querySelector('.toolkit-content');
+    if (content) {
+      const referencesHeading = content.querySelector('#references');
+      if (referencesHeading) {
+        const referencesList = (referencesHeading.nextElementSibling && referencesHeading.nextElementSibling.tagName === 'OL')
+          ? referencesHeading.nextElementSibling
+          : content.querySelector('#references + ol');
+        if (referencesList) {
+          referencesList.classList.add('toolkit-reference-list');
+          const referenceItems = Array.from(referencesList.children || []).filter((item) => item.tagName === 'LI');
+          const referenceIndexMap = {};
+          referenceItems.forEach((item, index) => {
+            const refNumber = index + 1;
+            const id = item.id && item.id.trim().length ? item.id : `ref-${refNumber}`;
+            item.id = id;
+            referenceIndexMap[String(refNumber)] = id;
+          });
+
+          const citationTest = /\[\d+\]/;
+          const citationRegex = /\[(\d+)\]/g;
+          const walker = document.createTreeWalker(
+            content,
+            NodeFilter.SHOW_TEXT,
+            {
+              acceptNode(node) {
+                if (!node || !node.parentElement) return NodeFilter.FILTER_REJECT;
+                if (node.parentElement.closest('#references')) return NodeFilter.FILTER_REJECT;
+                if (node.parentElement.closest('.toolkit-reference-list')) return NodeFilter.FILTER_REJECT;
+                if (node.parentElement.closest('a, code, pre, samp, kbd')) return NodeFilter.FILTER_REJECT;
+                if (!citationTest.test(node.nodeValue || '')) return NodeFilter.FILTER_SKIP;
+                return NodeFilter.FILTER_ACCEPT;
+              }
+            },
+            false
+          );
+
+          const textNodes = [];
+          while (walker.nextNode()) {
+            textNodes.push(walker.currentNode);
+          }
+
+          textNodes.forEach((textNode) => {
+            const original = textNode.nodeValue || '';
+            if (!citationTest.test(original)) return;
+            citationRegex.lastIndex = 0;
+            let lastIndex = 0;
+            let match;
+            const fragment = document.createDocumentFragment();
+
+            while ((match = citationRegex.exec(original)) !== null) {
+              const matchIndex = match.index;
+              const matchText = match[0];
+              const citationNumber = match[1];
+
+              if (matchIndex > lastIndex) {
+                fragment.appendChild(document.createTextNode(original.slice(lastIndex, matchIndex)));
+              }
+
+              const refId = referenceIndexMap[citationNumber] || `ref-${citationNumber}`;
+              const citationLink = document.createElement('a');
+              citationLink.className = 'toolkit-citation';
+              citationLink.href = `#${refId}`;
+              citationLink.setAttribute('data-citation-index', citationNumber);
+              citationLink.textContent = `[${citationNumber}]`;
+              fragment.appendChild(citationLink);
+
+              lastIndex = matchIndex + matchText.length;
+            }
+
+            if (lastIndex < original.length) {
+              fragment.appendChild(document.createTextNode(original.slice(lastIndex)));
+            }
+
+            textNode.parentNode.replaceChild(fragment, textNode);
+          });
+
+          const highlightCitations = (refId) => {
+            if (!refId) return;
+            const targets = content.querySelectorAll(`a.toolkit-citation[href="#${refId}"]`);
+            if (!targets.length) return;
+            targets.forEach((anchor) => {
+              anchor.classList.add('is-highlighted');
+            });
+            window.setTimeout(() => {
+              targets.forEach((anchor) => anchor.classList.remove('is-highlighted'));
+            }, 1500);
+          };
+
+          const handleHashHighlight = () => {
+            const hash = window.location.hash ? window.location.hash.substring(1) : '';
+            if (!hash) return;
+            highlightCitations(hash);
+          };
+
+          window.addEventListener('hashchange', handleHashHighlight);
+          if (window.location.hash) {
+            window.setTimeout(handleHashHighlight, 0);
+          }
+        }
+      }
+    }
+  }
 
   // Communication funnel stage interactions
   const stages = document.querySelectorAll('.comm-stage');

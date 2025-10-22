@@ -430,6 +430,100 @@ body.toolkit-page #main-content {
   padding-right: 1rem;
 }
 
+/* Ordered lists ---------------------------------------------------------- */
+.toolkit-content ol {
+  margin: 1.2rem 0;
+  padding-left: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.toolkit-content ol > li {
+  margin-bottom: 0.65rem;
+  padding-left: 0.4rem;
+  line-height: 1.65;
+}
+
+.toolkit-content ol > li:last-child {
+  margin-bottom: 0;
+}
+
+/* References ------------------------------------------------------------- */
+.toolkit-content h2#references {
+  position: relative;
+  margin-top: clamp(2.6rem, 5vw, 3.4rem);
+  padding-top: clamp(1.4rem, 3vw, 1.8rem);
+  border-top: 1px solid rgba(11, 59, 77, 0.12);
+  padding-left: 0;
+  counter-increment: none;
+}
+
+.toolkit-content h2#references::before {
+  display: none;
+}
+
+.toolkit-reference-list {
+  list-style: decimal;
+  margin: clamp(1.4rem, 3vw, 1.8rem) 0 0;
+  padding-left: clamp(1.6rem, 3vw, 2rem);
+}
+
+.toolkit-reference-list li {
+  margin-bottom: 0.6rem;
+  line-height: 1.55;
+  color: rgba(20, 50, 64, 0.86);
+  font-size: 0.96rem;
+  scroll-margin-top: 5.4rem;
+}
+
+.toolkit-reference-list li:last-child {
+  margin-bottom: 0;
+}
+
+.toolkit-reference-list a {
+  word-break: break-word;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(249, 132, 0, 0.55);
+}
+
+.toolkit-reference-list a:hover,
+.toolkit-reference-list a:focus-visible {
+  color: var(--orange);
+}
+
+.toolkit-reference-list li:target {
+  background: linear-gradient(90deg, rgba(249, 132, 0, 0.16), transparent);
+  border-radius: 10px;
+}
+
+.toolkit-citation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.65rem;
+  padding: 0.1rem 0.4rem;
+  margin: 0 0.12rem;
+  border-radius: 999px;
+  background: rgba(249, 132, 0, 0.16);
+  color: rgba(11, 59, 77, 0.88);
+  font-weight: 700;
+  font-size: 0.92em;
+  line-height: 1.1;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.toolkit-citation:hover,
+.toolkit-citation:focus-visible {
+  background: rgba(249, 132, 0, 0.34);
+  color: var(--navy);
+  transform: translateY(-1px);
+}
+
+.toolkit-citation.is-highlighted {
+  background: rgba(249, 132, 0, 0.34);
+  color: var(--navy);
+}
+
 /* Tips grid -------------------------------------------------------------- */
 .toolkit-tips {
   display: grid;
