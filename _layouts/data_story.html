@@ -152,6 +152,22 @@ body_class: "data-story-page"
                 <p class="methodology-title"><strong>{{ page.methodology.title }}</strong></p>
               {% endif %}
 
+              {% if page.methodology.qa %}
+                <div class="methodology-accordion">
+                  {% for item in page.methodology.qa %}
+                    <details class="methodology-item">
+                      <summary>
+                        <span class="methodology-question">{{ item.question }}</span>
+                        <span class="methodology-icon" aria-hidden="true"></span>
+                      </summary>
+                      <div class="methodology-answer">
+                        {{ item.answer | markdownify }}
+                      </div>
+                    </details>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
               {% for paragraph in page.methodology.paragraphs %}
                 {{ paragraph | markdownify | replace: '<p>', '<p class="footnote-text">' }}
               {% endfor %}

@@ -67,3 +67,89 @@ body.data-story-page .report-container {
 body.data-story-page #main-content {
   margin-top: -44px;
 }
+
+/* Methodology toggle layout for multi-question summaries. */
+.methodology-accordion {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.methodology-item {
+  border: 1px solid rgba(11, 59, 77, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 20px -16px rgba(11, 59, 77, 0.45);
+  overflow: hidden;
+}
+
+.methodology-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #0B3B4D;
+  list-style: none;
+}
+
+.methodology-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.methodology-item summary::marker {
+  content: "";
+}
+
+.methodology-item[open] summary {
+  background: rgba(230, 238, 241, 0.6);
+}
+
+.methodology-icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 59, 77, 0.6);
+  flex: 0 0 22px;
+}
+
+.methodology-icon::before,
+.methodology-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #0B3B4D;
+  transform: translate(-50%, -50%);
+}
+
+.methodology-icon::before {
+  width: 10px;
+  height: 2px;
+}
+
+.methodology-icon::after {
+  width: 2px;
+  height: 10px;
+}
+
+.methodology-item[open] .methodology-icon::after {
+  opacity: 0;
+}
+
+.methodology-answer {
+  padding: 0 18px 16px;
+  border-top: 1px solid rgba(11, 59, 77, 0.12);
+  color: #1f2f39;
+}
+
+.methodology-answer p {
+  margin-bottom: 10px;
+}
+
+.methodology-answer ul {
+  margin: 0 0 10px 18px;
+}

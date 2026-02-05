@@ -41,7 +41,7 @@ story_sections:
     figures:
       - src: "/assets/images/Blog 2_FosterCare/ames-services-youth-outcomes.png"
         alt: "Average marginal effects of transition services on education, employment, and housing outcomes"
-        caption: "Average marginal effects show most transition services yield minimal change in education, employment, or housing by age 19."
+        popup_caption: "Average marginal effects show most transition services yield minimal change in education, employment, or housing by age 19."
   -
     paragraphs:
       - >-
@@ -57,7 +57,7 @@ story_sections:
     figures:
       - src: "/assets/images/Blog 2_FosterCare/service-access-homelessness.png"
         alt: "Service access and homelessness among former foster youth by state"
-        caption: "States offering more services per youth do not necessarily see lower homelessness rates, underscoring limits of broad service expansion."
+        popup_caption: "States offering more services per youth do not necessarily see lower homelessness rates, underscoring limits of broad service expansion."
   -
     paragraphs:
       - >-
@@ -71,7 +71,7 @@ story_sections:
     figures:
       - src: "/assets/images/Blog 2_FosterCare/enrollment-rate-by-race.png"
         alt: "Enrollment rate by race for former foster youth"
-        caption: "Enrollment at age 19 varies sharply by race, with Black and AI/AN youth trailing the national pattern."
+        popup_caption: "Enrollment at age 19 varies sharply by race, with Black and AI/AN youth trailing the national pattern."
   -
     paragraphs:
       - >-
