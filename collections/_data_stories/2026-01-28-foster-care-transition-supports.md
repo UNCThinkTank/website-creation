@@ -86,18 +86,23 @@ story_sections:
         invest in what actually helps them build stable, independent lives.
 methodology:
   title: "Methodology"
-  paragraphs:
-    - >-
-      We used National Youth in Transition Database (NYTD) data for more than
-      8,400 youth across multiple states, comparing outcomes at age 19 for those
-      who did and did not receive transition services before age 19.
-    - >-
-      A difference-in-differences approach compares changes over time for youth
-      who did and did not receive services. The data are observational, so
-      results should be interpreted with caution.
-    - >-
-      Sources: [Lansing, Daly, & Pergamit
-      (2021)](https://acf.gov/opre/report/how-employment-programs-can-support-young-people-transitioning-out-foster-care);
-      [U.S. Department of
-      Education](https://www.ed.gov/teaching-and-administration/supporting-students/special-populations/students-foster-care/students-in-foster-care).
+  qa:
+    - question: "Which dataset(s) were used?"
+      answer: |-
+        Data were drawn from Waves 2 and 3 of the National Youth in Transition Database merged with the Adoption and Foster Care Analysis and Reporting System, resulting in a sample of 8,464 youth observed at age 19 and a longitudinal subsample observed again at age 21 across multiple states. The dataset contains 61 variables on service receipt, demographics, foster care history, and outcomes. Service indicators include independent living skills training, budgeting and financial management, housing education, supervised independent living, rental assistance, and educational financial aid.
+    - question: "What is the time period for analysis?"
+      answer: |-
+        The time period for analysis is years.
+    - question: "How was the data cleaned (filtering, sorting, grouping, etc.)?"
+      answer: |-
+        The clean_names() function in the janitor package was used to standardize variable column names. The any_service variable was created to represent whether youth received any one service (grouping all service variables into a 0/1 indicator). The employed_any variable was created to represent full-time or part-time employment as a single outcome. The housed_19 variable was created by mutating the homeless binary variable and only using "0" values (indicating not homeless). Outcomes (employed_any, enrolled_19, housed_19) were converted to numeric variables. The sex, race, and foster_status variables were converted to factors using factor(). Outcome variables and factors were also filtered to exclude "0" values for logistic regression analysis.
+    - question: "How were missing values handled?"
+      answer: |-
+        11,569 duplicates created during the data merge were dropped. 2,581 observations were dropped due to incompatibility with the research question (no service records available). NYTD/AFCARS nonresponse codes (2, 3, 77, 88, 99) were converted to "N/A" for standardization since they represent missing values. Main binary variables were recoded to 0/1 to drop invalid codes. Missingness in key outcome variables (homeless, employment indicators, educational enrollment, substance abuse, incarceration) is likely non-ignorable because youth facing instability can be harder to reach for follow-up surveys, creating potential bias. Service exposure variables show minimal missingness (<0.2%) and serve as primary independent variables. The sample was restricted to complete cases while acknowledging potential selection bias.
+    - question: "What visuals were created?"
+      answer: |-
+        The visuals included box plots for average marginal effects (AMEs) by outcomes, bar charts showing enrollment rates by race, and state-level housing effects line plots for interaction models.
+    - question: "Is the analysis descriptive or causal?"
+      answer: |-
+        This analysis is quasi-causal because it uses a difference-in-differences design to estimate associations between receiving transition services before age 19 and outcomes at age 19. While DiD strengthens causal interpretation by comparing treated and untreated youth over time, findings should be interpreted cautiously due to limitations in the observational NYTD-AFCARS data, including nonrandom selection into services and coarse measurement of service intensity. The study provides qualified causal estimates that depend on DiD assumptions such as parallel trends.
 ---
