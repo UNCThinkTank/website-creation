@@ -50,6 +50,56 @@ body_class: "data-story-page"
                 </div>
                 <hr class="keyword-divider">
               {% endif %}
+
+              {% assign has_research = page.research_question %}
+              {% assign has_datasets = page.datasets %}
+              {% if has_research or has_datasets %}
+                <section class="story-research">
+                  <div class="research-grid">
+                    {% if has_research %}
+                      <article class="research-card research-question">
+                        {% if page.research_question.title %}
+                          <h2 class="research-title">{{ page.research_question.title }}</h2>
+                        {% endif %}
+                        {% if page.research_question.prompt %}
+                          <p class="research-prompt">{{ page.research_question.prompt }}</p>
+                        {% endif %}
+                        {% if page.research_question.body %}
+                          <div class="research-body">
+                            {{ page.research_question.body | markdownify }}
+                          </div>
+                        {% endif %}
+                      </article>
+                    {% endif %}
+
+                    {% if has_datasets %}
+                      <article class="research-card research-datasets">
+                        {% if page.datasets.title %}
+                          <h2 class="research-title">{{ page.datasets.title }}</h2>
+                        {% endif %}
+                        {% if page.datasets.description %}
+                          <div class="research-body">
+                            {{ page.datasets.description | markdownify }}
+                          </div>
+                        {% endif %}
+                        {% if page.datasets.links %}
+                          <p class="dataset-label">{{ page.datasets.label | default: 'Dataset List' }}</p>
+                          <ul class="dataset-links">
+                            {% for link in page.datasets.links %}
+                              <li>
+                                <a href="{{ link.url }}" target="_blank" rel="noopener">
+                                  <i class="fa fa-file-text-o dataset-icon" aria-hidden="true"></i>
+                                  <span>{{ link.label }}</span>
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </article>
+                    {% endif %}
+                  </div>
+                </section>
+              {% endif %}
             </section>
           </div>
         </div>
@@ -77,7 +127,18 @@ body_class: "data-story-page"
         {% endif %}
 
         {% assign has_story_sections = page.story_sections %}
-        {% assign has_methodology = page.methodology.paragraphs %}
+        {% assign has_methodology = page.methodology.qa %}
+        {% if has_methodology %}
+          {% assign has_methodology = true %}
+        {% elsif page.methodology.paragraphs %}
+          {% assign has_methodology = true %}
+        {% elsif page.methodology.dataset %}
+          {% assign has_methodology = true %}
+        {% elsif page.methodology.title %}
+          {% assign has_methodology = true %}
+        {% else %}
+          {% assign has_methodology = false %}
+        {% endif %}
 
         {% if has_story_intro or has_story_sections or has_methodology %}
 
@@ -95,10 +156,16 @@ body_class: "data-story-page"
                     <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
                       <img
                         src="{{ figure.src | relative_url }}"
+                        {% if figure.srcset %}
+                          srcset="{{ figure.srcset }}"
+                        {% endif %}
+                        {% if figure.sizes %}
+                          sizes="{{ figure.sizes }}"
+                        {% endif %}
                         alt="{{ figure.alt | default: page.title }}"
                         class="{{ figure.img_class | default: 'img-responsive large-img' }}"
                         {% if figure.enable_popup != false %}
-                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                          onclick="openPopup('{{ figure.popup_src | default: figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
                         {% endif %}
                       >
                       {% if figure.caption %}
@@ -129,10 +196,16 @@ body_class: "data-story-page"
                     <figure class="{{ figure.wrapper_class | default: 'story-figure' }}">
                       <img
                         src="{{ figure.src | relative_url }}"
+                        {% if figure.srcset %}
+                          srcset="{{ figure.srcset }}"
+                        {% endif %}
+                        {% if figure.sizes %}
+                          sizes="{{ figure.sizes }}"
+                        {% endif %}
                         alt="{{ figure.alt | default: section.heading | default: page.title }}"
                         class="{{ figure.img_class | default: 'img-responsive large-img' }}"
                         {% if figure.enable_popup != false %}
-                          onclick="openPopup('{{ figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
+                          onclick="openPopup('{{ figure.popup_src | default: figure.src | relative_url }}', '{{ figure.popup_caption | default: figure.caption | escape }}')"
                         {% endif %}
                       >
                       {% if figure.caption %}
@@ -149,7 +222,7 @@ body_class: "data-story-page"
             <hr class="story-divider">
             <section class="{{ page.methodology.wrapper_class | default: 'methodology-block' }}">
               {% if page.methodology.title %}
-                <p class="methodology-title"><strong>{{ page.methodology.title }}</strong></p>
+                <h2 class="methodology-title">{{ page.methodology.title }}</h2>
               {% endif %}
 
               {% if page.methodology.qa %}
@@ -175,6 +248,37 @@ body_class: "data-story-page"
               {% if page.methodology.dataset %}
                 {{ page.methodology.dataset | markdownify | replace: '<p>', '<p class="footnote-text">' }}
               {% endif %}
+            </section>
+          {% endif %}
+
+          {% if page.analysis_download %}
+            <section class="{{ page.analysis_download.wrapper_class | default: 'analysis-download' }}">
+              <div class="analysis-download-card">
+                <div class="analysis-download-header">
+                  <div>
+                    <p class="analysis-download-eyebrow">{{ page.analysis_download.eyebrow | default: 'Recreate the Analysis' }}</p>
+                    <h2 class="analysis-download-title">{{ page.analysis_download.title | default: 'Download the Data & RMD' }}</h2>
+                  </div>
+                  <span class="analysis-download-icon" aria-hidden="true">
+                    <i class="fa fa-cloud-download"></i>
+                  </span>
+                </div>
+                {% if page.analysis_download.description %}
+                  <div class="analysis-download-body">
+                    {{ page.analysis_download.description | markdownify }}
+                  </div>
+                {% endif %}
+                {% if page.analysis_download.files %}
+                  <div class="analysis-download-links">
+                    {% for file in page.analysis_download.files %}
+                      <a href="{{ file.url }}" class="analysis-download-link" target="_blank" rel="noopener">
+                        <i class="fa fa-file-code-o" aria-hidden="true"></i>
+                        <span>{{ file.label }}</span>
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
             </section>
           {% endif %}
 

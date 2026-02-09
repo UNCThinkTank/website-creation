@@ -1,0 +1,803 @@
+---
+title: 'When Insurance Expands but Mortality Rises: What North Carolina’s County Data Says About the ACA and Diabetes (2010–2016)'
+author: "Neil Sharma"
+date: "Dec 14 2025"
+output: html_document
+---
+
+#Set Working Directory
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Load required libraries
+# Add more as needed
+library(tidyverse)
+library(dplyr)
+library(janitor)   # for cleaning dataset
+library(readr)
+library(ggplot2)
+```
+
+## Research Question 
+
+What is your primary research question?
+
+What was the impact of the Affordable Care Act’s implementation on diabetes and associated mortality rates across NC counties, using County panel data from 2010 to 2016?
+
+## Dataset(s)
+
+To look at the effectiveness of the ACA, the study merged data from several sources to look at how health outcomes related to diabetes were affected by this policy change. Thus, datasets originated from the North Carolina Department of Health and Human Services (NC DHHS), the North Carolina Health Department, the North Carolina Office of State Budget and Management (NC OSBM), the Census Bureau, UNC Sheps Health Center NC data, and the American Community Survey (ACS 1 and ACS 5). The NC state agency datasets provide annually updated county-level counts on mortality by disease type, population, un-insurance rates, and labor-market conditions like unemployment. UNC Sheps Health Center provided measures of health care supply such as primary care presence by county. Finally, Census and ACS datasets provide regularly collected demographic and socioeconomic information (for example, income, education, and insurance coverage), with 1-year estimates captured in larger counties with 65,000 residents or more, and 5-year estimated staggered but insightful data for smaller counties.
+
+Dataset links:
+
+
+ACS Data (Census Bureau)
+- ACS 1-year (API + downloads): https://www.census.gov/data/developers/data-sets/acs-1year.html
+- ACS 5-year (API + downloads): https://www.census.gov/data/developers/data-sets/acs-5year.html
+
+
+NCDHHS Data (county-level health statistics, including mortality)
+- NC State Center for Health Statistics, County-Level data portal: https://schs.dph.ncdhhs.gov/interactive/query/dms/dms.cfm
+
+UNC Sheps Health Center NC Data (health workforce supply)
+- NC Health Workforce: “Health Professional Supply Data” (county rates per 10,000): https://nchealthworkforce.unc.edu/interactive/supply/
+
+NC OSBM (unemployment)
+- Monthly labor force and unemployment (LINC dataset): https://linc.osbm.nc.gov/explore/assets/monthly-labor-force-linc/view/
+
+##See codebook //https://docs.google.com/spreadsheets/d/1XFB3ImWDQuLVgIuxPmP2aEBQM2MSSpL2/edit?gid=159098599#gid=159098599
+
+
+```{r datasets and cleaning}
+
+## A shared Github Repository will be provided with dataset merging and cleaning info.
+# Download or import dataset(s)
+# Example: 
+# data <- read_csv("https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD")
+
+# Use glimpse(data) or head(data) to preview
+
+## A shared Github repository will be provided
+
+# Clean dataset
+# Example workflow:
+# - Standardize column names
+# - Filter by variables of interest
+# - Address missing data
+# - Create derived variables if needed
+
+# data <- data %>%
+#   janitor::clean_names() %>%
+#   filter(year >= 2020)
+
+# Handle missing data:
+# data <- data %>% drop_na(variable_of_interest)
+
+
+```
+
+
+## Visualizations
+
+
+
+Two Way Fixed Effects, OLS  Analysis starts here 
+
+
+Finding 1: Counties dense in Primary Care Facilities more protective against Diabetes Associated Mortalities after ACA rollout
+```{r}
+##For graphing TWFE fixed effect style interaction between ACA rollout and Primary Care density on diabetes and associated disease mortality.
+
+library(interactions)
+
+
+library(fixest)
+
+
+setwd("/Users/neilsharma/Desktop/R-715/final-team-projects-dark-orchid-1/Final Merged CSV File")
+# Read in the CSV as final_merge
+group_data <- readr::read_csv("715_DO_final_merge.csv")
+
+
+group_data <- group_data |>
+  mutate(
+    ln_diabetes_deaths_18_64_total_per_100k =
+      log(diabetes_deaths_18_64_total_per_100k + 0.1),
+    ln_diabetes_associated_18_64_total_per_100k =
+      log(diabetes_associated_18_64_total_per_100k + 0.1)
+  )
+
+
+
+ols_assoc_int <- lm(
+  ln_diabetes_associated_18_64_total_per_100k ~
+    post_aca_2014 * total_primary_care +
+    uninsured_adults_age_18_to_64_percent +
+    unemployment_rate_pct +
+    poverty_pct +
+    bach_plus_pct +
+    access_proxy +
+    black_pct + aian_pct + asian_pct + nhpi_pct + other_pct + two_or_more_pct,
+  data = group_data
+)
+
+summary(ols_assoc_int)
+
+twfe_assoc_int <- feols(
+  ln_diabetes_associated_18_64_total_per_100k ~
+    post_aca_2014 * total_primary_care +          # main + interaction
+    uninsured_adults_age_18_to_64_percent +
+    unemployment_rate_pct +
+    poverty_pct +
+    bach_plus_pct +
+    access_proxy +
+    black_pct + aian_pct + asian_pct + nhpi_pct + other_pct + two_or_more_pct |
+    county + year,
+  cluster = ~ county,
+  data = group_data
+)
+
+summary(twfe_assoc_int)
+
+
+# TWFE-style model using lm() for plotting
+model_interact_aca_assoc_twfe <- lm(
+  ln_diabetes_associated_18_64_total_per_100k ~
+    post_aca_2014 * total_primary_care +          # interaction
+    uninsured_adults_age_18_to_64_percent +
+    unemployment_rate_pct +
+    poverty_pct +
+    bach_plus_pct +
+    black_pct + aian_pct + asian_pct + nhpi_pct + other_pct + two_or_more_pct +
+    factor(county) + factor(year),               # county + year FE
+  data = group_data
+)
+
+summary(model_interact_aca_assoc_twfe)
+
+interact_plot(
+  model_interact_aca_assoc_twfe,
+  pred   = total_primary_care,
+  modx   = post_aca_2014,
+  interval    = TRUE,
+  plot.points = TRUE
+) +
+  labs(
+    title = "Interaction: Post-2014 × Primary Care Access",
+    x     = "Primary Care Providers per 10,000",
+    y     = "Predicted log(Associated Diabetes Deaths per 100k)"
+  ) +
+  theme_minimal()
+
+###Though most coefficients were not significant, DAM rates improved in counties with higher number of primary care facilitators per 10K,  after ACA rollout. In other words, though primary care density is not significant on its own (p = 0.259), the post-ACA interaction is negative and significant (β = −0.00050, p = 0.022), suggesting primary care capacity becomes increasingly protective post 2014, especially in urban areas with higher facilitators per 10K. Additionally, higher BA attainment is associated with lower DAM (β = −0.0169, p = 0.046). 
+
+## in other words, for every 10 additional primary care providers per 10,000, it’s about -0.5% reduction in Diabetes Associated mortality
+
+```
+
+
+Finding 2 DiD
+```{r}
+
+# Insert code for your second visualization here
+# Example: bar plot by region or subgroup
+# ggplot(data, aes(x=state, y=coverage)) +
+#   geom_col() +
+#   coord_flip()
+
+##DIFF IN DIFF
+
+library(dplyr)
+library(tidyr)
+
+
+
+did_data <- group_data |>
+  mutate(
+    ln_assoc_18_64 = log(diabetes_associated_18_64_total_per_100k + 0.1),
+    ln_assoc_65_99 = log(diabetes_associated_65_99_total_per_100k + 0.1)
+  ) |>
+  select(
+    county, year, post_aca_2014,
+    ln_assoc_18_64, ln_assoc_65_99,
+    total_primary_care,
+    uninsured_adults_age_18_to_64_percent,
+    unemployment_rate_pct,
+    poverty_pct,
+    bach_plus_pct
+  ) |>
+  pivot_longer(
+    cols = c(ln_assoc_18_64, ln_assoc_65_99),
+    names_to = "age_group",
+    values_to = "ln_assoc_deaths"
+  ) |>
+  mutate(
+    treat_18_64 = if_else(age_group == "ln_assoc_18_64", 1L, 0L)
+  )
+
+###WITH RACE
+
+did_data <- group_data |>
+  mutate(
+    ln_assoc_18_64 = log(diabetes_associated_18_64_total_per_100k + 0.1),
+    ln_assoc_65_99 = log(diabetes_associated_65_99_total_per_100k + 0.1)
+  ) |>
+  select(
+    county, year, post_aca_2014,
+    ln_assoc_18_64, ln_assoc_65_99,
+    total_primary_care,
+    uninsured_adults_age_18_to_64_percent,
+    unemployment_rate_pct,
+    poverty_pct,
+    bach_plus_pct,
+    black_pct, aian_pct, asian_pct, nhpi_pct, other_pct, two_or_more_pct
+  ) |>
+  pivot_longer(
+    cols = c(ln_assoc_18_64, ln_assoc_65_99),
+    names_to  = "age_group",
+    values_to = "ln_assoc_deaths"
+  ) |>
+  mutate(
+    treat_18_64 = if_else(age_group == "ln_assoc_18_64", 1L, 0L)
+  )
+
+
+view(did_data)
+
+```
+
+
+```{r}
+###Parallel Trends test
+
+library(ggplot2)
+
+pre_trend <- did_data |>
+  filter(year < 2014) |>
+  group_by(year, treat_18_64) |>
+  summarize(
+    mean_ln_deaths = mean(ln_assoc_deaths, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(pre_trend,
+       aes(x = year, y = mean_ln_deaths,
+           color = factor(treat_18_64))) +
+  geom_line() +
+  geom_point() +
+  scale_color_manual(
+    values = c("0" = "steelblue", "1" = "darkorange"),
+    labels = c("65–99", "18–64"),
+    name   = "Age group"
+  ) +
+  labs(
+    title = "Pre-2014 Trends in log(Associated Diabetes Deaths)",
+    x = "Year",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  theme_minimal()
+
+
+###
+
+### Parallel Trends test
+
+library(ggplot2)
+
+pre_trend <- did_data |>
+  filter(year < 2014) |>
+  group_by(year, treat_18_64) |>
+  summarize(
+    mean_ln_deaths = mean(ln_assoc_deaths, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(pre_trend,
+       aes(x = year, y = mean_ln_deaths,
+           color = factor(treat_18_64))) +
+  geom_line() +
+  geom_point() +
+  scale_color_manual(
+    values = c("0" = "steelblue", "1" = "darkorange"),
+    labels = c("65–99", "18–64"),
+    name   = "Age group"
+  ) +
+  labs(
+    title = "Pre-2014 Trends in log(Associated Diabetes Deaths)",
+    x = "Year",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  scale_y_continuous(limits = c(0, NA)) +   # start y-axis at 0
+  theme_minimal()
+
+
+```
+
+
+
+```{r}
+library(fixest)
+
+did_assoc <- feols(
+  ln_assoc_deaths ~ treat_18_64 * post_aca_2014 +
+    total_primary_care +
+    uninsured_adults_age_18_to_64_percent +
+    unemployment_rate_pct +
+    poverty_pct +
+    bach_plus_pct |
+    county + year + age_group,
+  cluster = ~ county,
+  data = did_data
+)
+
+summary(did_assoc)
+
+
+##
+  
+did_assoc <- feols(
+  ln_assoc_deaths ~ treat_18_64 * post_aca_2014 +
+    total_primary_care +
+    uninsured_adults_age_18_to_64_percent +
+    unemployment_rate_pct +
+    poverty_pct +
+    bach_plus_pct +
+    black_pct + aian_pct + asian_pct + nhpi_pct + other_pct + two_or_more_pct |
+    county + year + age_group,
+  cluster = ~ county,
+  data = did_data
+)
+
+summary(did_assoc)
+
+
+
+```
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Average outcome by year and group
+did_trend <- did_data |>
+  group_by(year, treat_18_64) |>
+  summarize(
+    mean_ln_deaths = mean(ln_assoc_deaths, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(did_trend,
+       aes(x = year, y = mean_ln_deaths,
+           color = factor(treat_18_64),
+           linetype = factor(treat_18_64))) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  scale_color_manual(
+    values = c("0" = "steelblue", "1" = "darkorange"),
+    labels = c("65 to 99 (comparison)", "18 to 64 (treated)"),
+    name   = "Age group"
+  ) +
+  scale_linetype_manual(
+    values = c("0" = "dashed", "1" = "solid"),
+    labels = c("65 to 99 (comparison)", "18 to 64 (treated)"),
+    name   = "Age group"
+  ) +
+  labs(
+    title = "Difference in Differences: Diabetes Associated Deaths",
+    subtitle = "Average log(Associated Diabetes Deaths per 100k), 18 to 64 vs 65 to 99",
+    x = "Year",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  scale_y_continuous(limits = c(0, NA)) +
+  theme_minimal()
+
+
+ggplot(did_trend,
+       aes(x = year, y = mean_ln_deaths,
+           color = factor(treat_18_64),
+           linetype = factor(treat_18_64))) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  scale_color_manual(
+    values = c("0" = "steelblue", "1" = "darkorange"),
+    labels = c("65 to 99 (comparison)", "18 to 64 (treated)"),
+    name   = "Age group"
+  ) +
+  scale_linetype_manual(
+    values = c("0" = "dashed", "1" = "solid"),
+    labels = c("65 to 99 (comparison)", "18 to 64 (treated)"),
+    name   = "Age group"
+  ) +
+  labs(
+    title = "Difference in Differences: Diabetes Associated Deaths",
+    subtitle = "Average log(Associated Diabetes Deaths per 100k), 18–64 vs 65–99",
+    x = "Year",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  scale_y_continuous(limits = c(2, NA)) +   # <-- start y-axis at 2
+  theme_minimal()
+
+
+####option 2 *Alphabetical
+# Build the 2x2 averages for DiD
+did_2x2 <- did_data |>
+  mutate(
+    period = if_else(year < 2014, "Pre", "Post")
+  ) |>
+  group_by(period, treat_18_64) |>
+  summarize(
+    mean_ln_deaths = mean(ln_assoc_deaths, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+###option 3 * ordered
+did_2x2 <- did_data |>
+  mutate(
+    period = if_else(year < 2014, "Pre", "Post"),
+    period = factor(period, levels = c("Pre", "Post"))  # <-- enforce order
+  ) |>
+  group_by(period, treat_18_64) |>
+  summarize(
+    mean_ln_deaths = mean(ln_assoc_deaths, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+library(ggplot2)
+
+ggplot(did_2x2,
+       aes(x = period, y = mean_ln_deaths,
+           group = factor(treat_18_64),
+           color = factor(treat_18_64))) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  scale_color_manual(
+    values = c("0" = "steelblue", "1" = "darkorange"),
+    labels = c("65–99 (comparison)", "18–64 (treated)"),
+    name   = "Age group"
+  ) +
+  labs(
+    title = "DiD Illustration: Pre vs Post by Age Group",
+    x = "Period",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  scale_y_continuous(limits = c(2, NA)) +
+  theme_minimal()
+
+
+```
+
+
+
+
+
+
+## Methodology
+
+Summarize steps taken: 
+
+- Which dataset(s) were used?
+
+To look at the effectiveness of the ACA, the study merged data from several sources to look at how health outcomes related to diabetes were affected by this policy change. Thus, datasets originated from the North Carolina Department of Health and Human Services (NC DHHS), the North Carolina Health Department, the North Carolina Office of State Budget and Management (NC OSBM), the Census Bureau, UNC Sheps Health Center NC data, and the American Community Survey (ACS 1 and ACS 5). The NC state agency datasets provide annually updated county-level counts on mortality by disease type, population, un-insurance rates, and labor-market conditions like unemployment. UNC Sheps Health Center provided measures of health care supply such as primary care presence by county. Finally, Census and ACS datasets provide regularly collected demographic and socioeconomic information (for example, income, education, and insurance coverage), with 1-year estimates captured in larger counties with 65,000 residents or more, and 5-year estimated staggered but insightful data for smaller counties.
+
+- What is the time period for analysis (years, months, quarters, etc.)
+
+2010-2013 (Pre ACA Rollout Period)
+
+2013-2014 Lag Year (to allow ACA policy to take effect in NC)
+
+2014-2016 (Post ACA Rollout Period)
+
+- How was the data cleaned (filtering, sorting, grouping, etc.)? - How were missing values handled? 
+
+A key data challenge involved missingness in ACS 1-year estimates, particularly for smaller and more rural counties with populations under 65,000. Diagnostic anti-join checks revealed systematic gaps for certain county-year pairs, especially in early years and low-population counties. Because this missingness followed a temporal pattern rather than occurring randomly across counties, we implemented a linear interpolation strategy to retain these observations while preserving within county trends. Interpolation was applied within counties across time using linear approximation, with forward and backward fills at the panel edges where necessary. Interpolated values were flagged for transparency and sensitivity assessment.
+	Additional data cleaning steps included replacing missing disease death observations with zeroes in cases where NCDHHS does not report a county-year value, consistent with reporting conventions. Variables were normalized to facilitate comparison across counties, including expressing mortality rates per 100,000 residents and provider supply per 10,000 residents. Variables with excessive missingness that could not be reliably imputed were excluded from the final dataset.
+	The resulting tidy panel dataset balances coverage across counties and years while maintaining consistency with the casual framework. These data preparation steps ensure that subsequent analyses reflect meaningful variation in insurance coverage, access to care, and diabetes outcomes.
+	
+	The outcome variable was logged to reduce the impact of outliers. Correlation and F-tests were conducted to finalize a list of covariates.
+
+
+- What visuals were created?
+Visual 1: Interaction between Primary Care Facilitator County Density and ACA Period, to study changing protective power of living in counties with higher or lower primary care facilitator concentrations.
+
+Visual 2: DiD, comparing changes in Diabetes and Associated mortalities with those who are working age (target of the ACA rollout) i.e. 18-64, vs. those who are retirement age and under medicare protection, generally unaffected by ACA those 65 and older.
+
+Visual 3: Descriptive, showing Diabetes and Associated mortalities, aggregated by year before ACA rollout, and after. Lag Year of 2013-2014 not charted.
+
+
+- Is the analysis descriptive or causal?
+
+Descriptive and Causal Estimation via DiD and TWFE approaches.
+
+
+Descriptive Visualizations
+```{r}
+
+# Insert code for your first visualization here
+# Example: line chart over time
+# ggplot(data, aes(x=year, y=coverage, group=1)) +
+#   geom_line() +
+#   labs(title="Overall Vaccination Trend", x="Year", y="Coverage (%)")
+
+setwd("/Users/neilsharma/Desktop/R-715/final-team-projects-dark-orchid-1/Final Merged CSV File")
+# Read in the CSV as final_merge
+final_merge <- readr::read_csv("715_DO_final_merge.csv")
+
+##install.packages("visdat")
+
+library(visdat)
+
+
+##Misc. Graphs
+
+library(dplyr)
+library(ggplot2)
+
+view(group_data)
+
+year_trend <- group_data |>
+  group_by(year) |>
+  summarize(
+    mean_log_assoc = mean(ln_diabetes_associated_18_64_total_per_100k, na.rm = TRUE)
+  )
+
+
+ggplot(year_trend, aes(x = year, y = mean_log_assoc)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Average log(Associated Diabetes Deaths per 100k) by Year",
+    x = "Year",
+    y = "Mean log(Associated Diabetes Deaths per 100k)"
+  ) +
+  theme_minimal()
+
+
+####Percentages
+year_trend <- group_data |>
+  group_by(year) |>
+  summarize(
+    mean_log_assoc = mean(ln_diabetes_associated_18_64_total_per_100k, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(year) |>
+  mutate(
+    mean_level_assoc = exp(mean_log_assoc),                 # back to deaths per 100k (geometric mean)
+    pct_change_yoy = 100 * (mean_level_assoc / lag(mean_level_assoc) - 1)
+  )
+
+# Table of % increases
+year_trend |> select(year, mean_level_assoc, pct_change_yoy)
+
+# Plot % increase points (YoY)
+ggplot(filter(year_trend, !is.na(pct_change_yoy)),
+       aes(x = year, y = pct_change_yoy)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Year-to-Year % Change in Associated Diabetes Deaths per 100k",
+    x = "Year",
+    y = "% change from prior year"
+  ) +
+  theme_minimal()
+
+
+##Missingness
+
+group_data_model <- group_data |>
+  select(
+    ln_diabetes_associated_18_64_total_per_100k,
+    post_aca_2014,
+    total_primary_care,
+    uninsured_adults_age_18_to_64_percent,
+    unemployment_rate_pct,
+    poverty_pct,
+    bach_plus_cnt,
+    black_pct, aian_pct, asian_pct, nhpi_pct, other_pct, two_or_more_pct
+  )
+
+vis_miss(group_data_model) +
+  labs(
+    title = "Missingness for Variables in TWFE Associated-Deaths Model",
+    x = "Variables",
+    y = "Observations"
+  )
+
+
+
+
+
+rate_var <- "diabetes_associated_18_64_total_per_100k"
+
+pre_post_rates <- group_data |>
+  mutate(period = if_else(year <= 2013, "Pre (2010–2013)", "Post (2014–2016)")) |>
+  group_by(period) |>
+  summarize(
+    mean_rate = mean(.data[[rate_var]], na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(period = factor(period, levels = c("Pre (2010–2013)", "Post (2014–2016)")))
+
+year_trend <- group_data |>
+  group_by(year) |>
+  summarize(mean_rate = mean(.data[[rate_var]], na.rm = TRUE), .groups = "drop") |>
+  mutate(period = if_else(year <= 2013, "Pre (2010–2013)", "Post (2014–2016)"))
+
+ggplot(year_trend, aes(x = year, y = mean_rate, color = period)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Average Diabetes-Associated Deaths per 100k by Year (Pre vs Post)",
+    x = "Year",
+    y = "Deaths per 100,000",
+    color = NULL
+  ) +
+  theme_minimal()
+
+year_trend2 <- year_trend |>
+  group_by(period) |>
+  mutate(year_in_period = row_number())
+
+ggplot(year_trend2, aes(x = year_in_period, y = mean_rate, group = period, color = period)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = 1:4, labels = c("Year 1","Year 2","Year 3","Year 4")) +
+  labs(
+    title = "Trend Comparison Within Periods (Pre vs Post)",
+    x = "Year within period",
+    y = "Deaths per 100,000",
+    color = NULL
+  ) +
+  theme_minimal()
+
+year_trend <- group_data |>
+  group_by(year) |>
+  summarize(mean_rate = mean(diabetes_associated_18_64_total_per_100k, na.rm = TRUE),
+            .groups = "drop") |>
+  mutate(period = if_else(year <= 2013, "Pre (2010–2013)", "Post (2014–2016)"))
+
+ggplot(year_trend, aes(x = year, y = mean_rate)) +
+  annotate("rect",
+           xmin = 2014, xmax = Inf,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.12) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Average Diabetes-Associated Deaths per 100k by Year",
+    subtitle = "Shaded region = Post (2014–2016)",
+    x = "Year",
+    y = "Deaths per 100,000"
+  ) +
+  theme_minimal()
+
+ggplot(year_trend, aes(x = year, y = mean_rate)) +
+  geom_line(aes(group = 1), linewidth = 1) +
+  geom_point(aes(color = period), size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Average Diabetes-Associated Deaths per 100k by Year",
+    x = "Year",
+    y = "Deaths per 100,000",
+    color = NULL
+  ) +
+  theme_minimal()
+
+ggplot(year_trend, aes(x = year, y = mean_rate)) +
+  annotate("rect",
+           xmin = 2014, xmax = 2013,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.12) +
+  # pre line (<= 2013) in blue
+  geom_line(data = filter(year_trend, year <= 2013),
+            color = "blue", linewidth = 1) +
+  # post line (>= 2014) in green
+  geom_line(data = filter(year_trend, year >= 2014),
+            color = "green", linewidth = 1) +
+  # points + labels for every year
+  geom_point(size = 2) +
+  geom_text(aes(label = year), vjust = -0.8, size = 3) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+  labs(
+    title = "Average Diabetes-Associated Deaths per 100k by Year",
+    subtitle = "Blue = Pre (2010–2013), Green = Post (2014–2016)",
+    x = "Year",
+    y = "Deaths per 100,000"
+  ) +
+  theme_minimal()
+
+###Picking this one
+library(ggplot2)
+library(dplyr)
+
+ggplot(year_trend, aes(x = year, y = mean_rate)) +
+
+  # lag window shading (between 2013 and 2014)
+  annotate("rect",
+           xmin = 2013, xmax = 2014,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.18) +
+
+  # post period shading (2014 onward)
+  annotate("rect",
+           xmin = 2014, xmax = 2013,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.10) +
+
+  # pre line (<= 2013) in blue
+  geom_line(data = filter(year_trend, year <= 2013),
+            color = "blue", linewidth = 1) +
+
+  # post line (>= 2014) in green
+  geom_line(data = filter(year_trend, year >= 2014),
+            color = "green", linewidth = 1) +
+
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2014, linetype = "dashed") +
+
+  # label years on x-axis (show every year)
+  scale_x_continuous(breaks = sort(unique(year_trend$year))) +
+
+  labs(
+    title = "Average Diabetes-Associated Deaths per 100k by Year",
+    subtitle = "Blue = Pre (2010–2013), Lag window = 2013–2014, Green = Post (2014–2016)",
+    x = "Year",
+    y = "Deaths per 100,000"
+  ) +
+  theme_minimal()
+
+
+```
+
+Misc. Graphs.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+pre_post <- group_data |>
+  mutate(period = if_else(year <= 2013, "Pre (2010–2013)", "Post (2014–2016)")) |>
+  group_by(period) |>
+  summarize(
+    mean_log_assoc = mean(ln_diabetes_associated_18_64_total_per_100k, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    period = factor(period, levels = c("Pre (2010–2013)", "Post (2014–2016)")),
+    mean_level_assoc = exp(mean_log_assoc)  # if your log is log(x)
+    # mean_level_assoc = exp(mean_log_assoc) - 1  # use this instead if your log is log(1 + x)
+  )
+
+pct_change <- 100 * (pre_post$mean_level_assoc[2] / pre_post$mean_level_assoc[1] - 1)
+
+ggplot(pre_post, aes(x = period, y = mean_level_assoc, group = 1)) +
+  geom_line() +
+  geom_point(size = 3) +
+  geom_text(
+    aes(label = paste0(round(mean_level_assoc, 2))),
+    vjust = -0.7
+  ) +
+  annotate(
+    "text",
+    x = 1.5,
+    y = max(pre_post$mean_level_assoc) * 1.05,
+    label = paste0("Post vs Pre: ", round(pct_change, 1), "%"),
+    fontface = "bold"
+  ) +
+  labs(
+    title = "Pre vs Post Average: Associated Diabetes Deaths per 100k",
+    x = NULL,
+    y = "Deaths per 100k (geometric mean)"
+  ) +
+  theme_minimal()
+
+
+
+```

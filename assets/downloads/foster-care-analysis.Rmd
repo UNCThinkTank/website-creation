@@ -1,0 +1,1189 @@
+---
+title: 'Evaluating the Impact of Foster Youth & Transition Services'
+author: "Erica James, Catherine Kunz, Chase Pierce, and Kierra Wright"
+date: "12 December 2025"
+output: html_document
+---
+
+#Set Working Directory
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r setup, include=FALSE}
+# These are all the datasets we used.
+library(tidyverse)
+library(dplyr)
+library(janitor)   # for cleaning dataset
+library(readr)
+library(ggplot2)
+library(marginaleffects)
+library(moderndive)
+library(interactions) 
+library(GGally)
+library(skimr)
+library(infer)
+library(marginaleffects)
+library(lmtest)
+library(sandwich)
+library(fixest)
+library(here)
+library(ggeffects)
+library(scales)
+library(googledrive)
+library(lubridate)
+```
+
+## Research Question 
+
+What is your primary research question?
+
+For youth exiting foster care, does receiving transition services before age 19 (e.g., job training, housing assistance, school financial aid) increase the likelihood at age 19 of (a) full-time employment, (b) postsecondary enrollment or on-time high school completion, and (c) stable housing?
+
+Logistic Regression Model: $$ \text{logit}(P(Y_i = 1)) = \beta_0 + \beta_1 \text{Services}_i + \beta_2 \text{Sex}_i + \beta_3 \text{Race}_i + \beta_4 \text{FosterStatus}_i + \varepsilon_i $$ Where:
+
+Y = i is one of three outcomes, depending on the model: 1 = employed in any form (vs not) 1 = enrolled in school or completed HS on time (vs not) 1 = not homeless / housing stable (vs homeless)
+
+Services = indicator for whether youth received at least one transition service before age 19
+
+Sex, Race, and FosterCareStatus are control variables
+
+The formulation is purposefully designed to be malleable, so predictors can easily be expanded (such as adding an interaction with sex) without rewriting the structure.
+
+## Dataset(s)
+
+For our project we used data from the National youth in transition Database (NYTD) and the Adoption & Foster Care Analysis and Reporting System (AFCARS). We chose these two databases because the NYTD is the best national, youth-level longitudinal source that follows cohorts of youth (surveyed at ~17, 19, 21) and includes self-reported housing outcomes and program participation—ideal for prevalence and cohort analyses of aged-out youth, and AFCARS provides administrative counts and placement/exit records (entries, exits, age at exit) for all children in foster care. 
+
+All of these data sets were requested online here: https://www.ndacan.acf.hhs.gov/datasets/datasets-list.cfm 
+
+Below are the names of the datasets we used and access to them via Google Drive:  
+
+#1 Adoption and Foster Care Analysis and Reporting System (AFCARS), Foster Care File FY2013
+- https://drive.google.com/file/d/1EkVR-AVYewFDM5F2AF7Mj95YjWF9fbmq/view?usp=drive_link
+
+#2 Adoption and Foster Care Analysis and Reporting System (AFCARS), Foster Care AB File FY2023
+- https://drive.google.com/file/d/1RcAKQ55qORBaqYDjCI22epEa5ty5jg4G/view?usp=drive_link
+
+#1 & 2 combined
+- https://drive.google.com/file/d/17YZMynmDiblqnt8Qd4ckag8-nV8aFzB5/view?usp=drive_link
+
+#3 National Youth in Transition Database (NYTD) - Outcomes File, Cohort Age 17 in FY2011, Waves 1-3 (Complete) 
+- https://drive.google.com/file/d/1DyWZ6-IYZj43vErJYQdjXrKDu0I6Tzoe/view?usp=drive_link 
+
+#4 Outcomes File, FY2020
+- https://drive.google.com/file/d/1jAUrWn8xM7bjca62-YT6780_seFc1fE7/view?usp=drive_link
+
+#5 Services FY2011-2023 
+- https://drive.google.com/file/d/1Sl6Ey2wUegA37AP5MloFiiCO-ao7Y2Xi/view?usp=drive_link
+
+```{r datasets}
+#1 & 2: 
+FosterSystem_2023_Dirty <- read_csv(
+  drive_download(
+    as_id("17YZMynmDiblqnt8Qd4ckag8-nV8aFzB5"), 
+    path = tempfile(fileext = ".csv"), 
+    overwrite = TRUE
+  )$local_path
+)
+glimpse(FosterSystem_2023_Dirty)
+
+#3 
+services_202 <- read_csv(
+  drive_download(
+    as_id("1DyWZ6-IYZj43vErJYQdjXrKDu0I6Tzoe"), 
+    path = tempfile(fileext = ".csv"), 
+    overwrite = TRUE
+  )$local_path
+)
+glimpse(services_202)
+
+#4
+Outcomes_2020 <- read_csv(
+  drive_download(
+    as_id("1jAUrWn8xM7bjca62-YT6780_seFc1fE7"), 
+    path = tempfile(fileext = ".csv"), 
+    overwrite = TRUE
+  )$local_path
+)
+glimpse(Outcomes_2020)
+
+#5
+Services2023 <- read_csv(
+  drive_download(
+    as_id("1Sl6Ey2wUegA37AP5MloFiiCO-ao7Y2Xi"),
+    path = tempfile(fileext = ".csv"),
+    overwrite = TRUE
+  )$local_path
+)
+glimpse(Services2023)
+```
+
+Cleaning Dataset
+
+For this step, we first individually cleaned our data sets. Later, we merged them and recleaned some inconsistencies.
+
+#Individual cleaning
+
+#1 & 2
+```{r}
+# Load data
+df <- FosterSystem_2023_Dirty
+
+# Simple rename mapping (new_name = old_name)
+rename_map <- c(
+  st = "st", 
+  stfips = "state",
+  stfcid = "stfcid",
+  aged_out = "agedout",
+  exited_flag = "exited",
+  discharge_date = "dodfcdt",
+  discharge_recorded_date = "dodtrndt", 
+  placement_code = "curplset",
+  placement_label = "curplset_lbl",
+  placement_start = "cursetdt",
+  placement_los_days = "settinglos",
+  discharge_code = "disreasn",
+  discharge_label = "disreasn_lbl",
+  sex = "sex",
+  indian_alaskan = "amiakn",
+  asian = "asian",
+  black = "blkafram", 
+  hawaiian = "hawaiipi",
+  white = "white",
+  race_unknown = "untodetm",
+  hispanic = "hisorgin",
+  race = "race",
+  raceethn = "raceethn",
+  total_removals = "totalrem",
+  num_placements = "numplep", 
+  fc_total_days = "lifelos",
+  last_removal_date = "latremdt",
+  last_removal_los = "latremlos",
+  placed_out_of_state = "placeout",
+  case_goal_code = "casegoal"
+)
+
+# Create final dataset
+fc_clean_2023 <- df %>%
+  # Keep only columns that exist in both the data and our rename map
+  select(any_of(rename_map)) %>%
+  # Rename columns
+  rename(all_of(rename_map[rename_map %in% names(.)])) %>%
+  # Filter to aged-out youth who exited
+  filter(aged_out == 1, exited_flag == 1) %>%
+  # Drop all rows with any missing values
+  drop_na() %>%
+  # Convert dates using lubridate's ymd() parser
+  mutate(
+    discharge_date = ymd(discharge_date),
+    discharge_recorded_date = ymd(discharge_recorded_date),
+    placement_start = ymd(placement_start), 
+    last_removal_date = ymd(last_removal_date),
+    # Extract month and year using lubridate's accessor functions
+    discharge_month = month(discharge_date, label = TRUE, abbr = TRUE),
+    discharge_year = year(discharge_date),
+    placement_start_month = month(placement_start, label = TRUE, abbr = TRUE), 
+    placement_start_year = year(placement_start),
+    last_removal_month = month(last_removal_date, label = TRUE, abbr = TRUE),
+    last_removal_year = year(last_removal_date)
+  ) %>%
+  # Clean column names and convert to tibble
+  clean_names() %>%
+  as_tibble()
+
+# Check results
+cat("Final cohort size:", nrow(fc_clean_2023), "\n")
+glimpse(fc_clean_2023)
+```
+#3
+```{r}
+#drop variables we don't need
+services_202_clean <- services_202 |>
+  select(-recnumbr, -repdate, -fy11cohort, -baseline)
+
+#rename variables
+services_202_clean <- services_202_clean |> 
+  drop_na(outcmdte) |>
+  rename(
+  report_date = contains("repdate"),
+  indian_alaskan = contains("amiakn"),
+  black = contains("blkafram"),
+  hawaiian = contains("hawaiipi"),
+  race_unknown = contains("raceunkn"),
+  race_declined = contains("racedcln"),
+  hispanic = contains("hisorgin"),
+  outcome_status = contains("outcmrpt"),
+  outcome_date = contains("outcmdte"),
+  outcome_foster_care = contains("outcmFCS"),
+  full_employment = contains("currfte"),
+  part_employment = contains("currpte"),
+  employment_skills = contains("emplysklls"),
+  ss = contains("socsecrty"),
+  connection_adult = contains("cnctadult"),
+  incarceration = contains("incarc"),
+  other_health_insurance = contains("othrhlthin"),
+  medical_insurance = contains("medicalin"),
+  mental_health_insurance = contains("mentlhlthin"),
+  prescription = contains("prescripin")
+) 
+
+names(services_202_clean)
+
+#fix dates
+services_202_clean <- services_202_clean |>
+  mutate(
+    dob_day   = day(dob),
+    dob_month = month(dob),
+    dob_year  = year(dob),
+    outcome_day = day(outcome_date),
+    outcome_month = month(outcome_date),
+    outcome_year = year(outcome_date)
+  )
+
+#drop dob and outcome_date after we fix the dates
+services_202_clean <- services_202_clean |>
+  select(-dob, -outcome_date)
+
+#address NAs
+services_202_clean <- services_202_clean %>%
+  mutate(
+    elig21 = as.integer(elig21),
+    insample = as.integer(insample),
+    samplestate = as.integer(samplestate),
+    
+    # fill elig21 according to cohort rules
+    elig21 = if_else(
+      (wave %in% c(2, 3)) & (samplestate == 0 | insample == 1),
+      1L,
+      0L
+    ),
+    
+    # fill missing insample with 0
+    insample = if_else(is.na(insample), 0L, insample)
+  ) %>%
+  filter(wave %in% c(2, 3))
+colSums(is.na(services_202_clean))
+```
+
+#4
+```{r}
+#drop what we don't need
+Outcomes_subset <- Outcomes_2020 |>
+  select(-repdate, -recnumbr, -fy20cohort, -baseline,
+ ) |>
+  
+  as_tibble()
+
+Outcomes_subset <- Outcomes_subset |>
+  mutate(across(everything(), ~na_if(trimws(.x), ""))) 
+
+#clean names
+Outcomes_subset_clean <- Outcomes_subset |>
+  drop_na(outcmdte) |>
+  rename(
+    sample_state = samplestate,
+    wave = wave,
+    stfips = state,
+    indian_alaskan = amiakn,
+    black = blkafram,
+    hawaiian = hawaiipi, 
+    race_unknown = raceunkn,
+    race_declined = racedcln,
+    hispanic = hisorgin,
+    outcome_status = outcmrpt,
+    outcome_date = outcmdte,
+    outcome_foster_care = outcmfcs,
+    full_employment = currfte,
+    part_employment = currpte,
+    employment_skills = emplysklls,
+    ss = socsecrty,
+    connection_adult = cnctadult,
+    incarceration = incarc,
+    other_health_insurance = othrhlthin,
+    medical_insurance = medicalin,
+    mental_health_insurance = mentlhlthin,
+    prescription = prescripin,
+    local_agency_fips_code = fips5
+  )
+
+#fix dates
+Outcomes_subset_clean <- Outcomes_subset_clean |>
+  mutate(
+    dob_day = day(dob),
+    dob_month = month(dob),
+    dob_year = year(dob),
+    outcome_day = day(outcome_date),
+    outcome_month = month(outcome_date),
+    outcome_year = year(outcome_date)
+  )
+
+Outcomes_subset_clean <- Outcomes_subset_clean |>
+  select(-dob, -outcome_date)
+
+#address NAs
+dir.create(here("diagnostics"), showWarnings = FALSE)
+
+# diagnostics before dropping
+n_before <- nrow(Outcomes_subset_clean)
+n_na_sample_state <- sum(is.na(Outcomes_subset_clean$sample_state))
+n_na_insample      <- sum(is.na(Outcomes_subset_clean$insample))
+n_na_elig19        <- sum(is.na(Outcomes_subset_clean$elig19))
+n_na_elig21        <- sum(is.na(Outcomes_subset_clean$elig21))
+
+n_either_na <- Outcomes_subset_clean %>%
+  filter(is.na(sample_state) | is.na(insample) | is.na(elig19) | is.na(elig21)) %>%
+  nrow()
+
+cat("Rows before:", n_before, "\n")
+cat("NA count sample_state:", n_na_sample_state, "\n")
+cat("NA count insample:     ", n_na_insample, "\n")
+cat("NA count elig19:       ", n_na_elig19, "\n")
+cat("NA count elig21:       ", n_na_elig21, "\n")
+cat("Rows that would be removed (any of the four NA):", n_either_na, "\n")
+cat(sprintf("Proportion removed: %.2f%%\n", 100 * n_either_na / n_before))
+
+# save removed rows for audit
+removed_rows <- Outcomes_subset_clean %>%
+  filter(is.na(sample_state) | is.na(insample) | is.na(elig19) | is.na(elig21))
+write_csv(removed_rows, here("diagnostics", "removed_missing_samplestate_insample_elig19_elig21.csv"))
+
+# perform the drop
+Outcomes_analysis <- Outcomes_subset_clean %>%
+  filter(!is.na(sample_state) & !is.na(insample) & !is.na(elig19) & !is.na(elig21)) %>%
+  # ensure integer coding for these vars (optional)
+  mutate(
+    sample_state = as.integer(sample_state),
+    insample = as.integer(insample),
+    elig19 = as.integer(elig19),
+    elig21 = as.integer(elig21)
+  )
+
+# diagnostics after dropping
+n_after <- nrow(Outcomes_analysis)
+cat("Rows after:", n_after, "\n")
+cat(sprintf("Rows removed: %d (%.2f%%)\n", n_before - n_after, 100 * (n_before - n_after) / n_before))
+```
+#5
+```{r}
+#rename
+Services2023 <- Services2023 |>
+  rename(
+    race_declined       = racedcln,
+    fiscal_year         = fy,
+    indian_alaskan      = amiakn,
+    black               = blkafram,
+    hawaiian            = hawaiipi,
+    race_unknown        = raceunkn,
+    hispanic            = hisorgin,
+    st                  = st,
+    report_date         = repdate,
+    ind_living_needs    = ilnasv,
+    budget_fin_mngmt    = budgetsv,
+    housing_ed_training = housedsv,
+    supervised_ind_living = silsv,
+    room_fin_asst       = rmbrdfasv,
+    edu_fin_asst        = educfinasv,
+    foster_care_status  = fcstatsv
+  )
+glimpse(Services2023)
+
+Services_2023_clean <- Services2023 |> select("dob", "sex", "cohort",  "race_declined", "fiscal_year", "stfcid", "stfips", "indian_alaskan", "white","black","hawaiian", "asian", "race_unknown", "hispanic", "st","report_date", "ind_living_needs", "budget_fin_mngmt", "housing_ed_training", "supervised_ind_living", "room_fin_asst", "edu_fin_asst", "foster_care_status")
+
+#fix dates
+Services_2023_clean <- Services_2023_clean |> mutate(dob = ymd(dob))
+
+
+Services_2023_clean <- Services_2023_clean |> mutate(
+  dob_year  = year(dob),
+  dob_month = month(dob, label = TRUE, abbr = FALSE),
+  dob_day   = day(dob)
+) |> select(-dob)
+glimpse(Services_2023_clean)
+
+services_subset <- Services_2023_clean |>
+  filter(fiscal_year %in% c(2011, 2020, 2023))
+
+unique(services_subset$fiscal_year)
+```
+
+#Merging & Final Cleaning
+Join 3 & 4 first since they are the most alike. 
+To data set we made from dataset #4 https://drive.google.com/file/d/1X9BpwfkAIUypyAq70a6uO4X-mYhsoa-e/view?usp=drive_link 
+```{r}
+outcomes_clean <- read_csv(
+  drive_download(
+    as_id("1X9BpwfkAIUypyAq70a6uO4X-mYhsoa-e"),
+    path = tempfile(fileext = ".csv"),
+    overwrite = TRUE
+  )$local_path
+)
+
+# Step 1: Create a minimal PK
+outcomes_clean <- outcomes_clean |>
+  mutate(pk = paste(stfcid, stfips, st, sep = "_"))
+
+services_202_clean <- services_202_clean |>
+  mutate(pk = paste(stfcid, stfips, st, sep = "_"))
+
+# Step 2: Remove duplicate PKs
+outcomes_clean <- outcomes_clean |>
+  distinct(pk, .keep_all = TRUE)
+
+services_202_clean <- services_202_clean |>
+  distinct(pk, .keep_all = TRUE)
+
+# Step 3: Keep only new columns from services_202_clean
+services_small <- services_202_clean |>
+  select(pk)  
+
+# Step 4: Join 3 & 4
+joined_outcomes <- left_join(outcomes_clean, services_small, by = "pk")
+
+# Step 5: Check results
+nrow(joined_outcomes) == nrow(outcomes_clean)  
+colSums(is.na(joined_outcomes))    
+```
+
+Make Primary key
+```{r}
+#pk
+cat_erica <- joined_outcomes |>
+  mutate(pk = paste(
+    stfcid, stfips, st, sex, indian_alaskan, asian, black,
+    hawaiian, white, race_unknown, hispanic, sep = "_"
+  ))
+
+chase <- fc_clean_2023 |>
+  mutate(pk = paste(
+    stfcid, stfips, st, sex, indian_alaskan, asian, black,
+    hawaiian, white, race_unknown, hispanic, sep = "_"
+  ))
+
+kierra <- services_subset |>
+  mutate(pk = paste(
+    stfcid, stfips, st, sex, indian_alaskan, asian, black,
+    hawaiian, white, race_unknown, hispanic, sep = "_"
+  ))
+
+# Remove duplicate PKs
+cat_erica <- cat_erica %>% distinct(pk, .keep_all = TRUE)
+chase <- chase %>% distinct(pk, .keep_all = TRUE)
+kierra <- kierra %>% distinct(pk, .keep_all = TRUE)
+
+#Check for duplicates
+anyDuplicated(cat_erica$pk)   # should return 0
+anyDuplicated(chase$pk)       # should return 0
+anyDuplicated(kierra$pk)      # should return 0
+```
+
+Join
+```{r}
+#Make sure pk exists in each dataset
+cat_erica <- cat_erica |>
+  mutate(pk = paste(stfcid, stfips, st, sex, indian_alaskan, asian, black, hawaiian, white, race_unknown, hispanic, sep = "_"))
+
+chase <- chase |>
+  mutate(pk = paste(stfcid, stfips, st, sex, indian_alaskan, asian, black, hawaiian, white, race_unknown, hispanic, sep = "_"))
+
+kierra <- kierra |>
+  mutate(pk = paste(stfcid, stfips, st, sex, indian_alaskan, asian, black, hawaiian, white, race_unknown, hispanic, sep = "_"))
+
+#Full join all datasets
+nytd_full <- full_join(cat_erica, chase, by = "pk") %>%
+             full_join(kierra, by = "pk")
+
+#Identify all suffixed columns (any column ending with .x, .y, .kierra)
+suffixed_cols <- grep("\\.x$|\\.y$|\\.kierra$", names(nytd_full), value = TRUE)
+base_names <- unique(sub("\\.x$|\\.y$|\\.kierra$", "", suffixed_cols))
+
+#Coalesce all suffixed columns into base names
+for (var in base_names) {
+  cols_to_coalesce <- grep(paste0("^", var, "(\\.x|\\.y|\\.kierra)?$"), names(nytd_full), value = TRUE)
+  
+  # convert all to character first to avoid type issues
+  nytd_full <- nytd_full|>
+    mutate(across(all_of(cols_to_coalesce), as.character)) |>
+    mutate("{var}" := coalesce(!!!syms(cols_to_coalesce)))
+}
+
+#Remove old suffixed columns
+nytd_full <- nytd_full |>
+  select(-all_of(suffixed_cols))
+
+#Ensure PK uniqueness
+nytd_full <- nytd_full |> distinct(pk, .keep_all = TRUE)
+
+#Quick checks
+nrow(nytd_full)             # total rows
+anyDuplicated(nytd_full$pk) # should be 0
+colSums(is.na(nytd_full))   # remaining NAs
+```
+
+Fixing Errors
+Outcomes_analysis_filtered_clean.csv: https://drive.google.com/file/d/1X9BpwfkAIUypyAq70a6uO4X-mYhsoa-e/view?usp=drive_link
+
+fc_clean_2023.csv: 
+https://drive.google.com/file/d/178fNYMD_VrixtLRscMDrNmsO2fTzw8pf/view?usp=drive_link
+
+Services_subset.csv:
+https://drive.google.com/file/d/15-31NY_1_9ZYoJWt4OZ4RwhvQ7Nll2_3/view?usp=drive_link
+
+```{r}
+# 0. Read data
+cat_erica    <- read_csv(here("Cleaned Data","Outcomes_analysis_filtered_clean.csv"))
+chase        <- read_csv(here("Cleaned Data","fc_clean_2023.csv"))
+services_sub <- read_csv(here("Cleaned Data","Services_subset.csv"))
+
+#you will need to change the above code to run ^
+
+# Check wave distribution in raw data
+cat("Raw cat_erica waves:", table(cat_erica$wave), "\n")
+
+# 1. Standardize function
+standardize <- function(df) {
+  if (!"stfcid" %in% names(df)) df$stfcid <- NA_character_
+  if (!"st" %in% names(df)) df$st <- NA_character_
+  if (!"stfips" %in% names(df)) df$stfips <- NA_character_
+  if (!"sex" %in% names(df)) df$sex <- NA_character_
+  
+  df %>%
+    mutate(
+      stfcid = as.character(stfcid),
+      st = toupper(str_squish(as.character(st))),
+      stfips = as.character(stfips),
+      sex = as.character(sex)
+    ) %>%
+    mutate(across(c(stfcid, st, stfips, sex), 
+                  ~ if_else(. == "" | . == "NA", NA_character_, .)))
+}
+
+cat2    <- standardize(cat_erica)
+# Skip chase since we're not using it
+kierra2 <- standardize(services_sub)
+
+# 2. Create join keys
+cat_k   <- cat2 %>% mutate(join_id = stfcid)
+kierra_k <- kierra2 %>% mutate(join_id = stfcid)
+
+# 3. Clean race columns
+clean_race_cols <- function(df) {
+  race_cols <- intersect(c("indian_alaskan","asian","black","hawaiian","white","race_unknown","hispanic"), names(df))
+  if (length(race_cols) == 0) return(df)
+  
+  df %>%
+    mutate(across(all_of(race_cols), ~ case_when(
+      is.na(.) ~ NA_real_,
+      as.character(.) %in% c("77","77.0","NA","") ~ NA_real_,
+      as.character(.) %in% c("1","1.0","TRUE","True") ~ 1,
+      as.character(.) %in% c("0","0.0","FALSE","False") ~ 0,
+      TRUE ~ as.numeric(as.character(.))
+    )))
+}
+
+cat_clean   <- clean_race_cols(cat_k)
+kierra_clean <- clean_race_cols(kierra_k)
+
+# Fix data type conflicts
+if ("dob_month" %in% names(cat_clean)) {
+  cat_clean <- cat_clean %>% mutate(dob_month = as.character(dob_month))
+}
+if ("dob_month" %in% names(kierra_clean)) {
+  kierra_clean <- kierra_clean %>% mutate(dob_month = as.character(dob_month))
+}
+
+# 4. Keep both Wave 2 and Wave 3 observations
+cat_final <- cat_clean
+
+# 5. Select useful services variables
+kierra_useful <- kierra_clean %>%
+  select(join_id, cohort, fiscal_year, report_date, ind_living_needs, 
+         budget_fin_mngmt, housing_ed_training, supervised_ind_living, 
+         room_fin_asst, edu_fin_asst, foster_care_status)
+
+# 6. Merge only outcomes + services (skip chase entirely)
+merged_analytical <- cat_final %>%
+  left_join(kierra_useful, by = "join_id", relationship = "many-to-many") %>%
+  # Clean up variables with coded missing values (77, 88)
+  mutate(
+    # Fix homeless variable (your key outcome) - keep cleaned outcome variable
+    homeless_clean = case_when(
+      homeless == 1 ~ 1,
+      homeless == 0 ~ 0,
+      homeless == 77 ~ NA_real_,
+      TRUE ~ NA_real_
+    ),
+    # Fix employment variables  
+    employment_any = case_when(
+      full_employment == 1 | part_employment == 1 | employment_skills == 1 ~ 1,
+      full_employment == 0 & part_employment == 0 & employment_skills == 0 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    # Create treatment variables from services
+    # If any of the service indicators == 1 -> 1
+    # Else if there is a services record (report_date not NA) -> 0
+    # Else -> NA (no services info)
+    received_housing_services = case_when(
+      housing_ed_training == 1 | supervised_ind_living == 1 | room_fin_asst == 1 ~ 1,
+      !is.na(report_date) ~ 0,
+      TRUE ~ NA_real_
+    ),
+    received_any_services = case_when(
+      ind_living_needs == 1 | budget_fin_mngmt == 1 | housing_ed_training == 1 | 
+      supervised_ind_living == 1 | room_fin_asst == 1 | edu_fin_asst == 1 ~ 1,
+      !is.na(report_date) ~ 0,
+      TRUE ~ NA_real_
+    ),
+    # Create consolidated race/ethnicity
+    race_ethnicity = case_when(
+      hispanic == 1 ~ "Hispanic/Latino",
+      indian_alaskan == 1 ~ "American Indian/Alaska Native",
+      black == 1 ~ "Black/African American",
+      white == 1 ~ "White",
+      asian == 1 ~ "Asian",
+      hawaiian == 1 ~ "Native Hawaiian/Pacific Islander",
+      TRUE ~ "Other/Unknown"
+    )
+  )
+
+# 7. Final cleanup - remove variables with high missingness
+na_counts <- colSums(is.na(merged_analytical))
+high_na_vars <- names(na_counts[na_counts > 5000])  
+
+cat("Variables with >5000 NAs (will be dropped):", paste(high_na_vars, collapse = ", "), "\n")
+
+# Remove high-NA variables if any exist
+if(length(high_na_vars) > 0) {
+  merged_clean <- merged_analytical %>%
+    select(-all_of(high_na_vars))
+} else {
+  merged_clean <- merged_analytical
+}
+
+# 8. Final diagnostics
+cat("\n=== CLEAN ANALYTICAL DATASET ===\n")
+cat("Total rows:", nrow(merged_clean), "\n")
+cat("Total columns:", ncol(merged_clean), "\n")
+cat("Unique individuals:", n_distinct(merged_clean$join_id), "\n")
+
+# Check key variables
+cat("\nHomelessness outcome distribution:\n")
+table(merged_clean$homeless_clean, useNA = "ifany") %>% print()
+
+cat("\nTreatment variable distribution:\n")
+table(merged_clean$received_housing_services, useNA = "ifany") %>% print()
+
+cat("\nWave distribution:\n")
+table(merged_clean$wave) %>% print()
+
+# 9. Show remaining NAs
+remaining_nas <- colSums(is.na(merged_clean))
+cat("\nRemaining variables with NAs:\n")
+print(remaining_nas[remaining_nas > 0])
+
+colSums(is.na(merged_clean))
+colnames(merged_clean)
+
+#DROP BECAUSE CREATED DURING DATA CLEANING
+#merged_data <- merged_data |> select(-received_housing_services, -received_any_services, -homeless_clean, -employment_any)
+
+#RACE: 77 = UNKNOWN so recode NAs to 77
+merged_data <- merged_clean |>
+  mutate(indian_alaskan = replace_na(indian_alaskan, 77))
+
+merged_data <- merged_data |>
+  mutate(hawaiian = replace_na(hawaiian, 77))
+
+merged_data <- merged_data |>
+  mutate(white = replace_na(white, 77))
+
+merged_data <- merged_data |>
+  mutate(asian = replace_na(asian, 77))
+
+merged_data <- merged_data |>
+  mutate(black = replace_na(black, 77))
+
+merged_data <- merged_data |>
+  mutate(hispanic = replace_na(hispanic, 77))
+
+#characteristics
+table(merged_data$budget_fin_mngmt, useNA = "ifany")
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(budget_fin_mngmt = replace_na(budget_fin_mngmt, 77))
+
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(edu_fin_asst = replace_na(edu_fin_asst, 77))
+
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(housing_ed_training = replace_na(housing_ed_training, 77))
+
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(ind_living_needs = replace_na(ind_living_needs, 77))
+
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(room_fin_asst = replace_na(room_fin_asst, 77))
+
+#77=blank so recode names
+merged_data <- merged_data |>
+  mutate(supervised_ind_living = replace_na(supervised_ind_living, 77))
+
+#to double check progress
+colSums(is.na(merged_data))
+
+#these three are still missing and we can't just fill them in
+
+table(merged_data$fiscal_year, useNA = "ifany")
+
+table(merged_data$local_agency_fips_code, useNA = "ifany")
+
+table(merged_data$foster_care_status, useNA = "ifany")
+#77= blank. did not receive services. can't fill in as 77.
+
+colSums(is.na(merged_data))
+```
+running diagnostics to address remaining missingness, fully clean our merged data for EDA.  
+```{r - diagnostics}
+
+# 1. BASIC MISSINGNESS SUMMARY
+
+cat("\n=== OVERVIEW OF REMAINING MISSINGNESS ===\n")
+missing_summary <- tibble(
+  variable = c("local_agency_fips_code", "cohort", "fiscal_year", "foster_care_status"),
+  n_missing = c(967, 2581, 2581, 2581),
+  n_total = nrow(merged_data),
+  pct_missing = round((c(967, 2581, 2581, 2581) / nrow(merged_data)) * 100, 2)
+)
+print(missing_summary)
+
+
+# 2. Are the same observations missing across variables
+
+cat("\n=== PATTERN OF MISSINGNESS ===\n")
+
+# Create missingness indicators
+merged_data <- merged_data %>%
+  mutate(
+    missing_agency = is.na(local_agency_fips_code),
+    missing_cohort = is.na(cohort),
+    missing_fiscal = is.na(fiscal_year),
+    missing_foster_status = is.na(foster_care_status)
+  )
+
+# Cross-tabulation of missingness patterns
+cat("\nAre cohort, fiscal_year, and foster_care_status missing together?\n")
+table(merged_data$missing_cohort, merged_data$missing_fiscal, 
+      dnn = c("Missing_Cohort", "Missing_Fiscal_Year")) %>% print()
+
+table(merged_data$missing_cohort, merged_data$missing_foster_status,
+      dnn = c("Missing_Cohort", "Missing_Foster_Status")) %>% print()
+
+# Count observations with ALL three service variables missing
+all_three_missing <- merged_data %>%
+  filter(missing_cohort & missing_fiscal & missing_foster_status) %>%
+  nrow()
+
+cat("\nObservations missing cohort, fiscal_year, AND foster_care_status:", all_three_missing, "\n")
+
+# 3. Analyze characteristics of missing vs non-missing observations
+
+cat("\n=== CHARACTERISTICS BY MISSINGNESS PATTERN ===\n")
+
+# Compare by wave
+cat("\nMissingness by Wave (age at follow-up):\n")
+table(merged_data$wave, merged_data$missing_cohort, 
+      dnn = c("Wave", "Missing_Service_Variables")) %>% 
+  addmargins() %>% print()
+
+# Compare by state sampling status
+cat("\nMissingness by Sample State:\n")
+table(merged_data$sample_state, merged_data$missing_cohort,
+      dnn = c("Sample_State", "Missing_Service_Variables")) %>%
+  prop.table(margin = 1) %>% round(3) %>% print()
+
+# Compare by response status
+cat("\nMissingness by Response Status:\n")
+table(merged_data$responded, merged_data$missing_cohort,
+      dnn = c("Responded", "Missing_Service_Variables")) %>%
+  prop.table(margin = 1) %>% round(3) %>% print()
+
+# 4. Check if missing observations have outcome data
+
+cat("\n=== DO MISSING OBSERVATIONS HAVE OUTCOME DATA? ===\n")
+
+outcome_comparison <- merged_data %>%
+  group_by(missing_cohort) %>%
+  summarise(
+    n = n(),
+    pct_homeless_available = sum(!is.na(homeless) & homeless != 77) / n() * 100,
+    pct_employment_available = sum(!is.na(full_employment) & full_employment != 77) / n() * 100,
+    pct_education_available = sum(!is.na(currenroll) & currenroll != 77) / n() * 100
+  ) %>%
+  mutate(across(starts_with("pct"), ~round(.x, 2)))
+
+print(outcome_comparison)
+
+# 5. Examine what we know about the missing observations
+
+cat("\n=== WHAT DO WE KNOW ABOUT OBSERVATIONS WITH MISSING SERVICE DATA? ===\n")
+
+# Select a sample of observations with missing service variables
+missing_sample <- merged_data %>%
+  filter(missing_cohort) %>%
+  select(stfcid, st, wave, responded, homeless, full_employment, 
+         currenroll, outcome_foster_care) %>%
+  head(20)
+
+print(missing_sample)
+
+# Summary statistics
+cat("\nSummary of observations WITH service data:\n")
+merged_data %>%
+  filter(!missing_cohort) %>%
+  summarise(
+    n = n(),
+    pct_in_foster_care = mean(outcome_foster_care == 1, na.rm = TRUE) * 100,
+    pct_homeless = mean(homeless == 1, na.rm = TRUE) * 100,
+    pct_employed_full = mean(full_employment == 1, na.rm = TRUE) * 100
+  ) %>%
+  mutate(across(starts_with("pct"), ~round(.x, 2))) %>%
+  print()
+
+cat("\nSummary of observations WITHOUT service data:\n")
+merged_data %>%
+  filter(missing_cohort) %>%
+  summarise(
+    n = n(),
+    pct_in_foster_care = mean(outcome_foster_care == 1, na.rm = TRUE) * 100,
+    pct_homeless = mean(homeless == 1, na.rm = TRUE) * 100,
+    pct_employed_full = mean(full_employment == 1, na.rm = TRUE) * 100
+  ) %>%
+  mutate(across(starts_with("pct"), ~round(.x, 2))) %>%
+  print()
+
+
+# 6. Final decision
+
+cat("\n=== IMPACT OF DROPPING OBSERVATIONS WITH MISSING SERVICE DATA ===\n")
+
+n_before <- nrow(merged_data)
+n_after <- sum(!merged_data$missing_cohort)
+pct_retained <- round((n_after / n_before) * 100, 2)
+
+cat("\nObservations before dropping NAs:", n_before, "\n")
+cat("Observations after dropping NAs:", n_after, "\n")
+cat("Percentage retained:", pct_retained, "%\n")
+cat("Observations lost:", n_before - n_after, "\n")
+
+# Check if this affects your analytical sample
+cat("\nBreakdown by key subgroups AFTER dropping missing service data:\n")
+merged_data %>%
+  filter(!missing_cohort) %>%
+  group_by(wave) %>%
+  summarise(
+    n = n(),
+    n_responded = sum(responded == 1),
+    n_with_outcomes = sum(homeless %in% c(0, 1))
+  ) %>%
+  print()
+
+# Based on this analysis, we can safely drop. 
+
+# Newly cleaned data
+
+# STEP 1: DROP OBSERVATIONS WITH MISSING SERVICE DATA
+
+cat("\n=== CREATING FINAL CLEAN DATASET ===\n\n")
+
+# Show what we're dropping
+cat("Dropping observations missing service variables (cohort, fiscal_year, foster_care_status)\n")
+cat("Observations before:", nrow(merged_data), "\n")
+
+# Create final clean dataset by removing observations with missing service data
+merged_FC_final <- merged_data %>%
+  filter(!missing_cohort) %>%  # Keep only observations WITH service data
+  select(-missing_agency, -missing_cohort, -missing_fiscal, -missing_foster_status)  # Remove indicator columns
+
+cat("Observations after:", nrow(merged_FC_final), "\n")
+cat("Observations dropped:", nrow(merged_data) - nrow(merged_FC_final), "\n")
+cat("Retention rate:", round(nrow(merged_FC_final)/nrow(merged_data)*100, 2), "%\n\n")
+
+# STEP 2: HANDLE local_agency_fips_code
+
+# Check the remaining NAs
+cat("=== REMAINING MISSINGNESS ===\n")
+remaining_nas <- colSums(is.na(merged_FC_final))
+cat("\nVariables with NAs:\n")
+print(remaining_nas[remaining_nas > 0])
+
+# local_agency_fips_code: Keep as is (967 NAs is reasonable - not all youth have local agency codes)
+# This variable isn't critical for your research question
+
+# STEP 3: FINAL QUALITY CHECKS
+
+cat("\n=== FINAL DATASET QUALITY CHECKS ===\n\n")
+
+# Check dimensions
+cat("Final dimensions:", nrow(merged_FC_final), "rows ×", ncol(merged_FC_final), "columns\n\n")
+
+# Check unique individuals
+cat("Unique youth (by stfcid):", n_distinct(merged_FC_final$stfcid), "\n\n")
+
+# Check wave distribution
+cat("Distribution by wave:\n")
+table(merged_FC_final$wave) %>% print()
+cat("\n")
+
+# Check key variables
+cat("Key outcome variables:\n")
+cat("- Homeless: ", sum(merged_FC_final$homeless %in% c(0,1)), "valid responses\n")
+cat("- Full employment: ", sum(merged_FC_final$full_employment %in% c(0,1)), "valid responses\n")
+cat("- Currently enrolled: ", sum(merged_FC_final$currenroll %in% c(0,1)), "valid responses\n\n")
+
+# Check key service variables
+cat("Key service variables (should have NO NAs):\n")
+service_vars <- c("cohort", "fiscal_year", "ind_living_needs", "budget_fin_mngmt", 
+                  "housing_ed_training", "supervised_ind_living", "room_fin_asst", 
+                  "edu_fin_asst", "foster_care_status")
+service_na_check <- colSums(is.na(merged_FC_final[, service_vars]))
+print(service_na_check)
+
+
+# Justification for Dropping:
+
+# 1. Perfect correlation: All 2,581 observations are missing cohort, fiscal_year, AND foster_care_status together - these are youth without service records
+# 2. Research question requires it: Our question asks "does receiving services affect outcomes?" - we NEED service data to answer this, so, if it is missing, safe to drop. As it will not be relevant when we begin running regressions.
+# 3. Reasonable retention: We are keeping 88.94% of our original clean merged data (20,746 observations)
+# 4. Consistent across waves: ~11% missing in both Wave 2 and Wave 3
+# 5. More missing among non-responders: This makes sense - youth who didn't respond to surveys may also not have service records either, so, it is all connected and explains the missingness
+
+colSums(is.na(merged_FC_final))
+
+#homeless_clean and #employment_any were manually created by accident, so drop those
+
+merged_FC_final <- merged_FC_final |>
+  select(-homeless_clean, -employment_any)
+
+colSums(is.na(merged_FC_final))
+```
+
+## Visualizations
+Finding 1 
+```{r}
+youth_outcomes <- merged_FC_final
+
+analysis_data <- youth_outcomes |>
+  mutate(
+    #Outcomes
+    employed_any = as.numeric(full_employment == 1 | part_employment == 1),
+    enrolled_19  = as.numeric(currenroll == 1),
+    housed_19    = as.numeric(homeless == 0),
+
+    #Exposure: received any transition service
+    any_service = as.numeric(
+      ind_living_needs == 1 | budget_fin_mngmt == 1 |
+      housing_ed_training == 1 | supervised_ind_living == 1 |
+      room_fin_asst == 1 | edu_fin_asst == 1
+    ),
+
+    #Controls
+    sex  = factor(sex),     # 1 = male, 2 = female (from codebook)
+    race = factor(race),    # categorical, derived race code
+    foster_status = factor(foster_care_status)
+  ) |>
+  filter(!is.na(any_service), !is.na(sex), !is.na(race),
+         !is.na(foster_status))
+
+#Employment model
+logit_emp <- glm(employed_any ~ any_service + sex + race + foster_status,
+                 data = analysis_data, family = binomial())
+
+#Education model
+logit_edu <- glm(enrolled_19 ~ any_service + sex + race + foster_status,
+                 data = analysis_data, family = binomial())
+
+#Housing model
+logit_house <- glm(housed_19 ~ any_service + sex + race + foster_status,
+                   data = analysis_data, family = binomial())
+
+#Compute Average Marginal Effects (AMEs) for each model
+ame_emp <- avg_slopes(logit_emp)
+ame_edu <- avg_slopes(logit_edu)
+ame_house <- avg_slopes(logit_house)
+
+#Convert to percentage points for interpretability
+ame_emp |>
+mutate(AME_percent = round(estimate * 100, 2),
+conf.low = round(conf.low * 100, 2),
+conf.high = round(conf.high * 100, 2)) |>
+select(term, AME_percent, conf.low, conf.high, p.value)
+
+ame_edu |>
+mutate(AME_percent = round(estimate * 100, 2),
+conf.low = round(conf.low * 100, 2),
+conf.high = round(conf.high * 100, 2)) |>
+select(term, AME_percent, conf.low, conf.high, p.value)
+
+ame_house |>
+mutate(AME_percent = round(estimate * 100, 2),
+conf.low = round(conf.low * 100, 2),
+conf.high = round(conf.high * 100, 2)) |>
+select(term, AME_percent, conf.low, conf.high, p.value)
+
+#Combine AMEs into a dataframe for plotting
+base_ames <- bind_rows(
+  ame_emp |> mutate(outcome = "Employment"),
+  ame_edu |> mutate(outcome = "Education"),
+  ame_house |> mutate(outcome = "Housing")
+) |>
+  filter(term == "any_service") |>
+  mutate(
+    AME_percent = round(estimate * 100, 2),
+    conf.low = conf.low * 100,
+    conf.high = conf.high * 100
+  )
+
+#Plot
+ame_bar_plot <- ggplot(base_ames, aes(x = outcome, y = AME_percent)) +
+  geom_col(fill = "royalblue", width = 0.7) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.15) +
+  labs(
+    title = "AMEs of Services on Youth Outcomes",
+    x = NULL, 
+    y = "Percentage Points"
+  ) +
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.title = element_text(hjust = 0.5)  # <-- this will now work
+  )
+
+ame_bar_plot
+```
+The AME boxes (in blue) represent the average estimated change in predicted probability (via percentage points) of the outcomes occurring upon receiving services. Boxes underneath 0 on the y-axis represent a decrease in the likelihood of the outcome occurring, while boxes above 0 on the y-axis represent an increase in the likelihood of the outcome occurring. The error boxes (vertical black lines with defined endpoints) represent the confidence intervals for each outcome. If the error box does not overlap with 0 on the y-axis, the estimated effect is statistically significant (see the housing outcome box above). If the error box does overlap with 0 on the y-axis, the estimated effect is not statistically significant (see the education and employment outcome boxes above). Longer error boxes represent more uncertainty in the estimate. A possible explanation for housing being the only statistically significant outcome in this case is the lower variability from outside factors of the outcome compared to education and employment outcomes.
+
+Finding 2
+```{r}
+# Bar Chart Showing Enrollment Rates by Race
+#Race labels
+race_labels <- c(
+  "1" = "White",
+  "2" = "Black",
+  "3" = "AI/AN",
+  "4" = "Asian",
+  "5" = "NH/PI",
+  "6" = "Multiracial",
+  "99" = "Unknown"
+)
+
+#Summarize enrollment by race
+enrollment_by_race <- youth_outcomes |>
+  mutate(
+    enrolled_19 = as.numeric(currenroll == 1),
+    race_label = factor(race_labels[as.character(race)],
+                        levels = race_labels)
+  ) |>
+  group_by(race_label) |>
+  summarise(
+    enrolled_rate = mean(enrolled_19, na.rm = TRUE),
+    enrolled_n = sum(enrolled_19 == 1, na.rm = TRUE),
+    total_n = n(),
+    .groups = "drop"
+  )
+
+#Plot
+enrollment_plot <- ggplot(enrollment_by_race,
+                          aes(x = race_label, y = enrolled_rate)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = scales::percent(enrolled_rate, accuracy = 0.1)),
+            vjust = -0.5,
+            size = 5) +
+  labs(
+    title = "Enrollment Rate by Race",
+    x = "Race",
+    y = "Enrollment Rate"
+  ) +
+  theme_minimal(base_size = 16) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  expand_limits(y = max(enrollment_by_race$enrolled_rate) + 0.05)
+enrollment_plot
+
+```
+This bar chart illustrates the enrollment rates of youth who were either enrolled in post-secondary education or had completed high school on time by age 19. Asian youth were notably more likely to be enrolled in school than their peers from other racial groups, with 46.2% enrolled. In contrast, American Indian/Alaska Native youth had the lowest enrollment rates, at only 19.9%. These patterns suggest that race is a strong and consistent predictor of youth enrollment rates.
+
+
+Finding 3
+```{r}
+# State-Level Housing Effects Line Plots for Interaction Models
+# Creating a state-level summary 
+services_vs_homeless <- youth_outcomes %>%
+  filter(homeless != 77, st != "PR") %>%
+  mutate(
+    total_services = rowSums(across(c(
+      ind_living_needs, budget_fin_mngmt, housing_ed_training,
+      supervised_ind_living, room_fin_asst, edu_fin_asst
+    )), na.rm = TRUE)
+  ) %>%
+  group_by(st) %>%
+  summarise(
+    avg_services = mean(total_services, na.rm = TRUE),
+    pct_homeless = mean(homeless == 1, na.rm = TRUE) * 100,
+    n = n()
+  ) %>%
+  filter(n >= 30) %>%  # Only keep states with stable sample sizes
+  ungroup()
+
+ggplot(services_vs_homeless, aes(x = avg_services, y = pct_homeless)) +
+  geom_point(size = 3, alpha = 0.8, color = "#2b8cbe") +
+  geom_smooth(method = "lm", se = TRUE, color = "#e74c3c", linetype = "dashed") +
+  geom_text(
+    aes(label = st),
+    vjust = -0.4,
+    size = 3,
+    fontface = "bold"
+  ) +
+  labs(
+  title = "Service Access and Homelessness Among Former Foster Youth",
+  subtitle = "Each point represents a state (n ≥ 30 youth). States providing more transition services per youth tend to have lower rates of homelessness",
+  x = "Average Number of Services Received per Youth",
+  y = "Percent of Youth Experiencing Homelessness",
+  caption = "Source: National Youth in Transition Database (NYTD). The dashed red line shows the overall trend. A downward slope suggests that broader service access may reduce homelessness risk"
+) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13),
+    plot.subtitle = element_text(size = 10, color = "gray30"),
+    plot.caption = element_text(hjust = 0, size = 8, color = "gray50", face = "italic")
+  )
+```
+This figure illustrates the relationship between the average number of transition services provided per youth and the share of young people who experienced homelessness after exiting foster care. Each point represents a state, restricted to those with at least 30 survey respondents to ensure a minimum level of reliability. The dashed red line depicts the overall trend, indicating that states offering a greater number of services per youth tend to exhibit slightly lower rates of post-care homelessness. While the association is modest, estimates from larger states such as California and Texas are likely more stable, whereas smaller states with limited sample sizes may contribute disproportionately to the observed variability.
+
+## Methodology
+
+Summarize steps taken: 
+
+- Which dataset(s) were used?
+Data were drawn from Waves 2 and 3 of the National Youth in Transition Database merged with the Adoption and Foster Care Analysis and Reporting System, resulting in a sample of 8,464 youth observed at age 19 and a longitudinal subsample observed again at age 21 across multiple states. The dataset contains 61 variables on service receipt, demographics, foster care history, and outcomes. Service indicators include independent living skills training, budgeting and financial management, housing education, supervised independent living, rental assistance, and educational financial aid. 
+
+
+- What is the time period for analysis (years, months, quarters, etc.)
+The time period for analysis is years. 
+
+- How was the data cleaned (filtering, sorting, grouping, etc.)?
+The clean_names() function was used in the janitor package to standardize variable column names. The any_service variable was created to represent if youth received any 1 service out of all service variables, for analysis purposes (any_service is the service variables grouped together and coded 0/1 with 0/1 binary values). The employed_any variable was created to represent if youth had either full time or part time employment as an outcome, since these were originally two separate variables. The housed_19 variable was created to represent if youth were stably housed by mutating the homeless binary variable and only using “0” values (indicating youth was not homeless). For analysis purposes, outcomes (employed_any, enrolled_19, and housed_19) were converted to numeric data variables. The sex, race, and foster_status variables were converted to factors using factor() function for analysis purposes. Outcome variables and factors were also filtered to exclude “0” values for logistic regression analysis.
+
+
+- How were missing values handled? 
+11,569 duplicates were created during the data merge process that were then dropped from the dataset. 2,581 observations were dropped due to incompatibility with research question (no service records were available for these observations) NYTD/AFCARS nonresponse codes (2, 3, 77, 88, 99–these were originally coded as "Not Applicable", “Legitimately Skipped” or "No Response") were converted to “N/A” for standardization since they were essentially missing values. Additionally, the main binary variables in the dataset were all recoded to 0/1 to drop invalid codes. The missingness  in key outcome variables (homeless, employment indicators, educational enrollment, substance abuse, incarceration) is likely non-ignorable since youth experiencing homelessness, unemployment, or instability may be systematically harder to reach for follow-up surveys, creating potential bias in our estimates. The service exposure variables show minimal missingness (<0.2%), these are our primary independent variables. For data measuring and analysis purposes,  the sample was restricted to complete cases while acknowledging potential selection bias. 
+
+
+- What visuals were created?
+The visuals created included box plots for average marginal effects (AMEs) by outcomes, bar charts showing enrollment rates by race, and state-level housing effects line plots for interaction models. 
+
+
+- Is the analysis descriptive or causal?
+This analysis is quasi-causal, because it uses a difference-in-differences (DiD) design to estimate the associations between receiving transition services before age 19 and outcomes at age 19. While DiD strengthens causal interpretation by comparing treated and untreated youth over time, the findings should still be interpreted cautiously due to limitations in the observational NYTD–AFCARS data, including nonrandom selection into services and coarse measurement of service intensity. Thus, the study provides evidence of estimated treatment effects under DiD assumptions, but the conclusions are not fully causal in the same way as a randomized experiment; instead, they represent credible but qualified causal estimates dependent on the validity of parallel trends and other DiD assumptions.
+
