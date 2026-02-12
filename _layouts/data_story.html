@@ -83,17 +83,22 @@ body_class: "data-story-page"
                           </div>
                         {% endif %}
                         {% if page.datasets.links %}
-                          <p class="dataset-label">{{ page.datasets.label | default: 'Dataset List' }}</p>
-                          <ul class="dataset-links">
-                            {% for link in page.datasets.links %}
-                              <li>
-                                <a href="{{ link.url }}" target="_blank" rel="noopener">
-                                  <i class="fa fa-file-text-o dataset-icon" aria-hidden="true"></i>
-                                  <span>{{ link.label }}</span>
-                                </a>
-                              </li>
-                            {% endfor %}
-                          </ul>
+                          <details class="dataset-dropdown">
+                            <summary class="dataset-summary">
+                              <span class="dataset-label">{{ page.datasets.label | default: 'Dataset List' }}</span>
+                              <span class="dataset-summary-icon" aria-hidden="true"></span>
+                            </summary>
+                            <ul class="dataset-links">
+                              {% for link in page.datasets.links %}
+                                <li>
+                                  <a href="{{ link.url }}" target="_blank" rel="noopener">
+                                    <i class="fa fa-file-text-o dataset-icon" aria-hidden="true"></i>
+                                    <span>{{ link.label }}</span>
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </details>
                         {% endif %}
                       </article>
                     {% endif %}
