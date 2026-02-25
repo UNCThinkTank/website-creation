@@ -75,11 +75,24 @@ body_class: "report studio-brief-page"
           {{ content }}
         </section>
 
+        {% if page.citations %}
+          <section class="studio-brief-citations" aria-label="Source index">
+            <header class="studio-brief-citations__header">
+              <h2 class="studio-brief-citations__title">Source Index</h2>
+            </header>
+            <div class="studio-brief-citations__body">
+              {{ page.citations | markdownify }}
+            </div>
+          </section>
+        {% endif %}
+
         {% if page.call_to_action %}
           <section class="studio-brief-cta" aria-label="Call to action">
             <div class="studio-brief-cta__inner">
               <h2 class="studio-brief-cta__heading">{{ page.call_to_action.heading | default: "Next Steps" }}</h2>
-              <p class="studio-brief-cta__body">{{ page.call_to_action.body }}</p>
+              {% if page.call_to_action.body %}
+                <p class="studio-brief-cta__body">{{ page.call_to_action.body }}</p>
+              {% endif %}
               {% if page.call_to_action.link %}
                 <a class="studio-brief-cta__link" href="{{ page.call_to_action.link.url }}">
                   {{ page.call_to_action.link.label | default: "Learn more" }}

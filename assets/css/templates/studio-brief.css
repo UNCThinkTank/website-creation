@@ -352,6 +352,173 @@ body.studio-brief-page #main-content {
   background: rgba(255, 247, 235, 0.92);
 }
 
+/* Citations --------------------------------------------------------------- */
+.studio-brief-citations {
+  margin-top: clamp(2.4rem, 4vw, 3.2rem);
+  padding: clamp(2rem, 4vw, 3rem);
+  border-radius: 26px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.96), rgba(255, 244, 230, 0.9));
+  border: 1px solid rgba(249, 132, 0, 0.2);
+  box-shadow: 0 22px 54px -44px rgba(11, 59, 77, 0.25);
+}
+
+.studio-brief-citations__header {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: clamp(1.1rem, 2.2vw, 1.6rem);
+}
+
+.studio-brief-citations__title {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.6vw, 2rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: linear-gradient(135deg, rgba(11, 59, 77, 0.9), rgba(249, 132, 0, 0.95));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .studio-brief-citations__title {
+    color: transparent;
+  }
+}
+
+.studio-brief-citations__body ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  row-gap: 0.7rem;
+  column-gap: 1.4rem;
+  counter-reset: citation;
+}
+
+.studio-brief-citations__body li {
+  counter-increment: citation;
+  position: relative;
+  padding-left: 2.6rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: rgba(11, 59, 77, 0.85);
+}
+
+.studio-brief-citations__body li::before {
+  content: counter(citation, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: rgba(11, 59, 77, 0.45);
+}
+
+.studio-brief-citations a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 59, 77, 0.25);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.studio-brief-citations a:hover,
+.studio-brief-citations a:focus-visible {
+  color: var(--orange);
+  border-color: rgba(249, 132, 0, 0.8);
+}
+
+/* Snap studio tables ------------------------------------------------------ */
+.brief-table-grid {
+  display: grid;
+  gap: clamp(1.2rem, 2.6vw, 1.8rem);
+  grid-template-columns: 1fr;
+  max-width: 560px;
+  margin: 0;
+}
+
+.brief-table-card {
+  border-radius: 22px;
+  background: rgba(11, 59, 77, 0.92);
+  color: #f4fbff;
+  padding: clamp(1rem, 2.2vw, 1.4rem);
+  box-shadow: 0 20px 50px -38px rgba(11, 59, 77, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.brief-table-card header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.brief-table-eyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.brief-table-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.brief-table-body {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0.4rem 0.6rem;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.brief-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  color: #f8fbff;
+}
+
+.brief-table th,
+.brief-table td {
+  padding: 0.45rem 0.4rem;
+}
+
+.brief-table th {
+  text-align: left;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.brief-table td:last-child,
+.brief-table th:last-child {
+  text-align: right;
+}
+
+.brief-table tbody tr + tr td {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brief-table-caption {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--orange);
+}
+
+.studio-brief-content .brief-table-eyebrow {
+  color: var(--orange);
+}
+
+.studio-brief-content .brief-table-caption {
+  color: var(--orange);
+}
+
 .studio-brief-content blockquote {
   margin: clamp(1.6rem, 3vw, 2.2rem) 0;
   padding: 1.6rem 1.8rem;
@@ -473,6 +640,12 @@ body.studio-brief-page #main-content {
     width: 32px;
     height: 32px;
     font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .studio-brief-citations__body ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

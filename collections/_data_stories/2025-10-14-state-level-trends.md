@@ -9,8 +9,6 @@ keywords:
   - Public Health
   - Vaccination
   - Preventive Care
-dataset_link: "https://github.com/UNCThinkTank/data"
-dataset_label: "Download the data on GitHub"
 permalink: "/data-stories/2025-10-14-state-level-trends.html"
 story_intro:
   paragraphs:
@@ -115,5 +113,13 @@ methodology:
       a baseline to assess future changes in vaccine uptake as national policy
       and leadership evolve.
   dataset: >-
-    Dataset: [CDC BRFSS — Zoster Vaccination Coverage](https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD)
+    Dataset: [CDC BRFSS - Zoster Vaccination Coverage](https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD)
+datasets:
+  title: "Dataset(s)"
+  label: "Dataset List"
+  links:
+    - label: "CDC BRFSS - Zoster Vaccination Coverage (CSV)"
+      url: "https://data.cdc.gov/api/views/aetd-68ew/rows.csv?accessType=DOWNLOAD"
+    - label: "Project data repository (GitHub)"
+      url: "https://github.com/UNCThinkTank/data"
 ---
